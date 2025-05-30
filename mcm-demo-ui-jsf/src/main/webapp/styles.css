@@ -1,0 +1,91 @@
+/* General background and font */
+body {
+    background: #fafafa;
+    font-family: 'Roboto', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Card-like table container */
+table {
+    border-radius: 12px;
+    overflow: hidden;
+    width: 100%;
+    margin-bottom: 1.5em;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(33, 150, 243, 0.10);
+    font-size: 1em;
+}
+
+/* Table header */
+th {
+    background: #1976d2;
+    color: #fff;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    font-size: 1.1em;
+    padding: 14px 10px;
+    border: none;
+}
+
+/* Table cells */
+td {
+    border: none;
+    padding: 14px 10px;
+    color: #263238;
+    font-size: 1em;
+}
+
+/* Row hover effect */
+tr:hover {
+    background: #bbdefb;
+    transition: background 0.2s;
+}
+
+/* Responsive for mobile */
+@media (max-width: 600px) {
+    table, thead, tbody, th, td, tr {
+        display: block;
+        width: 100%;
+    }
+    thead tr {
+        display: none;
+    }
+    tr {
+        margin-bottom: 1em;
+        border-radius: 8px;
+        box-shadow: 0 1px 4px rgba(33, 150, 243, 0.08);
+        background: #fff !important;
+    }
+    td {
+        position: relative;
+        padding-left: 50%;
+        min-height: 40px;
+        border-bottom: 1px solid #e0e0e0;
+    }
+    td:before {
+        position: absolute;
+        top: 14px;
+        left: 16px;
+        width: 45%;
+        white-space: nowrap;
+        font-weight: 500;
+        color: #1976d2;
+        content: attr(data-label);
+    }
+}
+
+.button-icon {
+    width: 20px;
+    height: 20px;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    vertical-align: middle;
+}
+.button-icon img {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+}

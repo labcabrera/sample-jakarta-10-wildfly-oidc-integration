@@ -1,0 +1,5 @@
+.vscode
+
+mcm-demo-api/target/*
+mcm-demo-ui-jsf/target/*
+mcm-demo-ui-spring-boot-oauth2/target/*

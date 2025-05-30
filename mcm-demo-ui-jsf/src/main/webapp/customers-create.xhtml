@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <title>Alta de Cliente</title>
+    <link rel="stylesheet" href="styles.css" />
+</h:head>
+<h:body>
+    <h2><a href="customers.xhtml">Clientes</a> / Alta de Cliente</h2>
+    
+    <h:form>
+        <h:panelGrid columns="2" styleClass="form-table">
+            <h:outputLabel for="firstName" value="Nombre:" />
+            <h:inputText id="firstName" value="#{customerCreateBean.createCustomerCmd.firstName}" required="true" />
+
+            <h:outputLabel for="lastName" value="Apellido:" />
+            <h:inputText id="lastName" value="#{customerCreateBean.createCustomerCmd.lastName}" required="true" />
+
+            <h:outputLabel for="email" value="Email:" />
+            <h:inputText id="email" value="#{customerCreateBean.createCustomerCmd.email}" required="true" />
+
+            <h:outputLabel for="phoneNumber" value="Teléfono:" />
+            <h:inputText id="phoneNumber" value="#{customerCreateBean.createCustomerCmd.phoneNumber}" required="false" />
+        </h:panelGrid>
+        <br/>
+        <h:commandButton value="Crear" action="#{customerCreateBean.createCustomer}" />
+        <h:messages globalOnly="true" layout="table"/>
+    </h:form>
+</h:body>
+</html>

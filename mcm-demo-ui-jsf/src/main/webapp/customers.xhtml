@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="jakarta.faces.html" xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <title>Customers</title>
+    <link rel="stylesheet" href="styles.css" />
+</h:head>
+<h:body>
+    <h2>Clientes</h2>
+    <h:form>
+        <h:dataTable value="#{customerBean.customersPage.content}" var="customer">
+            <h:column>
+                <f:facet name="header">ID</f:facet>
+                #{customer.id}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Nombre</f:facet>
+                #{customer.firstName}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Apellido</f:facet>
+                #{customer.lastName}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Email</f:facet>
+                #{customer.contactInfo.email}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Verificado</f:facet>
+                #{customer.emailVerified}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Teléfono</f:facet>
+                #{customer.contactInfo.phoneNumber}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Estado</f:facet>
+                #{customer.status}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Acciones</f:facet>
+                <h:commandLink action="#{customerBean.deleteCustomer}" styleClass="button-icon">
+                    <f:param name="customerId" value="#{customer.id}" />
+                    <img src="resources/images/delete.png" alt="Eliminar" title="Eliminar" />
+                </h:commandLink>
+            </h:column>
+        </h:dataTable>
+    </h:form>
+    <a href="customers-create.xhtml">Crear cliente</a>
+</h:body>
+
+</html>
