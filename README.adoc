@@ -78,6 +78,9 @@ Este servicio deberá devolver:
 }
 ----
 
+La imagen docker de este proyecto ejecuta el perfil standalone-microprofile.xml de Wildfly ya que incluye los módulos que utilizaremos para generar
+dinámicamente la definición OpenAPI usando Code-First.
+
 === mcm-demo-ui-jsf
 
 Este proyecto define un CRUD básico de clientes utilizando la API de consulta definida en el proyecto anterior. Durante la construcción del proyecto crea
@@ -102,6 +105,8 @@ las clases del cliente a partir de la URL de nuestro servicio de modo que es nec
     </executions>
 </plugin>
 ----
+
+La imagen docker de este proyecto ejecuta el perfil standalone.xml de Wildfly ya que es el que incluye los módulos de JSF utilizados por la interface web.
 
 === mcm-demo-ui-spring-boot-oauth2
 
