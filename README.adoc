@@ -126,40 +126,40 @@ Una vez creado el Realm crearemos el cliente "mcm-demo-client"
 
 image::./resources/images/keycloak-create-client.png[Client creation, width=600, align="center"]
 
-----
+// ----
 
-./standalone.sh -c standalone-microprofile.xml
+// ./standalone.sh -c standalone-microprofile.xml
 
-curl http://127.0.0.1:8080/demo/api/customers
+// curl http://127.0.0.1:8080/demo/api/customers
 
-curl http://127.0.0.1:8080/demo/api/customers/1 -v
+// curl http://127.0.0.1:8080/demo/api/customers/1 -v
 
-curl http://127.0.0.1:8080/demo/api/customers/2 -v
+// curl http://127.0.0.1:8080/demo/api/customers/2 -v
 
-curl http://127.0.0.1:8080/demo/api/customers -v
+// curl http://127.0.0.1:8080/demo/api/customers -v
 
-curl -X POST http://127.0.0.1:8080/demo/api/customers \
-  -H "Content-Type: application/json" \
-  -d '{
-    "firstName": "John",
-    "lastName": "Doe",
-    "email": "john.doe@example.com"
-}'
+// curl -X POST http://127.0.0.1:8080/demo/api/customers \
+//   -H "Content-Type: application/json" \
+//   -d '{
+//     "firstName": "John",
+//     "lastName": "Doe",
+//     "email": "john.doe@example.com"
+// }'
 
-http://127.0.0.1:8080/demo/api/hello
-http://127.0.0.1:8080/demo/hello.xhtml
+// http://127.0.0.1:8080/demo/api/hello
+// http://127.0.0.1:8080/demo/hello.xhtml
 
-mvn wildfly:deploy
-mvn wildfly:undeploy
-----
+// mvn wildfly:deploy
+// mvn wildfly:undeploy
+// ----
 
 
 == Estructura de paquetes
 
-- Domain: entidades del dominio (no las entidades JPA) y servicios con la lógica del negocio.º
+- *domain*: entidades del dominio (no las entidades JPA) y servicios con la lógica del negocio.º
 
-- Application: clases de aplicación que implementan la lógica del negocio y delegan en los servicios del dominio. Estas clases no deberían tener mucha lógica, sino que deberían delegar en los servicios del dominio.
+- *application*: clases de aplicación que implementan la lógica del negocio y delegan en los servicios del dominio. Estas clases no deberían tener mucha lógica, sino que deberían delegar en los servicios del dominio.
 
-- Infrastructure: clases de infraestructura que implementan la lógica de acceso a datos, como repositorios, adaptadores y servicios externos.
+- *infrastructure*: clases de infraestructura que implementan la lógica de acceso a datos, como repositorios, adaptadores y servicios externos.
 
-https://github.com/wildfly/wildfly-s2i/tree/main/examples/jsf-ejb-jpa/src/main/java/org/wildfly/plugins/demo/jsf
+// https://github.com/wildfly/wildfly-s2i/tree/main/examples/jsf-ejb-jpa/src/main/java/org/wildfly/plugins/demo/jsf
