@@ -118,9 +118,13 @@ docker run -d --name mcm-demo-keycloak --network mcm-demo -p 8090:8080 \
   start-dev
 ----
 
+Después abriremos la consola de adminstración desde localhost:8090/ y crearemos el Realm "mcm-demo".
+
 image::./resources/images/keycloak-create-realm.png[Realm creation, width=600, align="center"]
 
-Después crearemos el realm "mcm-demo" y el cliente guardando las credenciales.
+Una vez creado el Realm crearemos el cliente "mcm-demo-client"
+
+image::./resources/images/keycloak-create-client.png[Client creation, width=600, align="center"]
 
 ----
 
