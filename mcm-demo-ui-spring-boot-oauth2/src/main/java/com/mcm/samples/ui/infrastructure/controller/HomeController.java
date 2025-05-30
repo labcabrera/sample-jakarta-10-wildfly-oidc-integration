@@ -1,4 +1,4 @@
-package com.mcm.samples.ui;
+package com.mcm.samples.ui.infrastructure.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

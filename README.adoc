@@ -126,6 +126,23 @@ Una vez creado el Realm crearemos el cliente "mcm-demo-client"
 
 image::./resources/images/keycloak-create-client.png[Client creation, width=600, align="center"]
 
+Una vez creado el cliente crearemos dos grupos de ejemplo:
+
+image::./resources/images/keycloak-create-roles.png[Create roles, width=600, align="center"]
+
+Después crearemos un usuario de ejemplo _johndoe@demo.com_:
+
+image::./resources/images/keycloak-create-user.png[Create user, width=600, align="center"]
+
+Y le asignaremos los dos roles creados anteriormente:
+
+image::./resources/images/keycloak-user-roles.png[User roles, width=600, align="center"]
+
+De tal modo que en el token JWT podamos ver los roles asignados al usuario:
+
+image::./resources/images/jwt-info.png[User roles, width=600, align="center"]
+
+
 // ----
 
 // ./standalone.sh -c standalone-microprofile.xml
@@ -163,3 +180,5 @@ image::./resources/images/keycloak-create-client.png[Client creation, width=600,
 - *infrastructure*: clases de infraestructura que implementan la lógica de acceso a datos, como repositorios, adaptadores y servicios externos.
 
 // https://github.com/wildfly/wildfly-s2i/tree/main/examples/jsf-ejb-jpa/src/main/java/org/wildfly/plugins/demo/jsf
+
+// https://medium.com/@iaravinda33/integrating-keycloak-authentication-with-spring-boot-a-complete-guide-98df2c8d244a

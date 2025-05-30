@@ -1,4 +1,4 @@
-package com.mcm.samples.ui;
+package com.mcm.samples.ui.infrastructure;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

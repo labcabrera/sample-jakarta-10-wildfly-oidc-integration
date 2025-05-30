@@ -16,6 +16,8 @@ spring:
             token-uri: http://localhost:8090/realms/mcm-demo/protocol/openid-connect/token
             user-info-uri: http://localhost:8090/realms/mcm-demo/protocol/openid-connect/userinfo
             jwk-set-uri: http://localhost:8090/realms/mcm-demo/protocol/openid-connect/certs
-
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8090/realms/mcm-demo
 server:
   port: 8085

@@ -20,6 +20,9 @@
             <p th:if="${authorities}">
                 <strong>Authorities</strong>: <span th:text="${authorities}"></span>
             </p>
+            <p th:if="${jwt}">
+                <strong>JWT</strong>: <span th:text="${jwt}"></span>
+            </p>
         </div>
         <div th:if="${token}" class="content">
             <p><strong>Token info</strong>:</p>
@@ -27,6 +30,8 @@
                 <li th:each="entry : ${token.getPrincipal().getAttributes().entrySet()}"
                     th:text="|${entry.key}: ${entry.value}|"></li>
             </ul>
+        </div>
+        <div th:if="${token}" class="content">
         </div>
         <a th:href="@{/user/logout}">Logout</a>
     </div>
