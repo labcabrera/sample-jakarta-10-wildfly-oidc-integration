@@ -10,19 +10,15 @@ tanto en JSF como en Spring Boot + Thymeleaf que se integran con dicha API.
 
 Para la autenticación utilizaremos el flujo Authorization Flow de OAuth2 a partir de una imagen local de Keycloak.
 
-
-
-* Pruebas integración Wildfly standalone
+* Pruebas integración Wildfly con el perfil standalone
 * Definición estructura DDD de paquetes
-* POC de Code-First
-* POC de Contract-First
-* Integración seguridad (spring security)
-* Integración módulos spring boot (data, cloud config, cloud stream, actuator, etc.)
-
-Siguientes pasos:
+* POC API Code-First
+* POC API Contract-First
+* Integración seguridad usando Jakarta EE usando Spring Security
+* Pruebas de integración de diferentes módulos de Spring Boot (data, cloud config, cloud stream, actuator, etc.)
 * Dockerizar y crear los manifest pasra desplegarla en k8s (minikube)
-* Integración seguridad
-* Gestion congfiguración ddbb
+* Integración seguridad OAuth2 con Authorization Code Flow
+* Gestion variables de configuración
 
 == Arranque local de Wildfly
 
@@ -43,7 +39,7 @@ http://localhost:9990/console
 
 == Arranque local a través de Docker
 
-=== mcm-demo-api
+=== mcm-demo-api-code-first
 
 En primer lugar arrancaremos la API ya que necesitaremos la definición OpenAPI de esta autogenerada a través de MicroProfile para construir el cliente de los frontends.
 
