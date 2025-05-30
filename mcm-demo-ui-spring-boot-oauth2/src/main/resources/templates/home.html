@@ -1,10 +1,19 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <title>Demo Home</title>
+    <title>Home</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}" />
 </head>
+
 <body>
-    <h1 th:text="${message}">Mensaje</h1>
+    <h3>Demo Thymeleaf + Spring OAuth2</h3>
+    <div>
+        <div th:if="${message}">
+            <p th:text="${message}"></p>
+        </div>
+    </div>
+    <a th:href="@{/secured}">Secured resource</a>
 </body>
+
 </html>

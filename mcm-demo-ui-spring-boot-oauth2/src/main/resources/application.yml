@@ -1,2 +1,21 @@
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          keycloak:
+            client-id: mcm-demo-client
+            client-secret: rhFCqYCJ6lrwzBQWfpoTOTTzudl1Sc4w
+            authorization-grant-type: authorization_code
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            scope: openid,profile,email
+        provider:
+          keycloak:
+            issuer-uri: http://localhost:8090/realms/mcm-demo
+            authorization-uri: http://localhost:8090/realms/mcm-demo/protocol/openid-connect/auth
+            token-uri: http://localhost:8090/realms/mcm-demo/protocol/openid-connect/token
+            user-info-uri: http://localhost:8090/realms/mcm-demo/protocol/openid-connect/userinfo
+            jwk-set-uri: http://localhost:8090/realms/mcm-demo/protocol/openid-connect/certs
+
 server:
   port: 8085

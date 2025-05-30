@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Demo Home</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+</head>
+
+<body>
+    <h3>Demo Thymeleaf + Spring OAuth2</h3>
+    <div>
+        <div th:if="${message}">
+            <p th:text="${message}"></p>
+        </div>
+        <div th:if="${username}">
+            Username: <span th:text="${username}"></span>
+        </div>
+        <div th:if="${username}">
+            Email: <span th:text="${email}"></span>
+        </div>
+        <div th:if="${token}">
+            <div>Token info: </div>
+            <ul>
+                <li th:each="entry : ${token.getPrincipal().getAttributes().entrySet()}"
+                    th:text="|${entry.key}: ${entry.value}|"></li>
+            </ul>
+        </div>
+        <div th:if="${authorities}">
+            Authorities: <span th:text="${authorities}"></span>
+        </div>
+        <div th:if="${token}">
+            <p th:text="${token.getPrincipal().getAttributes()}"></p>
+        </div>
+        <div th:if="${principal}">
+            <p th:text="${principal}"></p>
+        </div>
+
+        <a th:href="@{/user/logout}">Logout</a>
+    </div>
+
+</body>
+
+</html>
