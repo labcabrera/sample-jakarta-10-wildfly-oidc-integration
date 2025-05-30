@@ -111,12 +111,14 @@ Este proyecto define un CRUD básico de clientes utilizando la API utilizando Th
 == Configuración de Keycloak
 
 ----
-docker run -p 8090:8080 \
+docker run -d --name mcm-demo-keycloak --network mcm-demo -p 8090:8080 \
   -e KEYCLOAK_ADMIN=admin \
   -e KEYCLOAK_ADMIN_PASSWORD=admin \
   quay.io/keycloak/keycloak:24.0.3 \
   start-dev
 ----
+
+image::./resources/images/keycloak-create-realm.png[Realm creation, width=600, align="center"]
 
 Después crearemos el realm "mcm-demo" y el cliente guardando las credenciales.
 
