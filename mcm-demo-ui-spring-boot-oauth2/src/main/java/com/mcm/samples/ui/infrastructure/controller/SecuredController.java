@@ -18,16 +18,12 @@ public class SecuredController {
 
     @GetMapping("/secured")
     public String home(Model model, @AuthenticationPrincipal OidcUser oidcUser) {
-        String jwt = oidcUser.getIdToken().getTokenValue();
-
-        log.info("auth: {}", SecurityContextHolder.getContext().getAuthentication().getAuthorities());
-
-        SecurityContextHolder.getContext().getAuthentication().getAuthorities().forEach(auth -> {
-            log.info("Authority: {}", auth.getAuthority());
-        });
-
-        List<String> authorities = oidcUser.getAuthorities().stream().map(e -> e.getAuthority().toString())
+        //NOTE: authorities are not available in the OidcUser object directly since they are mapped adding custom groups
+        List<String> authorities = SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
+            .map(e -> e.getAuthority().toString())
             .collect(Collectors.toList());
+
+        String jwt = oidcUser.getIdToken().getTokenValue();
 
         model.addAttribute("message", "This is a sample generated message from the secured controller.");
         model.addAttribute("authorities", authorities);
