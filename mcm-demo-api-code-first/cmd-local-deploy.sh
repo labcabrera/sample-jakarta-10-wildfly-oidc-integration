@@ -1,1 +1,0 @@
-cp target/*.war /home/labcabrera/dev/wildfly/wildfly-36.0.1.Final/standalone/deployments/

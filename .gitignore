@@ -1,5 +1,5 @@
 .vscode
 
-mcm-demo-api-code-first/target/*
+mcm-demo-api-customers-jakarta-code-first/target/*
 mcm-demo-ui-jsf/target/*
 mcm-demo-ui-spring-boot-oauth2/target/*

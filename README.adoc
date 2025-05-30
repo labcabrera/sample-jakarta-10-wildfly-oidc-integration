@@ -39,7 +39,9 @@ http://localhost:9990/console
 
 == Arranque local a través de Docker
 
-=== mcm-demo-api-code-first
+=== Proyecto mcm-demo-api-customers-jakarta-code-first
+
+Este proyecto está basado en Jakarta EE y define una API REST que implementa un CRUD de la entidad Customer.
 
 En primer lugar arrancaremos la API ya que necesitaremos la definición OpenAPI de esta autogenerada a través de MicroProfile para construir el cliente de los frontends.
 
