@@ -7,13 +7,12 @@
 </head>
 
 <body>
-    <h3>Demo Thymeleaf + Spring OAuth2</h3>
-    <div>
-        <div th:if="${message}">
-            <p th:text="${message}"></p>
+    <h2>Home / Demo Thymeleaf + Spring OAuth2</h3>
+        <div>
+            <div th:text="${message}" class="content"></div>
+            <div class="content">
+            <a th:href="@{/secured}">Secured resource</a>
         </div>
-    </div>
-    <a th:href="@{/secured}">Secured resource</a>
 </body>
 
 </html>
