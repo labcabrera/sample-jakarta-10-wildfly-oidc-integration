@@ -2,6 +2,16 @@
 
 == Objetivo
 
+Este repositorio contiene varios ejemplos de integración de aplicaciones legacy basadas en Jakarta EE para su integración en aplicaciones modulares
+basadas en APIs REST.
+
+En este ejemplo en primer lugar definiremos una API REST de ejemplo que implementa un CRUD de la entidad Customer y posteriormente dos frontends basados
+tanto en JSF como en Spring Boot + Thymeleaf que se integran con dicha API.
+
+Para la autenticación utilizaremos el flujo Authorization Flow de OAuth2 a partir de una imagen local de Keycloak.
+
+
+
 * Pruebas integración Wildfly standalone
 * Definición estructura DDD de paquetes
 * POC de Code-First
@@ -10,15 +20,16 @@
 * Integración módulos spring boot (data, cloud config, cloud stream, actuator, etc.)
 
 Siguientes pasos:
-* Dockerizar y desplegarla en k8s (minikube)
+* Dockerizar y crear los manifest pasra desplegarla en k8s (minikube)
 * Integración seguridad
 * Gestion congfiguración ddbb
 
+== Arranque local de Wildfly
 
-== Arranque de Wildfly
+Para las pruebas se ha utilizado la versión 36.0.1 de Wildfly, que se puede descargar desde https://wildfly.org/downloads/
 
-Utilizaremos una configuración preestablecida para de _standalone_ en la que hemos añadidos los
-módulos de _MicroProfile_.
+Utilizaremos una configuración preestablecida para de _standalone_ para el arranque en local en la que hemos añadidos los módulos de _MicroProfile_. Esta configuración
+se encuentra en la carpeta _config_.
 
 [source, bash]
 ----
@@ -27,8 +38,74 @@ módulos de _MicroProfile_.
 
 Una vez arrancado el servidor, podemos acceder a la consola de administración en:
 
-http://localhost:9990/console/index.html#deployments
+http://localhost:9990/console
 
+
+== Arranque local a través de Docker
+
+=== mcm-demo-api
+
+En primer lugar arrancaremos la API ya que necesitaremos la definición OpenAPI de esta autogenerada a través de MicroProfile para construir el cliente de los frontends.
+
+Para ello simplemente ejecutaremos el script _cmd-docker-screate-image.sh_ que construye el proyecto y crea la imagen local de Docker.
+
+Podemos ejecutar la imagen a través del scripts _cmd-docker-start.sh_ que inicializa la red local de Docker y arranca la imagen.
+
+Una vez arrancada la imagen comprobaremos que la API está correctamente desplegada consultando la definición de la API a través de:
+
+[source, bash]
+----
+curl --location 'http://127.0.0.1:8081/openapi'
+----
+
+Verificaremos que la API funciona obteniendo el listado de clientes que al no haber creado ninguno no debería devolver resultados:
+
+[source, bash]
+----
+curl --location 'http://127.0.0.1:8081/demo-api/api/customers'
+----
+
+Este servicio deberá devolver:
+
+[source, json]
+----
+{
+    "content": [],
+    "page": 0,
+    "size": 10,
+    "totalElements": 0,
+    "totalPages": 0
+}
+----
+
+=== mcm-demo-ui-jsf
+
+Este proyecto define un CRUD básico de clientes utilizando la API de consulta definida en el proyecto anterior. Durante la construcción del proyecto crea
+las clases del cliente a partir de la URL de nuestro servicio de modo que es necesario que esté en ejecución para compilar el proyecto.
+
+[source, xml]
+----
+<plugin>
+    <groupId>org.openapitools</groupId>
+    <artifactId>openapi-generator-maven-plugin</artifactId>
+    <version>7.12.0</version>
+    <executions>
+        <execution>
+            <id>generate-rest-client</id>
+            <goals>
+                <goal>generate</goal>
+            </goals>
+            <configuration>
+                <inputSpec>http://127.0.0.1:8081/openapi</inputSpec>
+                <... />
+        </execution>
+    </executions>
+</plugin>
+----
+
+=== mcm-demo-ui-spring-boot-oauth2
+
+Este proyecto define un CRUD básico de clientes utilizando la API utilizando Thymeleaf y Spring Boot en lugar de Jakarta EE y JSF.
 
 == Configuración de Keycloak
 
@@ -41,8 +118,6 @@ docker run -p 8090:8080 \
 ----
 
 Después crearemos el realm "mcm-demo" y el cliente guardando las credenciales.
-
-waR7EFtFuz6uZtQACPmVmhqI7pAGDX21
 
 ----
 
