@@ -1,14 +1,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-
     <modelVersion>4.0.0</modelVersion>
+
     <groupId>com.mcm.demo</groupId>
-    <artifactId>mcm-demo-ui</artifactId>
+    <artifactId>mcm-demo-api-customers-jakarta-contract-first</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
     </properties>
@@ -20,26 +22,22 @@
             <version>10.0.0</version>
             <scope>provided</scope>
         </dependency>
-
         <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-oauth2-client</artifactId>
-            <version>6.2.4</version>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-annotations</artifactId>
+            <version>1.6.11</version>
         </dependency>
         <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-config</artifactId>
-            <version>6.2.4</version>
+            <groupId>cz.jirutka.rsql</groupId>
+            <artifactId>rsql-parser</artifactId>
+            <version>2.1.0</version>
         </dependency>
         <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-web</artifactId>
-            <version>6.2.4</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-            <version>6.1.6</version>
+            <groupId>org.eclipse.microprofile</groupId>
+            <artifactId>microprofile</artifactId>
+            <version>6.0</version>
+            <type>pom</type>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -57,9 +55,20 @@
             <version>2.17.1</version>
         </dependency>
         <dependency>
+            <groupId>org.eclipse.microprofile.openapi</groupId>
+            <artifactId>microprofile-openapi-api</artifactId>
+            <version>3.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>org.openapitools</groupId>
             <artifactId>jackson-databind-nullable</artifactId>
             <version>0.2.6</version>
+        </dependency>
+        <dependency>
+            <groupId>org.modelmapper</groupId>
+            <artifactId>modelmapper</artifactId>
+            <version>3.2.0</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -68,29 +77,12 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>1.4.14</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.32</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <version>5.10.2</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <version>5.2.0</version>
-            <scope>test</scope>
-        </dependency>
+
     </dependencies>
 
     <build>
@@ -128,7 +120,7 @@
                         <configuration>
                             <sources>
                                 <source>
-                                    ${project.build.directory}/generated-sources/openapi/src/main/java</source>
+                                    ${project.build.directory}/generated-sources/openapi/src/gen/java</source>
                             </sources>
                         </configuration>
                     </execution>
@@ -140,23 +132,22 @@
                 <version>7.12.0</version>
                 <executions>
                     <execution>
-                        <id>generate-rest-client</id>
+                        <id>generate-api</id>
                         <goals>
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <inputSpec>http://127.0.0.1:8081/openapi</inputSpec>
-                            <generatorName>java</generatorName>
+                            <inputSpec>${project.basedir}/src/main/resources/openapi.yml</inputSpec>
+                            <generatorName>jaxrs-spec</generatorName>
                             <output>${project.build.directory}/generated-sources/openapi</output>
-                            <apiPackage>com.mcm.demo.api.client</apiPackage>
-                            <modelPackage>com.mcm.demo.api.client.model</modelPackage>
-                            <invokerPackage>com.mcm.demo.api.client.invoker</invokerPackage>
+                            <apiPackage>com.mcm.demo.api</apiPackage>
+                            <modelPackage>com.mcm.demo.api.model</modelPackage>
                             <configHelp>false</configHelp>
                             <configOptions>
                                 <useJakartaEe>true</useJakartaEe>
                                 <dateLibrary>java8-localdatetime</dateLibrary>
+                                <interfaceOnly>true</interfaceOnly>
                             </configOptions>
-                            <library>native</library>
                             <additionalProperties>
                                 <useJakartaEe>true</useJakartaEe>
                                 <annotationLibrary>none</annotationLibrary>

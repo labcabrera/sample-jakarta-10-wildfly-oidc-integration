@@ -1,0 +1,282 @@
+openapi: 3.0.1
+info:
+  title: Customers API
+  version: "1.0.0"
+servers:
+  - url: /demo-api
+components:
+  schemas:
+    ApiError:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+          example: ["2022-03-10T12:15:500"]
+        details:
+          type: array
+          items:
+            $ref: "#/components/schemas/ApiErrorDetail"
+    ApiErrorDetail:
+      type: object
+      properties:
+        message:
+          type: string
+        detail:
+          type: string
+    CreateCustomerCmd:
+      type: object
+      required:
+        - firstName
+        - lastName
+        - email
+      properties:
+        firstName:
+          type: string
+          description: First name of the customer
+          example: ["John"]
+        lastName:
+          type: string
+          description: Last name of the customer
+          example: ["Doe"]
+        email:
+          type: string
+          description: Email address of the customer
+          example: ["john.doe@somehost.com"]
+        phoneNumber:
+          type: string
+          description: Phone number of the customer
+          example: ["666 77 88 99"]
+    Customer:
+      type: object
+      required:
+        - id
+        - firstName
+        - lastName
+        - contactInfo
+        - status
+        - emailVerified
+        - createdAt
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the customer
+          example: ["b41909ed-57d4-4342-92a7-3445c0fb19f8"]
+        firstName:
+          type: string
+          description: First name of the customer
+          example: ["John"]
+        lastName:
+          type: string
+        contactInfo:
+          description: Contact information of the customer
+          type: object
+          $ref: "#/components/schemas/CustomerContactInfo"
+        status:
+          description: Status of the customer
+          type: string
+          examples:
+            - ACTIVE
+          $ref: "#/components/schemas/CustomerStatus"
+        emailVerified:
+          type: boolean
+          description: Indicates if the customer has verified their email address
+          example: [true]
+        createdAt:
+          type: string
+          format: date-time
+          description: Creation timestamp of the customer record
+          example: ["2023-10-01T12:00:000"]
+        updatedAt:
+          type: string
+          format: date-time
+          description: Last update timestamp of the customer record
+          example: ["2023-10-01T12:00:000"]
+    CustomerContactInfo:
+      type: object
+      properties:
+        email:
+          type: string
+        phoneNumber:
+          type: string
+    CustomerPage:
+      type: object
+      properties:
+        page:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items:
+            $ref: "#/components/schemas/Customer"
+    CustomerStatus:
+      description: Estado del cliente
+      type: string
+      enum:
+        - pending_activation
+        - active
+        - inactive
+        - deleted
+        - suspended
+    UpdateCustomerCmd:
+      type: object
+      properties:
+        firstName:
+          type: string
+          description: New customer name
+          example: ["John"]
+        lastName:
+          type: string
+          description: New last name of the customer
+          example: ["Doe"]
+        email:
+          type: string
+          description: New email address of the customer
+          example: ["john.doe@somehost.com"]
+        phoneNumber:
+          type: string
+          description: New phone number of the customer
+          example: ["666 77 88 99"]
+tags:
+  - name: Customers
+    description: Customers Demo REST API
+paths:
+  /api/customers:
+    get:
+      summary: Find customers by search expression
+      description: Find customers by search expression
+      tags:
+        - Customers
+      parameters:
+        - description: Page count
+          example: 0
+          name: page
+          in: query
+          schema:
+            type: integer
+            format: int32
+            default: "0"
+        - description: Search expression (RSQL)
+          example: firstName==John
+          name: query
+          in: query
+          schema:
+            type: string
+            default: ""
+        - description: Page size
+          example: 10
+          name: size
+          in: query
+          schema:
+            type: integer
+            format: int32
+            default: "10"
+      responses:
+        "200":
+          description: Customer list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomerPage"
+    post:
+      summary: Create consumer
+      description: Create consumer
+      tags:
+        - Customers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateCustomerCmd"
+        required: true
+      responses:
+        "201":
+          description: Customer created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Customer"
+        "400":
+          description: Validation errors
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+  /api/customers/{id}:
+    patch:
+      summary: Update consumer
+      description: Update consumer
+      tags:
+        - Customers
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateCustomerCmd"
+        required: true
+      responses:
+        "202":
+          description: Customer updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Customer"
+        "400":
+          description: Validation errors
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+    get:
+      summary: Find customer by id
+      description: Find customer by id
+      tags:
+        - Customers
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Customer found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Customer"
+        "404":
+          description: Customer not found
+    delete:
+      summary: Delete customer by id
+      description: Delete customer by id
+      tags:
+        - Customers
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
