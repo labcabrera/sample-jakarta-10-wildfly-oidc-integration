@@ -33,14 +33,14 @@ public interface CustomerResourceDefinition {
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    @Operation(summary = "Find customer by id", description = "Find customer by id")
+    @Operation(summary = "Find customer by id", description = "Find customer by id", operationId = "findCustomerById")
     @APIResponse(responseCode = "200", description = "Customer found", content = @Content(schema = @Schema(implementation = Customer.class)))
     @APIResponse(responseCode = "404", description = "Customer not found")
     public Response findById(@PathParam("id") String id);
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Operation(summary = "Find customers by search expression", description = "Find customers by search expression")
+    @Operation(summary = "Find customers by search expression", description = "Find customers by search expression", operationId = "findCustomers")
     @APIResponse(responseCode = "200", description = "Customer list", content = @Content(schema = @Schema(implementation = CustomerPage.class)))
     public Response find(
         @QueryParam("query") @DefaultValue("") @Parameter(description = "Search expression (RSQL)", example = "firstName==John") String searchExpression,
@@ -50,7 +50,7 @@ public interface CustomerResourceDefinition {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @Operation(summary = "Create consumer", description = "Create consumer")
+    @Operation(summary = "Create consumer", description = "Create consumer", operationId = "createConsumer")
     @APIResponse(responseCode = "201", description = "Customer created", content = @Content(schema = @Schema(implementation = Customer.class)))
     @APIResponse(responseCode = "400", description = "Validation errors", content = @Content(schema = @Schema(implementation = ApiError.class)))
     public Response createConsumer(CreateCustomerCmd cmd);
@@ -59,13 +59,13 @@ public interface CustomerResourceDefinition {
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @Operation(summary = "Update consumer", description = "Update consumer")
+    @Operation(summary = "Update consumer", description = "Update consumer", operationId = "updateConsumer")
     @APIResponse(responseCode = "202", description = "Customer updated", content = @Content(schema = @Schema(implementation = Customer.class)))
     @APIResponse(responseCode = "400", description = "Validation errors", content = @Content(schema = @Schema(implementation = ApiError.class)))
     public Response updateConsumer(@PathParam("id") String id, UpdateCustomerCmd cmd);
 
     @DELETE
     @Path("/{id}")
-    @Operation(summary = "Delete customer by id", description = "Delete customer by id")
+    @Operation(summary = "Delete customer by id", description = "Delete customer by id", operationId = "deleteCustomer")
     public Response delete(@PathParam("id") String id);
 }
