@@ -28,7 +28,7 @@ public class CustomerApiImpl implements ApiApi {
 
     @Override
     public CustomerPage apiCustomersGet(Integer page, String query, Integer size) {
-        return customerRepository.find(query, page, size);
+        return customerRepository.find(query, page != null ? page : 0, size != null ? size : 10);
     }
 
     @Override
