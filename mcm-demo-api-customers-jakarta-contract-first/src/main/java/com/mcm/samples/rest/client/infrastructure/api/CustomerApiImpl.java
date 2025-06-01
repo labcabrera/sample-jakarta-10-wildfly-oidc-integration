@@ -27,27 +27,27 @@ public class CustomerApiImpl implements ApiApi {
     private CustomerUpdateService customerUpdateService;
 
     @Override
-    public CustomerPage apiCustomersGet(Integer page, String query, Integer size) {
+    public CustomerPage findCustomers(Integer page, String query, Integer size) {
         return customerRepository.find(query, page != null ? page : 0, size != null ? size : 10);
     }
 
     @Override
-    public void apiCustomersIdDelete(String id) {
+    public void deleteCustomer(String id) {
         customerRepository.delete(id);
     }
 
     @Override
-    public Customer apiCustomersIdGet(String id) {
+    public Customer findCustomerById(String id) {
         return customerRepository.findById(id).get();
     }
 
     @Override
-    public Customer apiCustomersIdPatch(String id, @Valid @NotNull UpdateCustomerCmd updateCustomerCmd) {
+    public Customer updateCustomer(String id, @Valid @NotNull UpdateCustomerCmd updateCustomerCmd) {
         return customerUpdateService.update(id, updateCustomerCmd);
     }
 
     @Override
-    public Customer apiCustomersPost(@Valid @NotNull CreateCustomerCmd createCustomerCmd) {
+    public Customer createCustomer(@Valid @NotNull CreateCustomerCmd createCustomerCmd) {
         return customerCreationService.create(createCustomerCmd);
     }
 
