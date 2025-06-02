@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mcm-demo-api-customers-jakarta-code-first
+  labels:
+    k8s-app: mcm-demo-api-customers-jakarta-code-first
+spec:
+  selector:
+    k8s-app: mcm-demo-api-customers-jakarta-code-first
+  type: ClusterIP
+  ports:
+  - name: web
+    port: 80
+    targetPort: 8081
+    protocol: TCP

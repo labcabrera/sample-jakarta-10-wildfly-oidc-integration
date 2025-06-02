@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mcm-demo-api-customers-jakarta-code-first
+  labels:
+    k8s-app: mcm-demo-api-customers-jakarta-code-first
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: mcm-demo-api-customers-jakarta-code-first
+  template:
+    metadata:
+      labels:
+        k8s-app: mcm-demo-api-customers-jakarta-code-first
+    spec:
+      imagePullSecrets:
+      - name: registrykey
+      containers:
+      - name: mcm-demo-api-customers-jakarta-code-first
+        image: {{DOCKER_REGISTRY}}
+        env:
+        - name: SAMPLE_APP_PROPERTY
+          valueFrom:
+            configMapKeyRef:
+              name: mcm-java-properties
+              key: SAMPLE_APP_PROPERTY
+        - name: SAMPLE_APP_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: mcm-java-secrets
+              key: APP_MONGO_REPLICA
+        - name: JAVA_OPTS
+          valueFrom:
+            configMapKeyRef:
+              name: mcm-java-config
+              key: JAVA_OPTS
+        - name: TZ
+          value: Europe/Madrid
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+          name: web
+          protocol: TCP
