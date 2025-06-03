@@ -181,6 +181,27 @@ image::./resources/images/jwt-info.png[User roles, width=600, align="center"]
 
 - *infrastructure*: clases de infraestructura que implementan la lógica de acceso a datos, como repositorios, adaptadores y servicios externos.
 
+== Ejecutando el proyecto con Minikube
+
+En primer lugar crearemos un clúster de Minikube con Docker como driver:
+
+[source, bash]
+----
+minikube start --driver=docker
+----
+
+Después iniciaremos la consola de administración de Minikube:
+
+[source, bash]
+----
+ minikube dashboard
+----
+
+[source, bash]
+----
+minikube stop
+----
+
 // https://github.com/wildfly/wildfly-s2i/tree/main/examples/jsf-ejb-jpa/src/main/java/org/wildfly/plugins/demo/jsf
 
 // https://medium.com/@iaravinda33/integrating-keycloak-authentication-with-spring-boot-a-complete-guide-98df2c8d244a

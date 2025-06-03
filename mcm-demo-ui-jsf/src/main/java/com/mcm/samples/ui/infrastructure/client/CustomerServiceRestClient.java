@@ -41,7 +41,7 @@ public class CustomerServiceRestClient implements CustomerService {
     public Customer findById(String customerId) {
         log.debug("Customer search by id << {}", customerId);
         try {
-            return customersApi.apiCustomersIdGet(customerId);
+            return customersApi.findCustomerById(customerId);
         }
         catch (ApiException ex) {
             throw new RuntimeException(ex);
@@ -52,7 +52,7 @@ public class CustomerServiceRestClient implements CustomerService {
     public CustomerPage find(String searchExpression, Integer page, Integer size) {
         log.debug("Customer search << {} ({}, {})", searchExpression, page, size);
         try {
-            return customersApi.apiCustomersGet(page, searchExpression, size);
+            return customersApi.findCustomers(page, searchExpression, size);
         }
         catch (ApiException ex) {
             throw new RuntimeException(ex);
@@ -63,7 +63,7 @@ public class CustomerServiceRestClient implements CustomerService {
     public Customer create(CreateCustomerCmd cmd) {
         log.debug("Customer create << {}", cmd.getEmail());
         try {
-            return customersApi.apiCustomersPost(cmd);
+            return customersApi.createConsumer(cmd);
         }
         catch (ApiException ex) {
             throw new RuntimeException(ex);
@@ -74,7 +74,7 @@ public class CustomerServiceRestClient implements CustomerService {
     public void deleteById(String customerId) {
         log.debug("Customer delete << {}", customerId);
         try {
-            customersApi.apiCustomersIdDelete(customerId);
+            customersApi.deleteCustomer(customerId);
         }
         catch (ApiException ex) {
             throw new RuntimeException(ex);
