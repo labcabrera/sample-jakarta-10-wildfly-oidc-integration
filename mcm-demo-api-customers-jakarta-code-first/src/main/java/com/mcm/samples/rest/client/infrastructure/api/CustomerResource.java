@@ -13,6 +13,8 @@ import com.mcm.samples.rest.client.domain.exception.ParseException;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.Response;
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,6 +24,9 @@ public class CustomerResource implements CustomerResourceDefinition {
 
     @Inject
     private CustomerService customerService;
+
+    @Context
+    private HttpHeaders httpHeaders;
 
     @Override
     public Response findById(String id) {
@@ -34,6 +39,11 @@ public class CustomerResource implements CustomerResourceDefinition {
     @Override
     public Response find(String searchExpression, Integer page, Integer size) {
         log.info("Customers << search by search expression {} ({}, {})", searchExpression, page, size);
+
+        //TODO just for debugging purposes to check the Authorization header is present
+        String authorizationHeader = httpHeaders.getHeaderString("Authorization");
+        log.info("Authorization header: {}", authorizationHeader);
+
         try {
             Page<Customer> customerPage = customerService.find(searchExpression, page, size);
             return Response.ok(customerPage).build();

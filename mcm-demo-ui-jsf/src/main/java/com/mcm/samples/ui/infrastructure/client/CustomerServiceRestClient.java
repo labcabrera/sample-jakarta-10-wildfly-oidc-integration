@@ -38,9 +38,13 @@ public class CustomerServiceRestClient implements CustomerService {
         apiClient.setPort(port);
         apiClient.setScheme(scheme);
         apiClient.setBasePath(basePath);
-        // apiClient.addDefaultHeader("Authorization", "Bearer " + accessToken);
-        customersApi = new CustomersApi(apiClient);
 
+        apiClient.setRequestInterceptor(e -> {
+            log.debug("Request Interceptor: {}", e);
+            e.header("Authorization", "Bearer " + accessToken);
+        });
+
+        customersApi = new CustomersApi(apiClient);
         log.info("CustomerService initialized successfully");
     }
 
