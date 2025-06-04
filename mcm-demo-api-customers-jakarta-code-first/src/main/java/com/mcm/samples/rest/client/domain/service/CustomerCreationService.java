@@ -10,14 +10,15 @@ import com.mcm.samples.rest.client.domain.entity.CustomerContactInfo;
 import com.mcm.samples.rest.client.domain.entity.CustomerStatus;
 import com.mcm.samples.rest.client.domain.exception.ConstraintValidationException;
 
-import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
+import jakarta.security.enterprise.SecurityContext;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import lombok.extern.slf4j.Slf4j;
 
-@ApplicationScoped
+@RequestScoped
 @Slf4j
 public class CustomerCreationService {
 
@@ -28,11 +29,14 @@ public class CustomerCreationService {
     private CustomerRepository customerRepository;
 
     @Inject
-    private EmailVerificationService emailVerificationService;
+    private SecurityContext securityContext;
 
     @Transactional
     public Customer create(CreateCustomerCmd cmd) {
         log.info("Creating customer with command: {}", cmd);
+        String username = securityContext.getCallerPrincipal().getName();
+        log.info("User: {}", username);
+
         Set<ConstraintViolation<CreateCustomerCmd>> violations = validator.validate(cmd);
         if (!violations.isEmpty()) {
             throw new ConstraintValidationException("Invalid customer.", violations);
@@ -48,12 +52,10 @@ public class CustomerCreationService {
                 .phoneNumber(cmd.getPhoneNumber())
                 .build())
             .status(CustomerStatus.PENDING_ACTIVATION)
-            .emailVerified(false)
             .createdAt(LocalDateTime.now())
+            .createdBy(username)
             .build();
-        Customer inserted = customerRepository.save(customer);
-        emailVerificationService.sendEmailVerification(inserted.getId(), inserted.getContactInfo().getEmail());
-        return inserted;
+        return customerRepository.save(customer);
     }
 
 }

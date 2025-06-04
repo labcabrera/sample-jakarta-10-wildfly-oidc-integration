@@ -28,10 +28,12 @@ public class CustomerEntity {
 
     private String status;
 
-    private Boolean emailVerified;
-
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
+
+    private String createdBy;
+
+    private String updatedBy;
 
 }

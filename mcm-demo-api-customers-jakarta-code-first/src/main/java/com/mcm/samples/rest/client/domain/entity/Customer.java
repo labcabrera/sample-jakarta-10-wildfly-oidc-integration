@@ -17,7 +17,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@JsonbPropertyOrder({ "id", "firstName", "lastName", "contactInfo", "status", "emailVerified" })
+@JsonbPropertyOrder({ "id", "firstName", "lastName", "contactInfo", "status", "createdAt", "updatedAt", "createdBy",
+    "updatedBy" })
 public class Customer {
 
     @NotNull
@@ -42,11 +43,6 @@ public class Customer {
     private CustomerStatus status;
 
     @NotNull
-    @Schema(description = "Indicates if the customer has verified their email address", example = "true")
-    private Boolean emailVerified;
-
-    @NotNull
-
     @Schema(description = "Creation timestamp of the customer record", example = "2023-10-01T12:00:00")
     @JsonbDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
     private LocalDateTime createdAt;
@@ -54,4 +50,11 @@ public class Customer {
     @Schema(description = "Last update timestamp of the customer record", example = "2023-10-01T12:00:00")
     @JsonbDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
     private LocalDateTime updatedAt;
+
+    @Schema(description = "User who created the customer record", example = "johndoe")
+    private String createdBy;
+
+    @Schema(description = "User who last updated the customer record", example = "johndoe")
+    private String updatedBy;
+
 }
