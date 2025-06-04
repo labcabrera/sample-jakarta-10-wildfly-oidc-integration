@@ -11,6 +11,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import com.mcm.samples.ui.domain.exception.InvalidConfigurationException;
+import com.mcm.samples.ui.domain.exception.TokenResponseException;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -165,10 +166,7 @@ public class CustomAuthenticationMechanism implements HttpAuthenticationMechanis
             log.info("-- Token endpoint response start --/n{}/n-- Token endpoint response end --", body);
             return jsonb.fromJson(body, TokenResponse.class);
         }
-        else {
-            System.err.println("Error al obtener tokens: HTTP " + resp.statusCode() + " -> " + resp.body());
-            return null;
-        }
+        throw new TokenResponseException(String.format("Error reading token: %s. Message: %s", resp.statusCode(), resp.body()));
     }
 
     private AuthenticationStatus redirectToIdp(HttpServletRequest request, HttpServletResponse response, HttpMessageContext context)

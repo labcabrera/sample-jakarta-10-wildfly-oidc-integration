@@ -1,9 +1,12 @@
-package com.mcm.samples.ui.domain;
+package com.mcm.samples.ui.domain.service;
 
 import com.mcm.demo.api.client.model.CreateCustomerCmd;
 import com.mcm.demo.api.client.model.Customer;
 import com.mcm.demo.api.client.model.CustomerPage;
 
+/**
+ * Interface para operaciones con los clientes que sera implementada por un cliente REST.
+ */
 public interface CustomerService {
 
     public Customer findById(String customerId);

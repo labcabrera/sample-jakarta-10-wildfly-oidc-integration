@@ -171,6 +171,13 @@ paths:
       tags:
         - Customers
       parameters:
+        - description: Search expression (RSQL)
+          example: firstName==John
+          name: query
+          in: query
+          schema:
+            type: string
+            default: ""
         - description: Page count
           example: 0
           name: page
@@ -179,13 +186,6 @@ paths:
             type: integer
             format: int32
             default: "0"
-        - description: Search expression (RSQL)
-          example: firstName==John
-          name: query
-          in: query
-          schema:
-            type: string
-            default: ""
         - description: Page size
           example: 10
           name: size

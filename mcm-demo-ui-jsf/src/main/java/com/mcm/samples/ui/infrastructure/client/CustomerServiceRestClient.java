@@ -6,22 +6,18 @@ import com.mcm.demo.api.client.invoker.ApiException;
 import com.mcm.demo.api.client.model.CreateCustomerCmd;
 import com.mcm.demo.api.client.model.Customer;
 import com.mcm.demo.api.client.model.CustomerPage;
-import com.mcm.samples.ui.domain.CustomerService;
+import com.mcm.samples.ui.domain.service.CustomerService;
 
 import jakarta.annotation.PostConstruct;
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
-import jakarta.security.enterprise.SecurityContext;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.faces.context.FacesContext;
 import lombok.extern.slf4j.Slf4j;
 
-@ApplicationScoped
+@RequestScoped
 @Slf4j
 public class CustomerServiceRestClient implements CustomerService {
 
     private CustomersApi customersApi;
-
-    @Inject
-    private SecurityContext securityContext;
 
     @PostConstruct
     public void init() {
@@ -32,13 +28,9 @@ public class CustomerServiceRestClient implements CustomerService {
 
         log.info("Initializing CustomerService");
         log.info("Customer API config - host: {}, port: {}, scheme: {}, basePath: {}", host, port, scheme, basePath);
-        if (securityContext == null || securityContext.getCallerPrincipal() == null) {
-            log.info("Missing security context");
-        }
-        else {
-            log.info("Security context: {}", securityContext.getCallerPrincipal().getName());
-            log.info("Security context class: {}", securityContext.getCallerPrincipal().getClass());
-        }
+
+        String accessToken = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("access_token");
+        log.info("Access token: {}", accessToken);
 
         customersApi = new CustomersApi();
         ApiClient apiClient = new ApiClient();
@@ -46,7 +38,10 @@ public class CustomerServiceRestClient implements CustomerService {
         apiClient.setPort(port);
         apiClient.setScheme(scheme);
         apiClient.setBasePath(basePath);
+        // apiClient.addDefaultHeader("Authorization", "Bearer " + accessToken);
         customersApi = new CustomersApi(apiClient);
+
+        log.info("CustomerService initialized successfully");
     }
 
     @Override
@@ -64,7 +59,7 @@ public class CustomerServiceRestClient implements CustomerService {
     public CustomerPage find(String searchExpression, Integer page, Integer size) {
         log.debug("Customer search << {} ({}, {})", searchExpression, page, size);
         try {
-            return customersApi.findCustomers(page, searchExpression, size);
+            return customersApi.findCustomers(searchExpression, page, size);
         }
         catch (ApiException ex) {
             throw new RuntimeException(ex);
