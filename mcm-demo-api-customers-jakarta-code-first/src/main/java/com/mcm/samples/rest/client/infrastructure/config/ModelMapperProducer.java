@@ -1,4 +1,4 @@
-package com.mcm.samples.rest.client.infrastructure;
+package com.mcm.samples.rest.client.infrastructure.config;
 
 import org.modelmapper.ModelMapper;
 
