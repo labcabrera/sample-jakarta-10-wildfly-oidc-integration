@@ -41,6 +41,7 @@ public class CustomAuthenticationMechanism implements HttpAuthenticationMechanis
 
     private static final String AUTH_SERVER_URL = "http://localhost:8090/realms/mcm-demo/protocol/openid-connect/auth";
     private static final String TOKEN_ENDPOINT = "http://localhost:8090/realms/mcm-demo/protocol/openid-connect/token";
+    private static final String CERT_ENDPOINT = "http://localhost:8090/realms/mcm-demo/protocol/openid-connect/certs";
     private static final String CLIENT_ID = "mcm-demo-client-jsf";
     private static final String CLIENT_SECRET = "HtsCdaR7o5KoNQpI0BOOWwtds1sxorCT";
     private static final String REDIRECT_URI = "http://localhost:8080/demo-ui/callback";
@@ -56,12 +57,6 @@ public class CustomAuthenticationMechanism implements HttpAuthenticationMechanis
     // @Override
     public AuthenticationStatus validateRequest(HttpServletRequest request, HttpServletResponse response, HttpMessageContext context)
         throws AuthenticationException {
-
-        // if (!context.isProtected()) {
-        //     log.info("Not required authentication for resource: {}", request.getRequestURI());
-        //     // El recurso no requiere autenticación, dejar pasar la petición
-        //     return context.doNothing();
-        // }
 
         log.info("------------------------------------------------------------");
         log.info("Validating request using OIDC authentication");
@@ -91,14 +86,6 @@ public class CustomAuthenticationMechanism implements HttpAuthenticationMechanis
                 TokenResponse tokenResponse = readTokenFromIdP(code);
 
                 if (tokenResponse != null && tokenResponse.id_token != null) {
-                    // Validar ID Token (firma, issuer, audiencia, etc.)
-                    // Para simplificar, aquí no implementamos validación completa de firma.
-                    // En producción deberías:
-                    //   - Descargar JWKS de Keycloak (https://.../protocol/openid-connect/certs)
-                    //   - Validar firma del ID Token, issuer, client_id (aud), exp, nonce, etc.
-                    // Podemos usar un IdentityStore que haga introspección del Access Token o validación JWT.
-
-                    // Creamos un Credential “falso” para que nuestro IdentityStore valide el token.
                     CustomCredential customCredentials = new CustomCredential(tokenResponse.access_token);
 
                     // Delegamos la validación a los IdentityStores registrados (p. ej. TokenIntrospectionIdentityStore)
@@ -201,15 +188,10 @@ public class CustomAuthenticationMechanism implements HttpAuthenticationMechanis
         }
     }
 
-    /**
-     * Hace la petición HTTP al endpoint /token de Keycloak para intercambiar el code por
-     * tokens. Devuelve un objeto con access_token, id_token, refresh_token, etc.
-     */
     private TokenResponse readTokenFromIdP(String code) throws IOException, InterruptedException {
         log.info("Reading token from Keycloak for code {}", code);
 
-        // Preparamos los parámetros del formulario x-www-form-urlencoded
-        var form = new StringBuilder();
+        StringBuilder form = new StringBuilder();
         form.append("grant_type=authorization_code");
         form.append("&code=").append(code);
         form.append("&redirect_uri=").append(REDIRECT_URI);
@@ -238,25 +220,16 @@ public class CustomAuthenticationMechanism implements HttpAuthenticationMechanis
     public boolean validateIdToken(String idToken) {
         try {
             SignedJWT signedJWT = SignedJWT.parse(idToken);
-            JWKSet jwkSet = JWKSet.load(new URL("http://localhost:8090/realms/mcm-demo/protocol/openid-connect/certs"));
+            JWKSet jwkSet = JWKSet.load(new URL(CERT_ENDPOINT));
             JWK jwk = jwkSet.getKeyByKeyId(signedJWT.getHeader().getKeyID());
             if (jwk == null) {
                 throw new IllegalStateException("No se encontró la clave pública para el kid: " + signedJWT.getHeader().getKeyID());
             }
             RSAKey rsaKey = (RSAKey) jwk;
             RSAPublicKey publicKey = rsaKey.toRSAPublicKey();
-
-            // 4. Verificar la firma
             JWSVerifier verifier = new RSASSAVerifier(publicKey);
             boolean signatureValid = signedJWT.verify(verifier);
-
             log.info("Signature validated: {}", signatureValid);
-
-            // 5. (Opcional) Validar claims: issuer, audience, exp, etc.
-            // Ejemplo:
-            // String issuer = signedJWT.getJWTClaimsSet().getIssuer();
-            // if (!issuer.equals("http://localhost:8090/realms/mcm-demo")) return false;
-
             return signatureValid;
         }
         catch (Exception ex) {

@@ -1,8 +1,18 @@
 package com.mcm.samples.ui.infrastructure.security;
 
-import java.util.Arrays;
+import java.net.URL;
+import java.security.interfaces.RSAPublicKey;
+import java.text.ParseException;
 import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
+import java.util.Map;
+
+import com.nimbusds.jose.JWSVerifier;
+import com.nimbusds.jose.crypto.RSASSAVerifier;
+import com.nimbusds.jose.jwk.JWK;
+import com.nimbusds.jose.jwk.JWKSet;
+import com.nimbusds.jose.jwk.RSAKey;
+import com.nimbusds.jwt.SignedJWT;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.security.enterprise.credential.Credential;
@@ -14,18 +24,61 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class CustomIdentityStoreHandler implements IdentityStoreHandler {
 
+    private static final String CERT_ENDPOINT = "http://localhost:8090/realms/mcm-demo/protocol/openid-connect/certs";
+    private Object claim;
+
     //TODO
     @Override
     public CredentialValidationResult validate(Credential credential) {
+
         CustomCredential customCredential = (CustomCredential) credential;
         String accessToken = customCredential.getAccessToken();
-
         log.info("Access token: {}", accessToken);
+        SignedJWT signedJWT;
+        try {
+            signedJWT = SignedJWT.parse(accessToken);
+        }
+        catch (ParseException ex) {
+            log.error("Invalid signature for access token: {}", accessToken);
+            return CredentialValidationResult.INVALID_RESULT;
+        }
 
-        String principal = "demo-principal";
-        Set<String> groups = new HashSet<>(Arrays.asList("admin", "user"));
+        boolean validSignature = validateIdToken(signedJWT);
+        if (!validSignature) {
+            log.error("Invalid signature for access token: {}", accessToken);
+            return CredentialValidationResult.INVALID_RESULT;
+        }
 
-        return new CredentialValidationResult(principal, groups);
+        try {
+            String username = signedJWT.getJWTClaimsSet().getStringClaim("name");
+            Map realmAccess = (Map) signedJWT.getJWTClaimsSet().getClaim("realm_access");
+            List<String> roles = (List<String>) realmAccess.get("roles");
+            return new CredentialValidationResult(username, new HashSet<>(roles));
+        }
+        catch (Exception e) {
+            log.error("Error parsing JWT claims", e);
+            return CredentialValidationResult.INVALID_RESULT;
+        }
+    }
+
+    public boolean validateIdToken(SignedJWT signedJWT) {
+        try {
+            JWKSet jwkSet = JWKSet.load(new URL(CERT_ENDPOINT));
+            JWK jwk = jwkSet.getKeyByKeyId(signedJWT.getHeader().getKeyID());
+            if (jwk == null) {
+                throw new IllegalStateException("No se encontró la clave pública para el kid: " + signedJWT.getHeader().getKeyID());
+            }
+            RSAKey rsaKey = (RSAKey) jwk;
+            RSAPublicKey publicKey = rsaKey.toRSAPublicKey();
+            JWSVerifier verifier = new RSASSAVerifier(publicKey);
+            boolean signatureValid = signedJWT.verify(verifier);
+            log.info("Signature validated: {}", signatureValid);
+            return signatureValid;
+        }
+        catch (Exception ex) {
+            log.error("Error validating token", ex);
+            return false;
+        }
     }
 
 }

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="jakarta.faces.html" xmlns:f="http://java.sun.com/jsf/core">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="jakarta.faces.html" xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
 <h:head>
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
     <title>Home</title>
@@ -7,6 +8,11 @@
 </h:head>
 <h:body>
     <h2>Home</h2>
+
+    <div>
+        <ui:include src="/WEB-INF/includes/user-info.xhtml" />
+    </div>
+
     <nav>
         <ul>
             <li><a href="customers.xhtml">Ir a Clientes</a></li>

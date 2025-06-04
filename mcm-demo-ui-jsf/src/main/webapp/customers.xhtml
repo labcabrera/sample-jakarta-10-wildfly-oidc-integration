@@ -9,7 +9,9 @@
 <h:body>
     <h2><a href="index.xhtml">Home</a> / Clientes</h2>
 
-    <ui:include src="/WEB-INF/includes/user-info.xhtml" />
+    <div>
+        <ui:include src="/WEB-INF/includes/user-info.xhtml" />
+    </div>
 
     <h:form>
         <h:dataTable value="#{customerBean.customersPage.content}" var="customer">
