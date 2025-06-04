@@ -2,20 +2,11 @@ package com.mcm.samples.ui.infrastructure.security;
 
 import java.io.IOException;
 import java.net.URI;
-import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.security.interfaces.RSAPublicKey;
 import java.util.Set;
 import java.util.UUID;
-
-import com.nimbusds.jose.JWSVerifier;
-import com.nimbusds.jose.crypto.RSASSAVerifier;
-import com.nimbusds.jose.jwk.JWK;
-import com.nimbusds.jose.jwk.JWKSet;
-import com.nimbusds.jose.jwk.RSAKey;
-import com.nimbusds.jwt.SignedJWT;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -39,20 +30,17 @@ public class CustomAuthenticationMechanism implements HttpAuthenticationMechanis
     @Inject
     private CustomIdentityStoreHandler identityStoreHandler;
 
+    private final HttpClient httpClient = HttpClient.newHttpClient();
+    private final Jsonb jsonb = JsonbBuilder.create();
+
     private static final String AUTH_SERVER_URL = "http://localhost:8090/realms/mcm-demo/protocol/openid-connect/auth";
     private static final String TOKEN_ENDPOINT = "http://localhost:8090/realms/mcm-demo/protocol/openid-connect/token";
-    private static final String CERT_ENDPOINT = "http://localhost:8090/realms/mcm-demo/protocol/openid-connect/certs";
     private static final String CLIENT_ID = "mcm-demo-client-jsf";
     private static final String CLIENT_SECRET = "HtsCdaR7o5KoNQpI0BOOWwtds1sxorCT";
     private static final String REDIRECT_URI = "http://localhost:8080/demo-ui/callback";
     private static final String SCOPE = "openid profile roles";
-
     private static final String PARAM_CODE = "code";
     private static final String SESSION_STATE = "OIDC_STATE";
-    private static final String SESSION_NONCE = "OIDC_NONCE";
-
-    private final HttpClient httpClient = HttpClient.newHttpClient();
-    private final Jsonb jsonb = JsonbBuilder.create();
 
     // @Override
     public AuthenticationStatus validateRequest(HttpServletRequest request, HttpServletResponse response, HttpMessageContext context)
@@ -101,13 +89,6 @@ public class CustomAuthenticationMechanism implements HttpAuthenticationMechanis
                         Set<String> groups = validationResult.getCallerGroups();
                         log.info("Authentication successful for user: {} with groups {}", principal.getName(), groups);
 
-                        boolean validatedToken = validateIdToken(tokenResponse.id_token);
-                        if (!validatedToken) {
-                            log.error("ID Token validation failed");
-                            return context.responseUnauthorized();
-                        }
-
-                        //hack
                         request.getSession().setAttribute("access_token", tokenResponse.access_token);
                         request.getSession().setAttribute("id_token", tokenResponse.id_token);
                         request.getSession().setAttribute("username", principal.getName());
@@ -216,31 +197,6 @@ public class CustomAuthenticationMechanism implements HttpAuthenticationMechanis
         }
     }
 
-    //TODO cache
-    public boolean validateIdToken(String idToken) {
-        try {
-            SignedJWT signedJWT = SignedJWT.parse(idToken);
-            JWKSet jwkSet = JWKSet.load(new URL(CERT_ENDPOINT));
-            JWK jwk = jwkSet.getKeyByKeyId(signedJWT.getHeader().getKeyID());
-            if (jwk == null) {
-                throw new IllegalStateException("No se encontró la clave pública para el kid: " + signedJWT.getHeader().getKeyID());
-            }
-            RSAKey rsaKey = (RSAKey) jwk;
-            RSAPublicKey publicKey = rsaKey.toRSAPublicKey();
-            JWSVerifier verifier = new RSASSAVerifier(publicKey);
-            boolean signatureValid = signedJWT.verify(verifier);
-            log.info("Signature validated: {}", signatureValid);
-            return signatureValid;
-        }
-        catch (Exception ex) {
-            log.error("Error validating token", ex);
-            return false;
-        }
-    }
-
-    /**
-     * Clase interna para mapear la respuesta JSON del token endpoint de Keycloak.
-     */
     public static class TokenResponse {
         public String access_token;
         public String expires_in;
