@@ -10,10 +10,11 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.UUID;
 
+import com.mcm.samples.ui.domain.exception.InvalidConfigurationException;
+
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.json.bind.Jsonb;
-import jakarta.json.bind.JsonbBuilder;
 import jakarta.security.enterprise.AuthenticationException;
 import jakarta.security.enterprise.AuthenticationStatus;
 import jakarta.security.enterprise.CallerPrincipal;
@@ -35,8 +36,8 @@ public class CustomAuthenticationMechanism implements HttpAuthenticationMechanis
         try (InputStream in = CustomAuthenticationMechanism.class.getClassLoader().getResourceAsStream("config.properties")) {
             config.load(in);
         }
-        catch (Exception e) {
-            throw new RuntimeException("No se pudo cargar config.properties", e);
+        catch (Exception ex) {
+            throw new InvalidConfigurationException(ex);
         }
     }
 
@@ -50,8 +51,11 @@ public class CustomAuthenticationMechanism implements HttpAuthenticationMechanis
     @Inject
     private CustomIdentityStoreHandler identityStoreHandler;
 
-    private final HttpClient httpClient = HttpClient.newHttpClient();
-    private final Jsonb jsonb = JsonbBuilder.create();
+    @Inject
+    private HttpClient httpClient;
+
+    @Inject
+    private Jsonb jsonb;
 
     private static final String PARAM_CODE = "code";
     private static final String SESSION_STATE = "OIDC_STATE";

@@ -10,6 +10,8 @@ import com.mcm.samples.ui.domain.CustomerService;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.security.enterprise.SecurityContext;
 import lombok.extern.slf4j.Slf4j;
 
 @ApplicationScoped
@@ -17,6 +19,9 @@ import lombok.extern.slf4j.Slf4j;
 public class CustomerServiceRestClient implements CustomerService {
 
     private CustomersApi customersApi;
+
+    @Inject
+    private SecurityContext securityContext;
 
     @PostConstruct
     public void init() {
@@ -27,6 +32,13 @@ public class CustomerServiceRestClient implements CustomerService {
 
         log.info("Initializing CustomerService");
         log.info("Customer API config - host: {}, port: {}, scheme: {}, basePath: {}", host, port, scheme, basePath);
+        if (securityContext == null || securityContext.getCallerPrincipal() == null) {
+            log.info("Missing security context");
+        }
+        else {
+            log.info("Security context: {}", securityContext.getCallerPrincipal().getName());
+            log.info("Security context class: {}", securityContext.getCallerPrincipal().getClass());
+        }
 
         customersApi = new CustomersApi();
         ApiClient apiClient = new ApiClient();
