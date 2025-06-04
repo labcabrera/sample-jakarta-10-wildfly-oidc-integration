@@ -1,5 +1,6 @@
 package com.mcm.samples.rest.client.infrastructure.security;
 
+import java.io.IOException;
 import java.util.Set;
 
 import com.mcm.samples.rest.client.infrastructure.config.AppConfig;
@@ -38,9 +39,15 @@ public class CustomAuthenticationMechanism implements HttpAuthenticationMechanis
         String header = request.getHeader("Authorization");
         log.info("Auhorization header: {}", header);
 
-        if (header == null || !header.startsWith("Bearer ")) {
+        if (header == null || header.isEmpty()) {
+            log.warn("Authorization header is missing");
+            writeError(response, "Authorization header is required.");
+            return AuthenticationStatus.SEND_FAILURE;
+        }
+        else if (!header.startsWith("Bearer ")) {
             log.warn("Authorization header is missing or does not start with 'Bearer '");
-            return context.responseUnauthorized();
+            writeError(response, "Invalid Authorization header format, expected 'Bearer <token>'.");
+            return AuthenticationStatus.SEND_FAILURE;
         }
 
         String token = header.substring("Bearer ".length()).trim();
@@ -51,6 +58,19 @@ public class CustomAuthenticationMechanism implements HttpAuthenticationMechanis
         CallerPrincipal principal = validationResult.getCallerPrincipal();
         Set<String> groups = validationResult.getCallerGroups();
         return context.notifyContainerAboutLogin(principal, groups);
+    }
+
+    private void writeError(HttpServletResponse response, String message) {
+        try {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json;charset=UTF-8");
+            String json = String.format("{\"code\":\"401\",\"message\":\"%s\"}", message);
+            response.getWriter().write(json);
+            response.getWriter().flush();
+        }
+        catch (IOException ex) {
+            throw new RuntimeException("Error writing error", ex);
+        }
     }
 
 }
