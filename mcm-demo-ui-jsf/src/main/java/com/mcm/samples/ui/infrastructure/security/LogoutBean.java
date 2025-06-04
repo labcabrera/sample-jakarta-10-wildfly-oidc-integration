@@ -19,7 +19,7 @@ public class LogoutBean {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
 
-        String idTokenHint = (String) request.getSession().getAttribute("access_token");
+        String idTokenHint = (String) request.getSession().getAttribute("id_token");
 
         log.info("Access token: {}", idTokenHint);
 

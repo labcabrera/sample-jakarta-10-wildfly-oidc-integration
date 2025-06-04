@@ -112,6 +112,7 @@ public class CustomAuthenticationMechanism implements HttpAuthenticationMechanis
 
                         //hack
                         request.getSession().setAttribute("access_token", tokenResponse.access_token);
+                        request.getSession().setAttribute("id_token", tokenResponse.id_token);
                         request.getSession().setAttribute("username", principal.getName());
                         request.getSession().setAttribute("principal", principal);
                         request.getSession().setAttribute("groups", groups);
