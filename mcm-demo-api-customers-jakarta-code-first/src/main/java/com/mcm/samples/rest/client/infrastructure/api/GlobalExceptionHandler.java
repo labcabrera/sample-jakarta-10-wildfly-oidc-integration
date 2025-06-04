@@ -6,6 +6,7 @@ import com.mcm.samples.rest.client.domain.entity.ApiError;
 import com.mcm.samples.rest.client.domain.exception.ParseException;
 
 import jakarta.validation.ConstraintViolationException;
+import jakarta.ws.rs.ForbiddenException;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import jakarta.ws.rs.ext.ExceptionMapper;
@@ -21,7 +22,7 @@ public class GlobalExceptionHandler implements ExceptionMapper<Throwable> {
         log.error("Global exception", exception);
         Status status = mapStatus(exception);
         ApiError errorInfo = ApiError.builder()
-            .code(status.toString())
+            .code(String.valueOf(status.getStatusCode()))
             .message(exception.getMessage())
             .timestamp(LocalDateTime.now())
             .build();
@@ -34,7 +35,10 @@ public class GlobalExceptionHandler implements ExceptionMapper<Throwable> {
         if (exception instanceof ParseException) {
             return Response.Status.BAD_REQUEST;
         }
-        if (exception instanceof ConstraintViolationException) {
+        else if (exception instanceof ForbiddenException) {
+            return Response.Status.FORBIDDEN;
+        }
+        else if (exception instanceof ConstraintViolationException) {
             return Response.Status.BAD_REQUEST;
         }
         else if (exception instanceof IllegalArgumentException) {

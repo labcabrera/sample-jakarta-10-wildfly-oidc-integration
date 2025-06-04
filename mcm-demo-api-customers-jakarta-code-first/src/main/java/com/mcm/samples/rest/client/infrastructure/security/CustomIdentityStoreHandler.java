@@ -7,6 +7,7 @@ import java.text.ParseException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.mcm.samples.rest.client.infrastructure.config.AppConfig;
 import com.nimbusds.jose.JWSVerifier;
@@ -34,10 +35,15 @@ public class CustomIdentityStoreHandler implements IdentityStoreHandler {
     private JWKSet jwkSet;
 
     @PostConstruct
-    public void init() throws IOException, ParseException {
-        String jwkUri = appConfig.jwtUri();
-        log.info("Using jwk uri: {}", jwkUri);
-        jwkSet = JWKSet.load(new URL(jwkUri));
+    public void init() {
+        try {
+            String jwkUri = appConfig.jwtUri();
+            log.info("Using jwk uri: {}", jwkUri);
+            jwkSet = JWKSet.load(new URL(jwkUri));
+        }
+        catch (IOException | ParseException ex) {
+            throw new RuntimeException("Error reading JWK set", ex);
+        }
     }
 
     @Override
@@ -62,9 +68,8 @@ public class CustomIdentityStoreHandler implements IdentityStoreHandler {
 
         try {
             String username = signedJWT.getJWTClaimsSet().getStringClaim("name");
-            Map realmAccess = (Map) signedJWT.getJWTClaimsSet().getClaim("realm_access");
-            List<String> roles = (List<String>) realmAccess.get("roles");
-            return new CredentialValidationResult(username, new HashSet<>(roles));
+            Set<String> roles = getRolesFromClaims(signedJWT);
+            return new CredentialValidationResult(username, roles);
         }
         catch (Exception e) {
             log.error("Error parsing JWT claims", e);
@@ -89,6 +94,21 @@ public class CustomIdentityStoreHandler implements IdentityStoreHandler {
             log.error("Error validating token", ex);
             return false;
         }
+    }
+
+    private Set<String> getRolesFromClaims(SignedJWT signedJWT) {
+        try {
+            Map<String, Object> realmAccess = (Map<String, Object>) signedJWT.getJWTClaimsSet().getClaim("realm_access");
+            if (realmAccess != null) {
+                List<String> roles = (List<String>) realmAccess.get("roles");
+                log.info("Readed roles from JWT claims: {}", roles);
+                return new HashSet<>(roles);
+            }
+        }
+        catch (ParseException e) {
+            log.error("Error parsing JWT claims", e);
+        }
+        return new HashSet<>();
     }
 
 }

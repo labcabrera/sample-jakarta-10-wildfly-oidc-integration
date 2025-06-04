@@ -57,6 +57,7 @@ public class CustomAuthenticationMechanism implements HttpAuthenticationMechanis
         CredentialValidationResult validationResult = identityStoreHandler.validate(customCredential);
         CallerPrincipal principal = validationResult.getCallerPrincipal();
         Set<String> groups = validationResult.getCallerGroups();
+        log.info("Execution notifyContainerAboutLogin {} {}", principal.getName(), groups);
         return context.notifyContainerAboutLogin(principal, groups);
     }
 
