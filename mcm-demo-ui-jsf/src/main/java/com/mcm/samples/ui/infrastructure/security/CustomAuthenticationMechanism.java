@@ -71,14 +71,9 @@ public class CustomAuthenticationMechanism implements HttpAuthenticationMechanis
             return context.notifyContainerAboutLogin(principal, groups);
         }
 
-        // if (request.getSession().getAttribute("principal") != null) {
-        //     return context.doNothing();
-        // }
-
         String path = request.getRequestURI().substring(request.getContextPath().length());
         String code = request.getParameter(PARAM_CODE);
 
-        // 1. Si es el callback con ?code=..., procesamos el intercambio de tokens
         if (path.equals("/callback") && code != null) {
             log.info("Callback processing code {}", code);
             try {
@@ -95,19 +90,19 @@ public class CustomAuthenticationMechanism implements HttpAuthenticationMechanis
                     // Podemos usar un IdentityStore que haga introspección del Access Token o validación JWT.
 
                     // Creamos un Credential “falso” para que nuestro IdentityStore valide el token.
-                    CustomCredential oAuth2Cred = new CustomCredential(tokenResponse.access_token);
+                    CustomCredential customCredentials = new CustomCredential(tokenResponse.access_token);
 
                     // Delegamos la validación a los IdentityStores registrados (p. ej. TokenIntrospectionIdentityStore)
                     // que extraerán usuario y roles. identityStoreHandler.validate(…) devolverá un 
                     // LoginResult con caller principal y grupos.
-                    var result = identityStoreHandler.validate(oAuth2Cred);
+                    CredentialValidationResult validationResult = identityStoreHandler.validate(customCredentials);
 
-                    log.info("Credential validation result: {}", result.getStatus());
+                    log.info("Credential validation result: {}", validationResult.getStatus());
 
-                    if (result.getStatus() == CredentialValidationResult.Status.VALID) {
+                    if (validationResult.getStatus() == CredentialValidationResult.Status.VALID) {
                         // Autenticación exitosa: fijamos el contexto y redirigimos a la URL original o a /
-                        CallerPrincipal principal = result.getCallerPrincipal();
-                        Set<String> groups = result.getCallerGroups();
+                        CallerPrincipal principal = validationResult.getCallerPrincipal();
+                        Set<String> groups = validationResult.getCallerGroups();
                         log.info("Authentication successful for user: {} with groups {}", principal.getName(), groups);
 
                         //hack
@@ -117,13 +112,16 @@ public class CustomAuthenticationMechanism implements HttpAuthenticationMechanis
                         request.getSession().setAttribute("principal", principal);
                         request.getSession().setAttribute("groups", groups);
 
+
+                        log.info("Returning redirect to ttp://localhost:8080/demo-ui/");
+
                         response.sendRedirect("http://localhost:8080/demo-ui/");
                         // Notificamos al contenedor de la autenticación exitosa
 
                         return context.notifyContainerAboutLogin(principal, groups);
                     }
                     else {
-                        log.info("Unauthorized with validation result code: {}", result.getStatus());
+                        log.info("Unauthorized with validation result code: {}", validationResult.getStatus());
                         // Token inválido o expirado
                         return context.responseUnauthorized();
                     }
