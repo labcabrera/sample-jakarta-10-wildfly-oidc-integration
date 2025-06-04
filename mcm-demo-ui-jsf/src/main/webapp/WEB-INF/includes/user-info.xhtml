@@ -1,0 +1,18 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+    <table>
+        <tr>
+            <td>Username</td>
+            <td><h:outputText value="#{sessionScope.username}" /></td>
+        </tr>
+        <tr>
+            <td>Id Token</td>
+            <td><h:outputText value="#{sessionScope.id_token}" /></td>
+        </tr>
+        <tr>
+            <td>Access token</td>
+            <td><h:outputText value="#{sessionScope.access_token}" /></td>
+        </tr>
+    </table>
+</ui:composition>

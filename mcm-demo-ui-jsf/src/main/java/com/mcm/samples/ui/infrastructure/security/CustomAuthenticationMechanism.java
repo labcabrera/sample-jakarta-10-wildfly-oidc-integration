@@ -2,11 +2,20 @@ package com.mcm.samples.ui.infrastructure.security;
 
 import java.io.IOException;
 import java.net.URI;
+import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.security.interfaces.RSAPublicKey;
 import java.util.Set;
 import java.util.UUID;
+
+import com.nimbusds.jose.JWSVerifier;
+import com.nimbusds.jose.crypto.RSASSAVerifier;
+import com.nimbusds.jose.jwk.JWK;
+import com.nimbusds.jose.jwk.JWKSet;
+import com.nimbusds.jose.jwk.RSAKey;
+import com.nimbusds.jwt.SignedJWT;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -105,13 +114,18 @@ public class CustomAuthenticationMechanism implements HttpAuthenticationMechanis
                         Set<String> groups = validationResult.getCallerGroups();
                         log.info("Authentication successful for user: {} with groups {}", principal.getName(), groups);
 
+                        boolean validatedToken = validateIdToken(tokenResponse.id_token);
+                        if (!validatedToken) {
+                            log.error("ID Token validation failed");
+                            return context.responseUnauthorized();
+                        }
+
                         //hack
                         request.getSession().setAttribute("access_token", tokenResponse.access_token);
                         request.getSession().setAttribute("id_token", tokenResponse.id_token);
                         request.getSession().setAttribute("username", principal.getName());
                         request.getSession().setAttribute("principal", principal);
                         request.getSession().setAttribute("groups", groups);
-
 
                         log.info("Returning redirect to ttp://localhost:8080/demo-ui/");
 
@@ -217,6 +231,37 @@ public class CustomAuthenticationMechanism implements HttpAuthenticationMechanis
         else {
             System.err.println("Error al obtener tokens: HTTP " + resp.statusCode() + " -> " + resp.body());
             return null;
+        }
+    }
+
+    //TODO cache
+    public boolean validateIdToken(String idToken) {
+        try {
+            SignedJWT signedJWT = SignedJWT.parse(idToken);
+            JWKSet jwkSet = JWKSet.load(new URL("http://localhost:8090/realms/mcm-demo/protocol/openid-connect/certs"));
+            JWK jwk = jwkSet.getKeyByKeyId(signedJWT.getHeader().getKeyID());
+            if (jwk == null) {
+                throw new IllegalStateException("No se encontró la clave pública para el kid: " + signedJWT.getHeader().getKeyID());
+            }
+            RSAKey rsaKey = (RSAKey) jwk;
+            RSAPublicKey publicKey = rsaKey.toRSAPublicKey();
+
+            // 4. Verificar la firma
+            JWSVerifier verifier = new RSASSAVerifier(publicKey);
+            boolean signatureValid = signedJWT.verify(verifier);
+
+            log.info("Signature validated: {}", signatureValid);
+
+            // 5. (Opcional) Validar claims: issuer, audience, exp, etc.
+            // Ejemplo:
+            // String issuer = signedJWT.getJWTClaimsSet().getIssuer();
+            // if (!issuer.equals("http://localhost:8090/realms/mcm-demo")) return false;
+
+            return signatureValid;
+        }
+        catch (Exception ex) {
+            log.error("Error validating token", ex);
+            return false;
         }
     }
 

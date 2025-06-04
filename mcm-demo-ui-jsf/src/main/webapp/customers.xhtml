@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="jakarta.faces.html" xmlns:f="http://java.sun.com/jsf/core">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="jakarta.faces.html" xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
 <h:head>
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
     <title>Customers</title>
@@ -8,10 +9,7 @@
 <h:body>
     <h2><a href="index.xhtml">Home</a> / Clientes</h2>
 
-    <h:panelGroup>
-        <h:outputText value="Username: " />
-        <h:outputText value="#{sessionScope.username}" style="font-weight:bold;" />
-    </h:panelGroup>
+    <ui:include src="/WEB-INF/includes/user-info.xhtml" />
 
     <h:form>
         <h:dataTable value="#{customerBean.customersPage.content}" var="customer">
