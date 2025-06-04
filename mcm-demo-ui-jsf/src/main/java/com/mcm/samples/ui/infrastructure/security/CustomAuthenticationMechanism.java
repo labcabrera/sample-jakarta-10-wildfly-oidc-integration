@@ -84,9 +84,9 @@ public class CustomAuthenticationMechanism implements HttpAuthenticationMechanis
             try {
                 // Obtener el 'state' de la sesión si lo usas (aquí omitido)
                 // Intercambiar code por tokens
-                TokenResponse tokResp = readTokenFromIdP(code);
+                TokenResponse tokenResponse = readTokenFromIdP(code);
 
-                if (tokResp != null && tokResp.id_token != null) {
+                if (tokenResponse != null && tokenResponse.id_token != null) {
                     // Validar ID Token (firma, issuer, audiencia, etc.)
                     // Para simplificar, aquí no implementamos validación completa de firma.
                     // En producción deberías:
@@ -95,7 +95,7 @@ public class CustomAuthenticationMechanism implements HttpAuthenticationMechanis
                     // Podemos usar un IdentityStore que haga introspección del Access Token o validación JWT.
 
                     // Creamos un Credential “falso” para que nuestro IdentityStore valide el token.
-                    CustomCredential oAuth2Cred = new CustomCredential(tokResp.access_token);
+                    CustomCredential oAuth2Cred = new CustomCredential(tokenResponse.access_token);
 
                     // Delegamos la validación a los IdentityStores registrados (p. ej. TokenIntrospectionIdentityStore)
                     // que extraerán usuario y roles. identityStoreHandler.validate(…) devolverá un 
@@ -111,6 +111,7 @@ public class CustomAuthenticationMechanism implements HttpAuthenticationMechanis
                         log.info("Authentication successful for user: {} with groups {}", principal.getName(), groups);
 
                         //hack
+                        request.getSession().setAttribute("access_token", tokenResponse.access_token);
                         request.getSession().setAttribute("username", principal.getName());
                         request.getSession().setAttribute("principal", principal);
                         request.getSession().setAttribute("groups", groups);
