@@ -10,7 +10,7 @@ import jakarta.security.enterprise.identitystore.CredentialValidationResult;
 import jakarta.security.enterprise.identitystore.IdentityStoreHandler;
 import lombok.extern.slf4j.Slf4j;
 
-// @ApplicationScoped
+@ApplicationScoped
 @Slf4j
 public class CustomIdentityStoreHandler implements IdentityStoreHandler {
 

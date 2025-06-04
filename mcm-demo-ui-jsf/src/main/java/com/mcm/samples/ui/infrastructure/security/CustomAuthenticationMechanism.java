@@ -18,18 +18,17 @@ import jakarta.security.enterprise.CallerPrincipal;
 import jakarta.security.enterprise.authentication.mechanism.http.HttpAuthenticationMechanism;
 import jakarta.security.enterprise.authentication.mechanism.http.HttpMessageContext;
 import jakarta.security.enterprise.identitystore.CredentialValidationResult;
-import jakarta.security.enterprise.identitystore.IdentityStoreHandler;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.ws.rs.core.UriBuilder;
 import lombok.extern.slf4j.Slf4j;
 
-// @ApplicationScoped
+@ApplicationScoped
 @Slf4j
-public class CustomAuthenticationMechanism  { //implements HttpAuthenticationMechanism {
+public class CustomAuthenticationMechanism implements HttpAuthenticationMechanism {
 
     @Inject
-    private IdentityStoreHandler identityStoreHandler;
+    private CustomIdentityStoreHandler identityStoreHandler;
 
     private static final String AUTH_SERVER_URL = "http://localhost:8090/realms/mcm-demo/protocol/openid-connect/auth";
     private static final String TOKEN_ENDPOINT = "http://localhost:8090/realms/mcm-demo/protocol/openid-connect/token";

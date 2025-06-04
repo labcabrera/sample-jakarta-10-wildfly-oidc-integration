@@ -56,11 +56,11 @@
         <auth-constraint>
             <role-name>user</role-name>
         </auth-constraint>
-    </security-constraint>
+    </security-constraint> -->
 
     <security-role>
         <role-name>*</role-name>
-    </security-role> -->
+    </security-role>
     
     <session-config>
         <session-timeout>30</session-timeout>
