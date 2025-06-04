@@ -7,6 +7,12 @@
 </h:head>
 <h:body>
     <h2><a href="index.xhtml">Home</a> / Clientes</h2>
+
+    <h:panelGroup>
+        <h:outputText value="Username: " />
+        <h:outputText value="#{sessionScope.username}" style="font-weight:bold;" />
+    </h:panelGroup>
+
     <h:form>
         <h:dataTable value="#{customerBean.customersPage.content}" var="customer">
             <h:column>

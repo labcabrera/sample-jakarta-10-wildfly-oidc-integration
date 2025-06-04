@@ -105,6 +105,7 @@ public class CustomAuthenticationMechanism implements HttpAuthenticationMechanis
                         log.info("Authentication successful for user: {} with groups {}", principal.getName(), groups);
 
                         //hack
+                        request.getSession().setAttribute("username", principal.getName());
                         request.getSession().setAttribute("principal", principal);
                         request.getSession().setAttribute("groups", groups);
 
