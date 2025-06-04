@@ -1,13 +1,25 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
+    version="6.0">
 
-<web-app version="4.0"
-         xmlns="http://xmlns.jcp.org/xml/ns/javaee"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee  http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd">
-    <context-param>
+    <display-name>MCM Samples - JSF UI</display-name>
+
+    <!-- <filter>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping> -->
+
+    <!-- <context-param>
         <param-name>jakarta.faces.PROJECT_STAGE</param-name>
         <param-value>Development</param-value>
     </context-param>
+-->
+
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
         <servlet-class>jakarta.faces.webapp.FacesServlet</servlet-class>
@@ -17,11 +29,43 @@
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>*.xhtml</url-pattern>
     </servlet-mapping>
+
+    <!-- <login-config>
+        <auth-method>NONE</auth-method>
+    </login-config>
+
+    <servlet>
+        <servlet-name>AuthCallbackServlet</servlet-name>
+        <servlet-class>com.example.security.AuthCallbackServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AuthCallbackServlet</servlet-name>
+        <url-pattern>/callback/*</url-pattern>
+    </servlet-mapping> -->
+
+    <!-- <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>protected-pages</web-resource-name>
+            <url-pattern>/demo-ui/customers.xhtml</url-pattern>
+            <url-pattern>/customers.xhtml</url-pattern>
+            <url-pattern>**customers**</url-pattern>
+            <url-pattern>/</url-pattern>
+            <url-pattern>/index.html</url-pattern>
+            <url-pattern>/demo-ui</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>user</role-name>
+        </auth-constraint>
+    </security-constraint>
+
+    <security-role>
+        <role-name>*</role-name>
+    </security-role> -->
+    
     <session-config>
-        <session-timeout>
-            30
-        </session-timeout>
+        <session-timeout>30</session-timeout>
     </session-config>
+
     <welcome-file-list>
         <welcome-file>index.xhtml</welcome-file>
     </welcome-file-list>
