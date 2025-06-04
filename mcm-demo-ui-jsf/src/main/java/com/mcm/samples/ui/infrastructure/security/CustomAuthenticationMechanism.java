@@ -47,6 +47,10 @@ public class CustomAuthenticationMechanism implements HttpAuthenticationMechanis
     private static final String CLIENT_SECRET = config.getProperty("client.secret");
     private static final String REDIRECT_URI = config.getProperty("redirect.uri");
     private static final String SCOPE = config.getProperty("scope");
+    private static final String BASE_URL = config.getProperty("base.url");
+
+    private static final String PARAM_CODE = "code";
+    private static final String SESSION_STATE = "OIDC_STATE";
 
     @Inject
     private CustomIdentityStoreHandler identityStoreHandler;
@@ -57,10 +61,8 @@ public class CustomAuthenticationMechanism implements HttpAuthenticationMechanis
     @Inject
     private Jsonb jsonb;
 
-    private static final String PARAM_CODE = "code";
-    private static final String SESSION_STATE = "OIDC_STATE";
-
-    // @Override
+    @Override
+    @SuppressWarnings("unchecked")
     public AuthenticationStatus validateRequest(HttpServletRequest request, HttpServletResponse response, HttpMessageContext context)
         throws AuthenticationException {
 
@@ -87,42 +89,29 @@ public class CustomAuthenticationMechanism implements HttpAuthenticationMechanis
         if (path.equals("/callback") && code != null) {
             log.info("Callback processing code {}", code);
             try {
-                // Obtener el 'state' de la sesión si lo usas (aquí omitido)
-                // Intercambiar code por tokens
                 TokenResponse tokenResponse = readTokenFromIdP(code);
 
-                if (tokenResponse != null && tokenResponse.id_token != null) {
-                    CustomCredential customCredentials = new CustomCredential(tokenResponse.access_token);
-
-                    // Delegamos la validación a los IdentityStores registrados (p. ej. TokenIntrospectionIdentityStore)
-                    // que extraerán usuario y roles. identityStoreHandler.validate(…) devolverá un 
-                    // LoginResult con caller principal y grupos.
+                if (tokenResponse != null && tokenResponse.getId_token() != null) {
+                    CustomCredential customCredentials = new CustomCredential(tokenResponse.getAccess_token());
                     CredentialValidationResult validationResult = identityStoreHandler.validate(customCredentials);
-
                     log.info("Credential validation result: {}", validationResult.getStatus());
 
                     if (validationResult.getStatus() == CredentialValidationResult.Status.VALID) {
-                        // Autenticación exitosa: fijamos el contexto y redirigimos a la URL original o a /
                         CallerPrincipal principal = validationResult.getCallerPrincipal();
                         Set<String> groups = validationResult.getCallerGroups();
                         log.info("Authentication successful for user: {} with groups {}", principal.getName(), groups);
 
-                        request.getSession().setAttribute("access_token", tokenResponse.access_token);
-                        request.getSession().setAttribute("id_token", tokenResponse.id_token);
+                        request.getSession().setAttribute("access_token", tokenResponse.getAccess_token());
+                        request.getSession().setAttribute("id_token", tokenResponse.getId_token());
                         request.getSession().setAttribute("username", principal.getName());
                         request.getSession().setAttribute("principal", principal);
                         request.getSession().setAttribute("groups", groups);
 
-                        log.info("Returning redirect to ttp://localhost:8080/demo-ui/");
-
-                        response.sendRedirect("http://localhost:8080/demo-ui/");
-                        // Notificamos al contenedor de la autenticación exitosa
-
+                        response.sendRedirect(BASE_URL);
                         return context.notifyContainerAboutLogin(principal, groups);
                     }
                     else {
                         log.info("Unauthorized with validation result code: {}", validationResult.getStatus());
-                        // Token inválido o expirado
                         return context.responseUnauthorized();
                     }
                 }
@@ -140,8 +129,6 @@ public class CustomAuthenticationMechanism implements HttpAuthenticationMechanis
         log.info("Caller principal: {}", context.getCallerPrincipal());
         log.info("Caller auth parameters: {}", context.getAuthParameters());
 
-        //TODO
-        // // 2. Si el usuario ya está autenticado (ya hay un SecurityContext con Subject), dejamos pasar
         if (context.getCallerPrincipal() != null) {
             log.info("User already authenticated: {}", context.getCallerPrincipal().getName());
             return context.doNothing();
@@ -149,42 +136,11 @@ public class CustomAuthenticationMechanism implements HttpAuthenticationMechanis
 
         if (context.isAuthenticationRequest()) {
             log.info("Is an authentication request, but no code provided: {}", path);
-            //     // Ya se está manejando otra cosa
             return context.doNothing();
         }
 
-        // // 3. Si la ruta está protegida y no hay código, redirigimos al Authorization Endpoint
-        // if (context.isAuthenticationRequest().equals(AuthenticationStatus.SEND_CONTINUE) ||
-        //     context.isAuthenticationRequest().equals(AuthenticationStatus.SEND_FAILURE)) {
-        //     // Ya se está manejando otra cosa
-        //     return context.doNothing();
-        // }
-
-        // 3.1 Construir URL de redirección a Keycloak
-        String state = UUID.randomUUID().toString();
-        // Podrías generar un nonce para validarlo tras el callback
-        // Guardamos state/nonce en sesión para luego validarlos
-        request.getSession().setAttribute(SESSION_STATE, state);
-
-        String redirectUrl = UriBuilder.fromUri(AUTH_SERVER_URL)
-            .queryParam("response_type", "code")
-            .queryParam("client_id", CLIENT_ID)
-            .queryParam("redirect_uri", REDIRECT_URI)
-            .queryParam("scope", SCOPE)
-            .queryParam("state", state)
-            // .queryParam("nonce", nonce) // si implementas validación de ID Token con nonce
-            .build()
-            .toString();
-
-        try {
-            log.info("Redirecting to {}", redirectUrl);
-            response.sendRedirect(redirectUrl);
-            return context.doNothing();
-        }
-        catch (IOException ex) {
-            log.error("Redirect error", ex);
-            throw new AuthenticationException("Error al redirigir a Keycloak", ex);
-        }
+        // If we reach here, we need to redirect to the OIDC provider for authentication
+        return redirectToIdp(request, response, context);
     }
 
     private TokenResponse readTokenFromIdP(String code) throws IOException, InterruptedException {
@@ -215,15 +171,29 @@ public class CustomAuthenticationMechanism implements HttpAuthenticationMechanis
         }
     }
 
-    public static class TokenResponse {
-        public String access_token;
-        public String expires_in;
-        public String refresh_expires_in;
-        public String refresh_token;
-        public String token_type;
-        public String not_before_policy;
-        public String session_state;
-        public String scope;
-        public String id_token;
+    private AuthenticationStatus redirectToIdp(HttpServletRequest request, HttpServletResponse response, HttpMessageContext context)
+        throws AuthenticationException {
+        String state = UUID.randomUUID().toString();
+        request.getSession().setAttribute(SESSION_STATE, state);
+
+        String redirectUrl = UriBuilder.fromUri(AUTH_SERVER_URL)
+            .queryParam("response_type", "code")
+            .queryParam("client_id", CLIENT_ID)
+            .queryParam("redirect_uri", REDIRECT_URI)
+            .queryParam("scope", SCOPE)
+            .queryParam("state", state)
+            .build()
+            .toString();
+
+        try {
+            log.info("Redirecting to {}", redirectUrl);
+            response.sendRedirect(redirectUrl);
+            return context.doNothing();
+        }
+        catch (IOException ex) {
+            log.error("Redirect error", ex);
+            throw new AuthenticationException("Error al redirigir a Keycloak", ex);
+        }
     }
+
 }
