@@ -66,8 +66,14 @@ public class CustomAuthenticationMechanism implements HttpAuthenticationMechanis
 
         if (request.getSession().getAttribute("principal") != null) {
             log.info("  Principal in session. Do nothing");
-            return context.doNothing();
+            CallerPrincipal principal = (CallerPrincipal) request.getSession().getAttribute("principal");
+            Set<String> groups = (Set<String>) request.getSession().getAttribute("groups");
+            return context.notifyContainerAboutLogin(principal, groups);
         }
+
+        // if (request.getSession().getAttribute("principal") != null) {
+        //     return context.doNothing();
+        // }
 
         String path = request.getRequestURI().substring(request.getContextPath().length());
         String code = request.getParameter(PARAM_CODE);
@@ -108,6 +114,9 @@ public class CustomAuthenticationMechanism implements HttpAuthenticationMechanis
                         request.getSession().setAttribute("username", principal.getName());
                         request.getSession().setAttribute("principal", principal);
                         request.getSession().setAttribute("groups", groups);
+
+                        response.sendRedirect("http://localhost:8080/demo-ui/");
+                        // Notificamos al contenedor de la autenticación exitosa
 
                         return context.notifyContainerAboutLogin(principal, groups);
                     }
