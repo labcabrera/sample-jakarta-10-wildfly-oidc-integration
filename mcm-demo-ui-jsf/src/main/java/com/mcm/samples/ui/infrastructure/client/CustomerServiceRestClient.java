@@ -75,7 +75,7 @@ public class CustomerServiceRestClient implements CustomerService {
     public Customer create(CreateCustomerCmd cmd) {
         log.debug("Customer create << {}", cmd.getEmail());
         try {
-            return customersApi.createConsumer(cmd);
+            return customersApi.createCustomer(cmd);
         }
         catch (ApiException ex) {
             throw new RuntimeException(ex);

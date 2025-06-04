@@ -202,6 +202,23 @@ Después iniciaremos la consola de administración de Minikube:
 minikube stop
 ----
 
+== Recursos
+
+Prueba de lectura del token a través del grant type password para verificar la configuración del usuario:
+
+[source, bash]
+----
+curl -X POST \
+  -d "grant_type=password" \
+  -d "client_id=mcm-demo-client-jsf" \
+  -d "client_secret=HtsCdaR7o5KoNQpI0BOOWwtds1sxorCT" \
+  -d "username=johndoe" \
+  -d "password=changeit" \
+  "http://localhost:8090/realms/mcm-demo/protocol/openid-connect/token"
+----
+
 // https://github.com/wildfly/wildfly-s2i/tree/main/examples/jsf-ejb-jpa/src/main/java/org/wildfly/plugins/demo/jsf
 
 // https://medium.com/@iaravinda33/integrating-keycloak-authentication-with-spring-boot-a-complete-guide-98df2c8d244a
+
+// https://ralph.blog.imixs.com/2025/03/26/wildfly-29-oidc-bearer-token-authentication/
