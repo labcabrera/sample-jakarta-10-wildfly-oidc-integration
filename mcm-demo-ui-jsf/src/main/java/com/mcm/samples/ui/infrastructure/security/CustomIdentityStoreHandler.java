@@ -1,11 +1,13 @@
 package com.mcm.samples.ui.infrastructure.security;
 
+import java.io.InputStream;
 import java.net.URL;
 import java.security.interfaces.RSAPublicKey;
 import java.text.ParseException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import com.nimbusds.jose.JWSVerifier;
 import com.nimbusds.jose.crypto.RSASSAVerifier;
@@ -24,10 +26,19 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class CustomIdentityStoreHandler implements IdentityStoreHandler {
 
-    private static final String CERT_ENDPOINT = "http://localhost:8090/realms/mcm-demo/protocol/openid-connect/certs";
-    private Object claim;
+    private static final Properties config = new Properties();
 
-    //TODO
+    static {
+        try (InputStream in = CustomAuthenticationMechanism.class.getClassLoader().getResourceAsStream("config.properties")) {
+            config.load(in);
+        }
+        catch (Exception e) {
+            throw new RuntimeException("No se pudo cargar config.properties", e);
+        }
+    }
+
+    private static final String CERT_ENDPOINT = config.getProperty("cert.endpoint");
+
     @Override
     public CredentialValidationResult validate(Credential credential) {
 

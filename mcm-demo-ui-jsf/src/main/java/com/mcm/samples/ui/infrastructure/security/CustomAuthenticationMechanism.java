@@ -1,10 +1,12 @@
 package com.mcm.samples.ui.infrastructure.security;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.Properties;
 import java.util.Set;
 import java.util.UUID;
 
@@ -27,18 +29,30 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class CustomAuthenticationMechanism implements HttpAuthenticationMechanism {
 
+    private static final Properties config = new Properties();
+
+    static {
+        try (InputStream in = CustomAuthenticationMechanism.class.getClassLoader().getResourceAsStream("config.properties")) {
+            config.load(in);
+        }
+        catch (Exception e) {
+            throw new RuntimeException("No se pudo cargar config.properties", e);
+        }
+    }
+
+    private static final String AUTH_SERVER_URL = config.getProperty("auth.server.url");
+    private static final String TOKEN_ENDPOINT = config.getProperty("token.endpoint");
+    private static final String CLIENT_ID = config.getProperty("client.id");
+    private static final String CLIENT_SECRET = config.getProperty("client.secret");
+    private static final String REDIRECT_URI = config.getProperty("redirect.uri");
+    private static final String SCOPE = config.getProperty("scope");
+
     @Inject
     private CustomIdentityStoreHandler identityStoreHandler;
 
     private final HttpClient httpClient = HttpClient.newHttpClient();
     private final Jsonb jsonb = JsonbBuilder.create();
 
-    private static final String AUTH_SERVER_URL = "http://localhost:8090/realms/mcm-demo/protocol/openid-connect/auth";
-    private static final String TOKEN_ENDPOINT = "http://localhost:8090/realms/mcm-demo/protocol/openid-connect/token";
-    private static final String CLIENT_ID = "mcm-demo-client-jsf";
-    private static final String CLIENT_SECRET = "HtsCdaR7o5KoNQpI0BOOWwtds1sxorCT";
-    private static final String REDIRECT_URI = "http://localhost:8080/demo-ui/callback";
-    private static final String SCOPE = "openid profile roles";
     private static final String PARAM_CODE = "code";
     private static final String SESSION_STATE = "OIDC_STATE";
 
