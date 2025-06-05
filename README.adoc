@@ -6,6 +6,8 @@ Este repositorio contiene diferentes ejemplos para la integración de la segurid
 aplicaciones basadas en Jakarta EE 10 y Jakarta Security 3 a través de OAuth2 y
 OpenID Connect.
 
+Utilizaremos Keycloak como IdP y Wildfly 36 como servidor de aplicaciones.
+
 [options="header", cols="1,1"]
 |===
 |Proyecto                           | Descripción
@@ -24,12 +26,11 @@ OpenID Connect.
                                       autenticación.
 |===
 
-Como IdP utilizaremos una imagen local de Keycloak.
-
 == Configuración local de Keycloak
 
-Antes de arrancar los proyectos es necesario configurar un Realm y un cliente en Keycloak para que se puedan autenticar los usuarios. Crearemos tres usuarios de ejemplo con
-diferentes roles para probar la seguridad de los servicios.
+Antes de arrancar los proyectos es necesario configurar el Realm, los clientes y los
+usuarios. Crearemos tres usuarios de ejemplo con diferentes roles para probar la
+correcta autorización de los servicios.
 
 En primer lugar crearemos una red local de Docker para que los contenedores puedan comunicarse entre ellos. Para ello utilizaremos el comando:
 
