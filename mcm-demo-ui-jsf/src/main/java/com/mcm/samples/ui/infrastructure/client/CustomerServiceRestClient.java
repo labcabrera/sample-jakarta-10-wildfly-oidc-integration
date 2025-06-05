@@ -6,11 +6,14 @@ import com.mcm.samples.ui.client.generated.customers.invoker.ApiException;
 import com.mcm.samples.ui.client.generated.customers.model.CreateCustomerCmd;
 import com.mcm.samples.ui.client.generated.customers.model.Customer;
 import com.mcm.samples.ui.client.generated.customers.model.CustomerPage;
+import com.mcm.samples.ui.domain.exception.InvalidConfigurationException;
 import com.mcm.samples.ui.domain.service.CustomerService;
+import com.mcm.samples.ui.infrastructure.config.AppConfig;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.faces.context.FacesContext;
+import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 
 @RequestScoped
@@ -19,33 +22,29 @@ public class CustomerServiceRestClient implements CustomerService {
 
     private CustomersApi customersApi;
 
+    @Inject
+    private AppConfig appConfig;
+
     @PostConstruct
     public void init() {
-        String host = System.getenv().getOrDefault("CUSTOMER_API_HOST", "127.0.0.1");
-        int port = Integer.parseInt(System.getenv().getOrDefault("CUSTOMER_API_PORT", "8081"));
-        String scheme = System.getenv().getOrDefault("CUSTOMER_API_SCHEME", "http");
-        String basePath = System.getenv().getOrDefault("CUSTOMER_API_BASE_PATH", "/demo-api");
-
-        log.info("Initializing CustomerService");
-        log.info("Customer API config - host: {}, port: {}, scheme: {}, basePath: {}", host, port, scheme, basePath);
-
-        String accessToken = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("access_token");
-        log.info("Access token: {}", accessToken);
-
-        customersApi = new CustomersApi();
-        ApiClient apiClient = new ApiClient();
-        apiClient.setHost(host);
-        apiClient.setPort(port);
-        apiClient.setScheme(scheme);
-        apiClient.setBasePath(basePath);
-
-        apiClient.setRequestInterceptor(e -> {
-            log.debug("Request Interceptor: {}", e);
-            e.header("Authorization", "Bearer " + accessToken);
-        });
-
-        customersApi = new CustomersApi(apiClient);
-        log.info("CustomerService initialized successfully");
+        String customersApiUrl = appConfig.customerApiUrl();
+        try {
+            log.info("Initializing CustomerService with base URI: {}", customersApiUrl);
+            String accessToken = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("access_token");
+            log.info("Access token: {}", accessToken);
+            ApiClient apiClient = new ApiClient();
+            apiClient.updateBaseUri(customersApiUrl);
+            apiClient.setRequestInterceptor(e -> {
+                log.debug("Request Interceptor: {}", e);
+                e.header("Authorization", "Bearer " + accessToken);
+            });
+            customersApi = new CustomersApi(apiClient);
+            log.info("CustomerService initialized successfully");
+        }
+        catch (Exception ex) {
+            log.error("Error initializing CustomerService: {}", ex.getMessage(), ex);
+            throw new InvalidConfigurationException("", ex);
+        }
     }
 
     @Override

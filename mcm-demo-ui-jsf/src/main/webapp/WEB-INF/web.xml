@@ -3,7 +3,7 @@
     xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
     version="6.0">
 
-    <display-name>MCM Samples - JSF UI</display-name>
+    <display-name>MCM UI JSF Sample</display-name>
 
     <!-- <filter>
         <filter-name>springSecurityFilterChain</filter-name>
@@ -44,7 +44,7 @@
         <url-pattern>/callback/*</url-pattern>
     </servlet-mapping> -->
 
-    <security-constraint>
+    <!-- <security-constraint>
         <web-resource-collection>
             <web-resource-name>protected-pages</web-resource-name>
             <url-pattern>/demo-ui/customers.xhtml</url-pattern>
@@ -57,15 +57,15 @@
         <auth-constraint>
             <role-name>user</role-name>
         </auth-constraint>
-    </security-constraint>
+    </security-constraint> -->
 
-    <security-role>
+    <!-- <security-role>
         <role-name>*</role-name>
     </security-role>
     
     <session-config>
         <session-timeout>30</session-timeout>
-    </session-config>
+    </session-config> -->
 
     <welcome-file-list>
         <welcome-file>index.xhtml</welcome-file>

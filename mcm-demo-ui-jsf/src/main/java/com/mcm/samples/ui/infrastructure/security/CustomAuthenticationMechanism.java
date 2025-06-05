@@ -12,6 +12,7 @@ import java.util.UUID;
 
 import com.mcm.samples.ui.domain.exception.InvalidConfigurationException;
 import com.mcm.samples.ui.domain.exception.TokenResponseException;
+import com.mcm.samples.ui.infrastructure.config.AppConfig;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -42,8 +43,8 @@ public class CustomAuthenticationMechanism implements HttpAuthenticationMechanis
         }
     }
 
-    private static final String AUTH_SERVER_URL = config.getProperty("auth.server.url");
-    private static final String TOKEN_ENDPOINT = config.getProperty("token.endpoint");
+    // private static final String AUTH_SERVER_URL = config.getProperty("auth.server.url");
+    // private static final String TOKEN_ENDPOINT = config.getProperty("token.endpoint");
     private static final String CLIENT_ID = config.getProperty("client.id");
     private static final String CLIENT_SECRET = config.getProperty("client.secret");
     private static final String REDIRECT_URI = config.getProperty("redirect.uri");
@@ -61,6 +62,9 @@ public class CustomAuthenticationMechanism implements HttpAuthenticationMechanis
 
     @Inject
     private Jsonb jsonb;
+
+    @Inject
+    private AppConfig appConfig;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -155,7 +159,7 @@ public class CustomAuthenticationMechanism implements HttpAuthenticationMechanis
         form.append("&client_secret=").append(CLIENT_SECRET);
 
         HttpRequest request = HttpRequest.newBuilder()
-            .uri(URI.create(TOKEN_ENDPOINT))
+            .uri(URI.create(appConfig.tokenUrl()))
             .header("Content-Type", "application/x-www-form-urlencoded")
             .POST(HttpRequest.BodyPublishers.ofString(form.toString()))
             .build();
@@ -174,7 +178,7 @@ public class CustomAuthenticationMechanism implements HttpAuthenticationMechanis
         String state = UUID.randomUUID().toString();
         request.getSession().setAttribute(SESSION_STATE, state);
 
-        String redirectUrl = UriBuilder.fromUri(AUTH_SERVER_URL)
+        String redirectUrl = UriBuilder.fromUri(appConfig.authorizationServerUrl())
             .queryParam("response_type", "code")
             .queryParam("client_id", CLIENT_ID)
             .queryParam("redirect_uri", REDIRECT_URI)

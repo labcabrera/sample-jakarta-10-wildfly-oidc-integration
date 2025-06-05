@@ -9,7 +9,7 @@ docker stop "$APP_NAME"
 
 docker rm "$APP_NAME"
 
-docker run -d --name "$APP_NAME" --network mcm-demo -p 8081:8080 \
+docker run -d --name "$APP_NAME" --network "$NETWORK_NAME" -p 8081:8080 \
     -e ENABLED_SECURITY=true \
     -e JWK_URI=http://mcm-demo-keycloak:8080/realms/mcm-demo/protocol/openid-connect/certs \
     "$APP_NAME"

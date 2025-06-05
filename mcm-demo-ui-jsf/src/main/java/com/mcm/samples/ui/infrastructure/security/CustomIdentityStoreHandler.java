@@ -1,14 +1,16 @@
 package com.mcm.samples.ui.infrastructure.security;
 
-import java.io.InputStream;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.interfaces.RSAPublicKey;
 import java.text.ParseException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
+import com.mcm.samples.ui.domain.exception.InvalidConfigurationException;
+import com.mcm.samples.ui.infrastructure.config.AppConfig;
 import com.nimbusds.jose.JWSVerifier;
 import com.nimbusds.jose.crypto.RSASSAVerifier;
 import com.nimbusds.jose.jwk.JWK;
@@ -16,7 +18,9 @@ import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jwt.SignedJWT;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import jakarta.security.enterprise.credential.Credential;
 import jakarta.security.enterprise.identitystore.CredentialValidationResult;
 import jakarta.security.enterprise.identitystore.IdentityStoreHandler;
@@ -26,18 +30,23 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class CustomIdentityStoreHandler implements IdentityStoreHandler {
 
-    private static final Properties config = new Properties();
+    @Inject
+    private AppConfig appConfig;
 
-    static {
-        try (InputStream in = CustomAuthenticationMechanism.class.getClassLoader().getResourceAsStream("config.properties")) {
-            config.load(in);
+    private JWKSet jwkSet;
+
+    @PostConstruct
+    public void init() throws MalformedURLException, IOException, ParseException {
+        log.info("Initializing CustomIdentityStoreHandler with AppConfig: {}", appConfig);
+        String jwtUrl = appConfig.jwkUri();
+        try {
+            jwkSet = JWKSet.load(new URL(jwtUrl));
         }
-        catch (Exception e) {
-            throw new RuntimeException("No se pudo cargar config.properties", e);
+        catch (Exception ex) {
+            log.error("Error loading JWK set from URL: {}", jwtUrl, ex);
+            throw new InvalidConfigurationException("Failed to load JWK set", ex);
         }
     }
-
-    private static final String CERT_ENDPOINT = config.getProperty("cert.endpoint");
 
     @Override
     public CredentialValidationResult validate(Credential credential) {
@@ -74,7 +83,6 @@ public class CustomIdentityStoreHandler implements IdentityStoreHandler {
 
     public boolean validateIdToken(SignedJWT signedJWT) {
         try {
-            JWKSet jwkSet = JWKSet.load(new URL(CERT_ENDPOINT));
             JWK jwk = jwkSet.getKeyByKeyId(signedJWT.getHeader().getKeyID());
             if (jwk == null) {
                 throw new IllegalStateException("No se encontró la clave pública para el kid: " + signedJWT.getHeader().getKeyID());
