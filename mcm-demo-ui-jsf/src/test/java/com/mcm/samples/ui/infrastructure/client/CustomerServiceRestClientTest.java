@@ -8,9 +8,9 @@ import java.util.Random;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.mcm.demo.api.client.CustomersApi;
-import com.mcm.demo.api.client.model.CreateCustomerCmd;
-import com.mcm.demo.api.client.model.Customer;
+import com.mcm.samples.ui.client.generated.customers.api.CustomersApi;
+import com.mcm.samples.ui.client.generated.customers.model.CreateCustomerCmd;
+import com.mcm.samples.ui.client.generated.customers.model.Customer;
 
 class CustomerServiceRestClientTest {
 

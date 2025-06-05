@@ -1,6 +1,6 @@
 package com.mcm.samples.ui.application;
 
-import com.mcm.demo.api.client.model.CustomerPage;
+import com.mcm.samples.ui.client.generated.customers.model.CustomerPage;
 import com.mcm.samples.ui.infrastructure.client.CustomerServiceRestClient;
 
 import jakarta.annotation.PostConstruct;

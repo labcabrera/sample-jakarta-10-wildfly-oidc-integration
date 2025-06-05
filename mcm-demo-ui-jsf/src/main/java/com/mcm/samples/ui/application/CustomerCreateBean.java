@@ -1,6 +1,6 @@
 package com.mcm.samples.ui.application;
 
-import com.mcm.demo.api.client.model.CreateCustomerCmd;
+import com.mcm.samples.ui.client.generated.customers.model.CreateCustomerCmd;
 import com.mcm.samples.ui.infrastructure.client.CustomerServiceRestClient;
 
 import jakarta.enterprise.context.RequestScoped;

@@ -138,12 +138,12 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <inputSpec>${project.basedir}/src/main/openapi/openapi.yml</inputSpec>
+                            <inputSpec>${project.basedir}/src/main/openapi/customer-api-definition.yml</inputSpec>
                             <generatorName>java</generatorName>
                             <output>${project.build.directory}/generated-sources/openapi</output>
-                            <apiPackage>com.mcm.demo.api.client</apiPackage>
-                            <modelPackage>com.mcm.demo.api.client.model</modelPackage>
-                            <invokerPackage>com.mcm.demo.api.client.invoker</invokerPackage>
+                            <apiPackage>com.mcm.samples.ui.client.generated.customers.api</apiPackage>
+                            <modelPackage>com.mcm.samples.ui.client.generated.customers.model</modelPackage>
+                            <invokerPackage>com.mcm.samples.ui.client.generated.customers.invoker</invokerPackage>
                             <configHelp>false</configHelp>
                             <configOptions>
                                 <useJakartaEe>true</useJakartaEe>

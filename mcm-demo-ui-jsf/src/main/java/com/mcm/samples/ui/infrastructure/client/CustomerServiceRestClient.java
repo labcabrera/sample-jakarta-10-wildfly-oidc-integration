@@ -1,11 +1,11 @@
 package com.mcm.samples.ui.infrastructure.client;
 
-import com.mcm.demo.api.client.CustomersApi;
-import com.mcm.demo.api.client.invoker.ApiClient;
-import com.mcm.demo.api.client.invoker.ApiException;
-import com.mcm.demo.api.client.model.CreateCustomerCmd;
-import com.mcm.demo.api.client.model.Customer;
-import com.mcm.demo.api.client.model.CustomerPage;
+import com.mcm.samples.ui.client.generated.customers.api.CustomersApi;
+import com.mcm.samples.ui.client.generated.customers.invoker.ApiClient;
+import com.mcm.samples.ui.client.generated.customers.invoker.ApiException;
+import com.mcm.samples.ui.client.generated.customers.model.CreateCustomerCmd;
+import com.mcm.samples.ui.client.generated.customers.model.Customer;
+import com.mcm.samples.ui.client.generated.customers.model.CustomerPage;
 import com.mcm.samples.ui.domain.service.CustomerService;
 
 import jakarta.annotation.PostConstruct;

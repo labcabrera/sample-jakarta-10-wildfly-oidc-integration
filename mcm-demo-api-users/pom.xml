@@ -145,7 +145,7 @@
                 <version>7.12.0</version>
                 <executions>
                     <execution>
-                        <id>generate-api</id>
+                        <id>generate-customers-api</id>
                         <goals>
                             <goal>generate</goal>
                         </goals>
@@ -153,8 +153,8 @@
                             <inputSpec>${project.basedir}/src/main/webapp/api-definition.yml</inputSpec>
                             <generatorName>jaxrs-spec</generatorName>
                             <output>${project.build.directory}/generated-sources/openapi</output>
-                            <apiPackage>com.mcm.samples.generated.users.api</apiPackage>
-                            <modelPackage>com.mcm.samples.generated.users.model</modelPackage>
+                            <apiPackage>com.mcm.samples.api.users.generated.users.api</apiPackage>
+                            <modelPackage>com.mcm.samples.api.users.generated.users.model</modelPackage>
                             <configHelp>false</configHelp>
                             <configOptions>
                                 <useJakartaEe>true</useJakartaEe>
