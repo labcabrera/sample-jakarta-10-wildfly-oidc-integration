@@ -5,10 +5,7 @@
     <title>Logout</title>
 </h:head>
 <h:body>
-    <f:event type="preRenderView" listener="#{logoutBean.logout}" />
-    <!-- <h:form>
-      <h:commandButton value="Cerrar sesión" action="#{logoutBean.logout}" />
-    </h:form> -->
+    <f:event type="preRenderView" listener="#{oidcLogoutBean.logout}" />
 </h:body>
 
 </html>

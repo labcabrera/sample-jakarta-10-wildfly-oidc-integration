@@ -39,13 +39,10 @@ public class OidcAuthenticationMechanism implements HttpAuthenticationMechanism 
         }
     }
 
-    // private static final String AUTH_SERVER_URL = config.getProperty("auth.server.url");
-    // private static final String TOKEN_ENDPOINT = config.getProperty("token.endpoint");
-    private static final String CLIENT_ID = config.getProperty("client.id");
-    private static final String CLIENT_SECRET = config.getProperty("client.secret");
-    private static final String REDIRECT_URI = config.getProperty("redirect.uri");
-    private static final String SCOPE = config.getProperty("scope");
-    private static final String BASE_URL = config.getProperty("base.url");
+    // private static final String CLIENT_ID = config.getProperty("client.id");
+    // private static final String CLIENT_SECRET = config.getProperty("client.secret");
+    //private static final String REDIRECT_URI = config.getProperty("redirect.uri");
+    // private static final String BASE_URL = config.getProperty("base.url");
 
     private static final String PARAM_CODE = "code";
     private static final String SESSION_STATE = "OIDC_STATE";
@@ -108,7 +105,7 @@ public class OidcAuthenticationMechanism implements HttpAuthenticationMechanism 
                         request.getSession().setAttribute("principal", principal);
                         request.getSession().setAttribute("groups", groups);
 
-                        response.sendRedirect(BASE_URL);
+                        response.sendRedirect(appConfig.loginRedirectUrl());
                         return context.notifyContainerAboutLogin(principal, groups);
                     }
                     else {
@@ -126,9 +123,6 @@ public class OidcAuthenticationMechanism implements HttpAuthenticationMechanism 
                 throw new AuthenticationException("Error al procesar callback OIDC", ex);
             }
         }
-
-        log.info("Caller principal: {}", context.getCallerPrincipal());
-        log.info("Caller auth parameters: {}", context.getAuthParameters());
 
         if (context.getCallerPrincipal() != null) {
             log.info("User already authenticated: {}", context.getCallerPrincipal().getName());
@@ -150,9 +144,9 @@ public class OidcAuthenticationMechanism implements HttpAuthenticationMechanism 
         StringBuilder form = new StringBuilder();
         form.append("grant_type=authorization_code");
         form.append("&code=").append(code);
-        form.append("&redirect_uri=").append(REDIRECT_URI);
-        form.append("&client_id=").append(CLIENT_ID);
-        form.append("&client_secret=").append(CLIENT_SECRET);
+        form.append("&redirect_uri=").append(appConfig.callbackUrl());
+        form.append("&client_id=").append(appConfig.clientId());
+        form.append("&client_secret=").append(appConfig.clientSecret());
 
         HttpRequest request = HttpRequest.newBuilder()
             .uri(URI.create(appConfig.tokenUrl()))
@@ -174,11 +168,13 @@ public class OidcAuthenticationMechanism implements HttpAuthenticationMechanism 
         String state = UUID.randomUUID().toString();
         request.getSession().setAttribute(SESSION_STATE, state);
 
+        log.info("Redirecting to OIDC provider with state: {}", appConfig.callbackUrl());
+
         String redirectUrl = UriBuilder.fromUri(appConfig.authorizationServerUrl())
             .queryParam("response_type", "code")
-            .queryParam("client_id", CLIENT_ID)
-            .queryParam("redirect_uri", REDIRECT_URI)
-            .queryParam("scope", SCOPE)
+            .queryParam("client_id", appConfig.clientId())
+            .queryParam("redirect_uri", appConfig.callbackUrl())
+            .queryParam("scope", appConfig.scope())
             .queryParam("state", state)
             .build()
             .toString();

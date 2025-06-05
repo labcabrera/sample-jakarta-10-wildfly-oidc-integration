@@ -8,6 +8,11 @@ OpenID Connect.
 
 En la demo utilizaremos *Keycloak* como IdP y *Wildfly* como servidor de aplicaciones.
 
+Utilizaremos una implementación ad-hoc basada en Jakarta Security de los flujos
+de seguridad para controlar la autenticación y autorización sin utilizar los
+componentes específicos de cada servidor de aplicaciones de tal modo que la capa
+de seguridad esté desacoplada de la implementación de este.
+
 [options="header", cols="1,1"]
 |===
 |Proyecto                           | Descripción

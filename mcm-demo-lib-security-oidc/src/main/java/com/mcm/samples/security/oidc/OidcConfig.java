@@ -19,6 +19,14 @@ public class OidcConfig {
         }
     }
 
+    public String clientId() {
+        return getProperty("CLIENT_ID", "client.id", null);
+    }
+
+    public String clientSecret() {
+        return getProperty("CLIENT_SECRET", "client.secret", null);
+    }
+
     public String authorizationServerUrl() {
         return getProperty("AUTH_SERVER_URL", "auth.server.url", null);
     }
@@ -27,8 +35,28 @@ public class OidcConfig {
         return getProperty("TOKEN_URL", "token.endpoint", null);
     }
 
+    public String logoutUrl() {
+        return getProperty("LOGOUT_URL", "logout.url", null);
+    }
+
+    public String callbackUrl() {
+        return getProperty("CALLBACK_URL", "callback.url", null);
+    }
+
+    public String loginRedirectUrl() {
+        return getProperty("LOGIN_REDIRECT_URL", "login.redirect", null);
+    }
+
+    public String logoutRedirectUrl() {
+        return getProperty("LOGOUT_REDIRECT_URL", "logout.redirect", null);
+    }
+
     public String jwkUri() {
         return getProperty("JWK_URL", "jwk.url", null);
+    }
+
+    public String scope() {
+        return getProperty("SCOPE", "scope", "openid profile email");
     }
 
     public String customerApiUrl() {
