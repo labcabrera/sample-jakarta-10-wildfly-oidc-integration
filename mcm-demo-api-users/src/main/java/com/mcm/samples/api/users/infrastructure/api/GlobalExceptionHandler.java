@@ -1,7 +1,9 @@
 package com.mcm.samples.api.users.infrastructure.api;
 
+import java.time.LocalDateTime;
+
 import com.mcm.samples.api.users.domain.exception.UserNotFoundException;
-import com.mcm.samples.generated.users.model.ApiError;
+import com.mcm.samples.api.users.generated.users.model.ApiError;
 
 import jakarta.validation.ConstraintViolationException;
 import jakarta.ws.rs.ForbiddenException;
@@ -17,12 +19,13 @@ public class GlobalExceptionHandler implements ExceptionMapper<Throwable> {
 
     @Override
     public Response toResponse(Throwable exception) {
-        log.error("Global exception", exception);
+        log.error("Handling global exception", exception);
         Status status = mapStatus(exception);
 
         ApiError apiError = new ApiError();
         apiError.setCode(String.valueOf(status.getStatusCode()));
         apiError.setMessage(exception.getMessage());
+        apiError.setTimestamp(LocalDateTime.now());
 
         return Response
             .status(status)
@@ -33,7 +36,7 @@ public class GlobalExceptionHandler implements ExceptionMapper<Throwable> {
 
     private Status mapStatus(Throwable exception) {
         if (exception instanceof UserNotFoundException) {
-            return Response.Status.BAD_REQUEST;
+            return Response.Status.NOT_FOUND;
         }
         else if (exception instanceof ForbiddenException) {
             return Response.Status.FORBIDDEN;
