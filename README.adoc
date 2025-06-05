@@ -1,12 +1,12 @@
-= MCM Demo REST Client
+= MCM Demo Integración de Seguridad
 
 == Objetivo
 
 Este repositorio contiene diferentes ejemplos para la integración de la seguridad de
-aplicaciones basadas en Jakarta EE 10 y Jakarta Security 3 a través de OAuth2 y
+aplicaciones basadas en *Jakarta EE* y *Jakarta Security* a través de OAuth2 y
 OpenID Connect.
 
-Utilizaremos Keycloak como IdP y Wildfly 36 como servidor de aplicaciones.
+Utilizaremos *Keycloak* como IdP y *Wildfly* como servidor de aplicaciones.
 
 [options="header", cols="1,1"]
 |===
