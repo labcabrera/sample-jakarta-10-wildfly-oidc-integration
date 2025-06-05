@@ -3,6 +3,7 @@ package com.mcm.samples.rest.client.domain.entity;
 import jakarta.json.bind.adapter.JsonbAdapter;
 
 public class CustomerStatusAdapter implements JsonbAdapter<CustomerStatus, String> {
+
     @Override
     public String adaptToJson(CustomerStatus status) {
         return status.getDescription();

@@ -5,6 +5,7 @@ import java.util.Set;
 
 import com.mcm.samples.rest.client.application.repository.CustomerRepository;
 import com.mcm.samples.rest.client.domain.cmd.CreateCustomerCmd;
+import com.mcm.samples.rest.client.domain.entity.AuditInfo;
 import com.mcm.samples.rest.client.domain.entity.Customer;
 import com.mcm.samples.rest.client.domain.entity.CustomerContactInfo;
 import com.mcm.samples.rest.client.domain.entity.CustomerStatus;
@@ -52,8 +53,10 @@ public class CustomerCreationService {
                 .phoneNumber(cmd.getPhoneNumber())
                 .build())
             .status(CustomerStatus.PENDING_ACTIVATION)
-            .createdAt(LocalDateTime.now())
-            .createdBy(username)
+            .auditInfo(AuditInfo.builder()
+                .createdAt(LocalDateTime.now())
+                .createdBy(username)
+                .build())
             .build();
         return customerRepository.save(customer);
     }

@@ -1,10 +1,7 @@
 package com.mcm.samples.rest.client.domain.entity;
 
-import java.time.LocalDateTime;
-
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
-import jakarta.json.bind.annotation.JsonbDateFormat;
 import jakarta.json.bind.annotation.JsonbPropertyOrder;
 import jakarta.json.bind.annotation.JsonbTypeAdapter;
 import jakarta.validation.constraints.NotNull;
@@ -17,8 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@JsonbPropertyOrder({ "id", "firstName", "lastName", "contactInfo", "status", "createdAt", "updatedAt", "createdBy",
-    "updatedBy" })
+@JsonbPropertyOrder({ "id", "firstName", "lastName", "contactInfo", "status", "auditInfo" })
 public class Customer {
 
     @NotNull
@@ -43,18 +39,7 @@ public class Customer {
     private CustomerStatus status;
 
     @NotNull
-    @Schema(description = "Creation timestamp of the customer record", example = "2023-10-01T12:00:00")
-    @JsonbDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
-    private LocalDateTime createdAt;
-
-    @Schema(description = "Last update timestamp of the customer record", example = "2023-10-01T12:00:00")
-    @JsonbDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
-    private LocalDateTime updatedAt;
-
-    @Schema(description = "User who created the customer record", example = "johndoe")
-    private String createdBy;
-
-    @Schema(description = "User who last updated the customer record", example = "johndoe")
-    private String updatedBy;
+    @Schema(description = "Entity audit information.")
+    private AuditInfo auditInfo;
 
 }

@@ -1,17 +1,17 @@
-package com.mcm.samples.rest.client.domain.entity;
+package com.mcm.samples.rest.client.infrastructure.jpa.entities;
 
-import jakarta.json.bind.annotation.JsonbPropertyOrder;
+import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Embeddable
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@JsonbPropertyOrder({ "email", "phoneNumber" })
-public class CustomerContactInfo {
+public class ContactInfoEntity {
 
     private String email;
 

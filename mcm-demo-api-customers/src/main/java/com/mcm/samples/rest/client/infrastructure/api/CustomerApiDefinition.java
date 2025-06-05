@@ -28,7 +28,7 @@ import jakarta.ws.rs.core.Response;
 
 @Path("/customers")
 @Tag(name = "Customers", description = "Customers Demo REST API")
-public interface CustomerResourceDefinition {
+public interface CustomerApiDefinition {
 
     @GET
     @Path("/{id}")

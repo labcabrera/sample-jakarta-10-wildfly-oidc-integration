@@ -96,6 +96,7 @@ public class CustomIdentityStoreHandler implements IdentityStoreHandler {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private Set<String> getRolesFromClaims(SignedJWT signedJWT) {
         try {
             Map<String, Object> realmAccess = (Map<String, Object>) signedJWT.getJWTClaimsSet().getClaim("realm_access");

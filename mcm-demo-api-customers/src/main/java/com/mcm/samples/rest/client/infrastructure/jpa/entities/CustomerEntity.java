@@ -1,7 +1,5 @@
 package com.mcm.samples.rest.client.infrastructure.jpa.entities;
 
-import java.time.LocalDateTime;
-
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -24,16 +22,11 @@ public class CustomerEntity {
     private String lastName;
 
     @Embedded
-    private CustomerContactInfoEntity contactInfo;
+    private ContactInfoEntity contactInfo;
 
     private String status;
 
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
-
-    private String createdBy;
-
-    private String updatedBy;
+    @Embedded
+    private AuditInfoEntity auditInfo;
 
 }

@@ -41,9 +41,8 @@ public class CustomerUpdateService {
         if (cmd.getPhoneNumber() != null) {
             customer.getContactInfo().setPhoneNumber(cmd.getPhoneNumber());
         }
-        customer.setUpdatedAt(LocalDateTime.now());
-        customer.setUpdatedBy(username);
-
+        customer.getAuditInfo().setUpdatedAt(LocalDateTime.now());
+        customer.getAuditInfo().setUpdatedBy(username);
         return customerRepository.update(customer);
     }
 
