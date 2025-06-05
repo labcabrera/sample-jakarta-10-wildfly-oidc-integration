@@ -110,9 +110,9 @@ La imagen docker de este proyecto ejecuta el perfil standalone.xml de Wildfly ya
 
 Este proyecto define un CRUD básico de clientes utilizando la API utilizando Thymeleaf y Spring Boot en lugar de Jakarta EE y JSF.
 
-include::doc-keycloak.adoc[]
-
 == Configuración de Keycloak
+
+Para la demo utilizaremos una imagen de Keycloak usando Docker:
 
 ----
 docker run -d --name mcm-demo-keycloak --network mcm-demo -p 8090:8080 \
@@ -126,7 +126,7 @@ Después abriremos la consola de adminstración desde localhost:8090/ y crearemo
 
 image::./resources/images/keycloak-create-realm.png[Realm creation, width=600, align="center"]
 
-Una vez creado el Realm crearemos el cliente "mcm-demo-client"
+Una vez creado el Realm crearemos el cliente "johndoe"
 
 image::./resources/images/keycloak-create-client.png[Client creation, width=600, align="center"]
 
@@ -145,6 +145,14 @@ image::./resources/images/keycloak-user-roles.png[User roles, width=600, align="
 De tal modo que en el token JWT podamos ver los roles asignados al usuario:
 
 image::./resources/images/jwt-info.png[User roles, width=600, align="center"]
+
+[options="header"]
+|===
+|Usuario            | Roles
+|_customer-manager_ | _customer-manager_, _customer-viewer_
+|_customer-viewer_  | _customer-viewer_
+|_johndoe_          | _user_, _admin_ 
+|===
 
 
 // ----
