@@ -5,6 +5,7 @@
 Este repositorio contiene diferentes ejemplos para la integración de la
 seguridad de aplicaciones basadas en Jakarta EE a través de OAuth2 y OpenID Connect.
 
+[options="header", cols="1,2"]
 |===
 |Proyecto                          | Descripción
 |link:/mcm-demo-lib-security-jwt[] | Starter de seguridad para servicios REST basados en JWT.
