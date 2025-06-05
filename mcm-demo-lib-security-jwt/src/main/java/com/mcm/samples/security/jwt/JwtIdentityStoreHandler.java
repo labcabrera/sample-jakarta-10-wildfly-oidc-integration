@@ -7,6 +7,7 @@ import java.text.ParseException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import com.nimbusds.jose.JWSVerifier;
@@ -16,6 +17,7 @@ import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jwt.SignedJWT;
 
+import jakarta.annotation.Nullable;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -30,6 +32,10 @@ public class JwtIdentityStoreHandler implements IdentityStoreHandler {
 
     @Inject
     private JwtConfig appConfig;
+
+    @Inject
+    @Nullable
+    private JwtUserInfoMapper userInfoMapper;
 
     private JWKSet jwkSet;
 
@@ -68,7 +74,7 @@ public class JwtIdentityStoreHandler implements IdentityStoreHandler {
         try {
             String username = signedJWT.getJWTClaimsSet().getStringClaim("name");
             Set<String> roles = getRolesFromClaims(signedJWT);
-            return new CredentialValidationResult(username, roles);
+            return mapCredentialValidationResult(username, roles);
         }
         catch (Exception e) {
             log.error("Error parsing JWT claims", e);
@@ -76,7 +82,7 @@ public class JwtIdentityStoreHandler implements IdentityStoreHandler {
         }
     }
 
-    public boolean validateIdToken(SignedJWT signedJWT) {
+    private boolean validateIdToken(SignedJWT signedJWT) {
         try {
             JWK jwk = jwkSet.getKeyByKeyId(signedJWT.getHeader().getKeyID());
             if (jwk == null) {
@@ -109,6 +115,19 @@ public class JwtIdentityStoreHandler implements IdentityStoreHandler {
             log.error("Error parsing JWT claims", e);
         }
         return new HashSet<>();
+    }
+
+    private CredentialValidationResult mapCredentialValidationResult(String username, Set<String> roles) {
+        log.info("Mapping credential validation result for user: {}", username);
+        if (userInfoMapper != null) {
+            log.info("Using user info mapper to map username: {}", username);
+            Optional<JwtUserInfo> userInfo = userInfoMapper.map(username);
+            if (userInfo.isPresent()) {
+                username = userInfo.get().getCode();
+                roles.addAll(userInfo.get().getRoles());
+            }
+        }
+        return new CredentialValidationResult(username, roles);
     }
 
 }

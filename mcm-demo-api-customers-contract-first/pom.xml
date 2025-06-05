@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.mcm.demo</groupId>
-    <artifactId>mcm-demo-api-customers-jakarta-contract-first</artifactId>
+    <artifactId>mcm-demo-api-customers-contract-first</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>war</packaging>
 

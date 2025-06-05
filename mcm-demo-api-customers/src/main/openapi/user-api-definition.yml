@@ -1,0 +1,103 @@
+openapi: 3.0.1
+info:
+  title: Users API
+  description: |-
+    API de ejemplo de lectura de información de usuarios.
+  version: 1.0.0
+servers:
+  - url: http://127.0.0.1:8082/api
+    description: Desarrollo local
+security:
+  - bearerAuth: []
+components:
+  schemas:
+    UserInfo:
+      type: object
+      required:
+        - id
+        - code
+        - roles
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the user
+          example: "johndoe"
+        code:
+          type: string
+          description: Internal code of the user
+          example: "ZJD0001"
+        roles:
+          type: array
+          items:
+            type: string
+          description: List of roles assigned to the user
+          example: ["ROLE_FOO", "ROLE_BAR"]
+    ApiError:
+      type: object
+      required:
+        - code
+        - message
+        - timestamp
+      properties:
+        code:
+          type: string
+          example: "404"
+        message:
+          type: string
+          example: "User not found"
+        timestamp:
+          type: string
+          format: date-time
+          example: "2022-03-10T12:15:123"
+        details:
+          type: array
+          items:
+            $ref: "#/components/schemas/ApiErrorDetail"
+    ApiErrorDetail:
+      type: object
+      properties:
+        message:
+          type: string
+        detail:
+          type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+tags:
+  - name: Users
+    description: Users API Operations
+paths:
+  /users/{id}:
+    get:
+      summary: Find customer by id
+      description: Find customer by id
+      operationId: findCustomerById
+      tags:
+        - Users
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserInfo"
+        "404":
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"

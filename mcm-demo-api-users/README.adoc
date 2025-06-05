@@ -1,3 +1,8 @@
 = API de Usuarios
 
-TODO
+Ejemplo de API REST implementada como Contract-First que devuelve información extendida
+de un usuario a partir de su identificador.
+
+Esta API devuelve el código interno de un usuario y una lista adicional de roles asociados
+que se recuperarán de una base de datos para que servicios externos puedan agregar esta
+información a la información obtenida del IdP.
