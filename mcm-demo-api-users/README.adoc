@@ -1,8 +1,3 @@
-= API de Clientes
+= API de Usuarios
 
 TODO
-
-== Permisos necesarios
-
-- alta, modificación y eliminación de clientes: rol 'customer-manager'
-- consulta de clientes: rol 'customer-viewer'

@@ -1,8 +1,48 @@
 = API de Clientes
 
-TODO
+Esta API permite realizar operaciones CRUD sobre clientes.
 
-== Permisos necesarios
+La API está securizada mediante autenticación JWT y requiere que el usuario tenga los roles adecuados para realizar las operaciones.
 
-- alta, modificación y eliminación de clientes: rol 'customer-manager'
-- consulta de clientes: rol 'customer-viewer'
+[options="header"]
+|===
+| Método | Ruta                | Descripción              | Rol              |
+| GET    | /api/customers      | Listado de clientes      | customer-viewer  |
+| GET    | /api/customers/{id} | Consulta RSQL de clientes| customer-viewer  |
+| POST   | /api/customers      | Alta de cliente          | customer-manager |
+| PATCH  | /api/customers/{id} | Actualización de cliente | customer-manager |
+| DELETE | /api/customers/{id} | Eliminación de cliente   | customer-manager |
+|===
+
+La API de la aplicación está basada en Code-First a partir de las anotaciones
+definidas en la clase `CustomerApiDefinition`.
+
+De este modo tenemos la interface de la API con las anotaciones separada de la
+implementacion `CustomerApi`.
+
+Para la consulta de clientes se ha utilizado RSQL, que permite realizar consultas complejas a partir de una expresión de búsqueda de modo que no se
+require crear un filtro para cada campo de la entidad.
+
+Para la generación dinámica de la definición de la API utilizamos Microprofile
+de modo que al levantar el servidor deberemos pasarle el valor de configuración:
+
+[source,bash]
+----
+./standalone.bin -c standalone-microprofile.xml
+----
+
+La configuración de este perfil por defecto la seguridad integrada de Undertow. Es
+necesario desactivarla para poder establecer los mecanismos personalizados de seguridad. Para ello desde la cli de WildFly ejecutaremos el comando:
+
+----
+/subsystem=undertow/application-security-domain=other:write-attribute(name=integrated-jaspi,value=false)
+----
+
+Este comando se ejecuta durante la generación de la imagen Docker.
+
+== Seguridad
+
+La seguridad de la API se gestiona mediante la validación del token JWT que se envía en el encabezado de autorización de las peticiones.
+
+Durante la verificación del token se consulta al almacén de cerfificados de Keycloak
+para recuperar la clave pública.
