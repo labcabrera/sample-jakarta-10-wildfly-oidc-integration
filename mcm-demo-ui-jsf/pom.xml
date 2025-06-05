@@ -11,12 +11,18 @@
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
+        <mcm.security.oidc.version>1.0.0-SNAPSHOT</mcm.security.oidc.version>
         <jakarta.version>10.0.0</jakarta.version>
         <jakarta.security.enterprise.version>3.0.0</jakarta.security.enterprise.version>
         <nimbus.version>9.37.3</nimbus.version>
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>com.mcm.demo</groupId>
+            <artifactId>mcm-demo-lib-security-oidc</artifactId>
+            <version>${mcm.security.oidc.version}</version>
+        </dependency>
         <dependency>
             <groupId>jakarta.platform</groupId>
             <artifactId>jakarta.jakartaee-api</artifactId>
@@ -138,7 +144,8 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <inputSpec>${project.basedir}/src/main/openapi/customer-api-definition.yml</inputSpec>
+                            <inputSpec>
+                                ${project.basedir}/src/main/openapi/customer-api-definition.yml</inputSpec>
                             <generatorName>java</generatorName>
                             <output>${project.build.directory}/generated-sources/openapi</output>
                             <apiPackage>com.mcm.samples.ui.client.generated.customers.api</apiPackage>
