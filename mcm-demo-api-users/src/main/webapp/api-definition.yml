@@ -13,6 +13,10 @@ components:
   schemas:
     UserInfo:
       type: object
+      required:
+        - id
+        - code
+        - roles
       properties:
         id:
           type: string
@@ -20,8 +24,8 @@ components:
           example: "johndoe"
         code:
           type: string
-          description: Unique identifier of the user
-          example: ["ZJD0001"]
+          description: Internal code of the user
+          example: "ZJD0001"
         roles:
           type: array
           items:
@@ -30,15 +34,21 @@ components:
           example: ["ROLE_FOO", "ROLE_BAR"]
     ApiError:
       type: object
+      required:
+        - code
+        - message
+        - timestamp
       properties:
         code:
           type: string
+          example: "404"
         message:
           type: string
+          example: "User not found"
         timestamp:
           type: string
           format: date-time
-          example: ["2022-03-10T12:15:500"]
+          example: "2022-03-10T12:15:123"
         details:
           type: array
           items:
@@ -74,13 +84,17 @@ paths:
             type: string
       responses:
         "200":
-          description: User found
+          description: Success
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/UserInfo"
         "404":
           description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
         "500":
           description: Internal server error
           content:
