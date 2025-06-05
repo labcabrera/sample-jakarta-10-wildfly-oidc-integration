@@ -26,6 +26,8 @@ En la demo utilizaremos *Keycloak* como IdP y *Wildfly* como servidor de aplicac
                                       autenticación.
 |===
 
+*TODO*: incluir imagen de modelo de seguridad y flujos de autenticación.
+
 == Configuración local de Keycloak
 
 Antes de arrancar los proyectos es necesario configurar el Realm, los clientes y los
@@ -101,6 +103,9 @@ en los proyectos:
 
 == API de Clientes
 
+Este proyecto expone una API REST con el CRUD básico de la entidad _Customer_
+guardando la información en una base de datos a través de JPA.
+
 Para construir y arrancar en una imagen local el proyecto utilizaremos los
 comandos siguientes dentro del proyecto _mcm-demo-api-customers_:
 
@@ -117,6 +122,23 @@ El segundo comando arranca la imagen Docker con las variables de entorno necesar
 La información de la API se puede consultar a través del siguiente
 link:mcm-demo-api-customers[link].
 
+== Frontal JSF de clientes
+
+Este proyecto consiste en un frontal básico basado en JSF que consume la
+API de clientes y utiliza OIDC para la autenticación propagando el token
+de acceso a la API.
+
+Levantaremos el proyecto a través de Docker del mismo modo que la API de clientes:
+
+----
+./cmd-docker-create-image.sh
+./cmd-docker-start.sh
+----
+
+El primer comando compila el proyecto y crea la imagen de Docker configurando
+la seguridad del perfil _standalone.xml_ de Wildfly.
+
+El segundo comando arranca la imagen Docker con las variables de entorno necesarias para la conexión con Keycloak y la API de clientes.
 
 == TODO
 
