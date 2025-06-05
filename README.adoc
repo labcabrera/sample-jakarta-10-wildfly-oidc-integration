@@ -110,6 +110,8 @@ La imagen docker de este proyecto ejecuta el perfil standalone.xml de Wildfly ya
 
 Este proyecto define un CRUD básico de clientes utilizando la API utilizando Thymeleaf y Spring Boot en lugar de Jakarta EE y JSF.
 
+include::doc-keycloak.adoc[]
+
 == Configuración de Keycloak
 
 ----

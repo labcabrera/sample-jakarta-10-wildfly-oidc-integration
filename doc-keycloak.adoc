@@ -1,0 +1,34 @@
+
+== Configuración de Keycloak
+
+----
+docker run -d --name mcm-demo-keycloak --network mcm-demo -p 8090:8080 \
+  -e KEYCLOAK_ADMIN=admin \
+  -e KEYCLOAK_ADMIN_PASSWORD=admin \
+  quay.io/keycloak/keycloak:24.0.3 \
+  start-dev
+----
+
+Después abriremos la consola de adminstración desde localhost:8090/ y crearemos el Realm "mcm-demo".
+
+image::./resources/images/keycloak-create-realm.png[Realm creation, width=600, align="center"]
+
+Una vez creado el Realm crearemos el cliente "mcm-demo-client"
+
+image::./resources/images/keycloak-create-client.png[Client creation, width=600, align="center"]
+
+Una vez creado el cliente crearemos dos grupos de ejemplo:
+
+image::./resources/images/keycloak-create-roles.png[Create roles, width=600, align="center"]
+
+Después crearemos un usuario de ejemplo _johndoe@demo.com_:
+
+image::./resources/images/keycloak-create-user.png[Create user, width=600, align="center"]
+
+Y le asignaremos los dos roles creados anteriormente:
+
+image::./resources/images/keycloak-user-roles.png[User roles, width=600, align="center"]
+
+De tal modo que en el token JWT podamos ver los roles asignados al usuario:
+
+image::./resources/images/jwt-info.png[User roles, width=600, align="center"]
