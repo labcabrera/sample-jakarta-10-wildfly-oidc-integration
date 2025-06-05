@@ -154,35 +154,6 @@ image::./resources/images/jwt-info.png[User roles, width=600, align="center"]
 |_johndoe_          | _user_, _admin_ 
 |===
 
-
-// ----
-
-// ./standalone.sh -c standalone-microprofile.xml
-
-// curl http://127.0.0.1:8080/demo/api/customers
-
-// curl http://127.0.0.1:8080/demo/api/customers/1 -v
-
-// curl http://127.0.0.1:8080/demo/api/customers/2 -v
-
-// curl http://127.0.0.1:8080/demo/api/customers -v
-
-// curl -X POST http://127.0.0.1:8080/demo/api/customers \
-//   -H "Content-Type: application/json" \
-//   -d '{
-//     "firstName": "John",
-//     "lastName": "Doe",
-//     "email": "john.doe@example.com"
-// }'
-
-// http://127.0.0.1:8080/demo/api/hello
-// http://127.0.0.1:8080/demo/hello.xhtml
-
-// mvn wildfly:deploy
-// mvn wildfly:undeploy
-// ----
-
-
 == Estructura de paquetes
 
 - *domain*: entidades del dominio (no las entidades JPA) y servicios con la lógica del negocio.º
@@ -226,6 +197,16 @@ curl -X POST \
   -d "password=changeit" \
   "http://localhost:8090/realms/mcm-demo/protocol/openid-connect/token"
 ----
+
+== Puertos locales
+
+|===
+|_mcm-demo-api-customers_              | 8081
+|_mcm-demo-api-users_                  | 8082
+|_mcm-demo-keycloak_                   | 8090
+|===
+
+
 
 // https://github.com/wildfly/wildfly-s2i/tree/main/examples/jsf-ejb-jpa/src/main/java/org/wildfly/plugins/demo/jsf
 

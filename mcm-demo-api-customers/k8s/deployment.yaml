@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mcm-demo-api-customers-jakarta-code-first
+  name: mcm-demo-api-customers
   labels:
-    k8s-app: mcm-demo-api-customers-jakarta-code-first
+    k8s-app: mcm-demo-api-customers
 spec:
   replicas: 1
   selector:
     matchLabels:
-      k8s-app: mcm-demo-api-customers-jakarta-code-first
+      k8s-app: mcm-demo-api-customers
   template:
     metadata:
       labels:
-        k8s-app: mcm-demo-api-customers-jakarta-code-first
+        k8s-app: mcm-demo-api-customers
     spec:
       imagePullSecrets:
       - name: registrykey
       containers:
-      - name: mcm-demo-api-customers-jakarta-code-first
+      - name: mcm-demo-api-customers
         image: {{DOCKER_REGISTRY}}
         env:
         - name: SAMPLE_APP_PROPERTY

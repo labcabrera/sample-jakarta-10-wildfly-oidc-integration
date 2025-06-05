@@ -2,6 +2,6 @@
 
 mvn clean package -DskipTests
 
-APP_NAME="mcm-demo-api-customers-jakarta-code-first"
+APP_NAME="mcm-demo-api-users"
 
 docker build -t "$APP_NAME" .

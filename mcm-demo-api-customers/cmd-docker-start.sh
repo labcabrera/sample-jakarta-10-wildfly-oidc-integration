@@ -1,7 +1,7 @@
 #!/bin/bash
 
 NETWORK_NAME="mcm-demo"
-APP_NAME="mcm-demo-api-customers-jakarta-code-first"
+APP_NAME="mcm-demo-api-customers"
 
 docker network inspect "$NETWORK_NAME" >/dev/null 2>&1 || docker network create "$NETWORK_NAME"
 
