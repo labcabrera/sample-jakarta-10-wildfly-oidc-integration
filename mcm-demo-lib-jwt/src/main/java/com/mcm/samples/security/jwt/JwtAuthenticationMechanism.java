@@ -17,13 +17,13 @@ import lombok.extern.slf4j.Slf4j;
 
 @ApplicationScoped
 @Slf4j
-public class CustomAuthenticationMechanism implements HttpAuthenticationMechanism {
+public class JwtAuthenticationMechanism implements HttpAuthenticationMechanism {
 
     @Inject
     private AppConfig appConfig;
 
     @Inject
-    private CustomIdentityStoreHandler identityStoreHandler;
+    private JwtIdentityStoreHandler identityStoreHandler;
 
     @Override
     public AuthenticationStatus validateRequest(HttpServletRequest request, HttpServletResponse response, HttpMessageContext context)
@@ -46,7 +46,7 @@ public class CustomAuthenticationMechanism implements HttpAuthenticationMechanis
         String token = header.substring("Bearer ".length()).trim();
         log.info("Received token: {}", token);
 
-        CustomCredential customCredential = new CustomCredential(token);
+        JwtCredential customCredential = new JwtCredential(token);
         CredentialValidationResult validationResult = identityStoreHandler.validate(customCredential);
         CallerPrincipal principal = validationResult.getCallerPrincipal();
         Set<String> groups = validationResult.getCallerGroups();

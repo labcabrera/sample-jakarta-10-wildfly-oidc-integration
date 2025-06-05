@@ -26,7 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @ApplicationScoped
 @Slf4j
-public class CustomIdentityStoreHandler implements IdentityStoreHandler {
+public class JwtIdentityStoreHandler implements IdentityStoreHandler {
 
     @Inject
     private AppConfig appConfig;
@@ -47,7 +47,7 @@ public class CustomIdentityStoreHandler implements IdentityStoreHandler {
 
     @Override
     public CredentialValidationResult validate(Credential credential) {
-        CustomCredential customCredential = (CustomCredential) credential;
+        JwtCredential customCredential = (JwtCredential) credential;
         String accessToken = customCredential.getAccessToken();
         log.info("Access token: {}", accessToken);
         SignedJWT signedJWT;
