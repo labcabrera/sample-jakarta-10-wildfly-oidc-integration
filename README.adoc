@@ -2,28 +2,90 @@
 
 == Objetivo
 
-Este repositorio contiene diferentes ejemplos para la integración de la
-seguridad de aplicaciones basadas en Jakarta EE a través de OAuth2 y OpenID Connect.
+Este repositorio contiene diferentes ejemplos para la integración de la seguridad de
+aplicaciones basadas en Jakarta EE 10 y Jakarta Security 3 a través de OAuth2 y
+OpenID Connect.
 
 [options="header", cols="1,1"]
 |===
 |Proyecto                           | Descripción
-|link:/mcm-demo-lib-security-jwt[]  | Starter de seguridad para servicios REST basados
+|link:mcm-demo-lib-security-jwt[]   | Starter de seguridad para servicios REST basados
                                       en JWT.
-|link:/mcm-demo-lib-security-oidc[] | Starter de seguridad para aplicaciones web basado
+|link:mcm-demo-lib-security-oidc[]  | Starter de seguridad para aplicaciones web basado
                                       en OIDC.
-|link:/mcm-demo-api-customers[]     | Ejemplo de API REST Code-First con un CRUD básico
+|link:mcm-demo-api-customers[]      | Ejemplo de API REST Code-First con un CRUD básico
                                       de Clientes.
-|link:/mcm-demo-api-users[]         | Ejemplo de API REST Contract-First con consultas
+|link:mcm-demo-api-users[]          | Ejemplo de API REST Contract-First con consultas
                                       de usuarios.
-|link:/mcm-demo-ui-jsf[]            | Frontal basado en JSF que consume la API de clientes
+|link:mcm-demo-ui-jsf[]             | Frontal basado en JSF que consume la API de clientes
                                       y utiliza OIDC para la autenticación.
-|link:/mcm-demo-ui-spring-boot[]    | Frontal basado en Spring Boot + Thymeleaf que
+|link:mcm-demo-ui-spring-boot[]     | Frontal basado en Spring Boot + Thymeleaf que
                                       consume la API de clientes y utiliza OIDC para la
                                       autenticación.
 |===
 
 Como IdP utilizaremos una imagen local de Keycloak.
+
+== Configuración local de Keycloak
+
+Antes de arrancar los proyectos es necesario configurar un Realm y un cliente en Keycloak para que se puedan autenticar los usuarios. Crearemos tres usuarios de ejemplo con
+diferentes roles para probar la seguridad de los servicios.
+
+En primer lugar crearemos una red local de Docker para que los contenedores puedan comunicarse entre ellos. Para ello utilizaremos el comando:
+
+[source, bash]
+----
+docker network create mcm-demo
+----
+
+Una vez creada la red arrancaremos el contenedor de Keycloak en el puerto 8090 con
+el siguiente comando:
+
+[source, bash]
+----
+docker run -d --name mcm-demo-keycloak --network mcm-demo -p 8090:8080 \
+  -e KEYCLOAK_ADMIN=admin \
+  -e KEYCLOAK_ADMIN_PASSWORD=admin \
+  quay.io/keycloak/keycloak:24.0.3 \
+  start-dev
+----
+
+Una vez arrancado el contenedor podemos acceder a la consola de administración de Keycloak
+a través de la URL http://localhost:8090/ y autenticarnos con el usuario y contraseña
+configurados al crear el contendor (_admin/admin_).
+
+Desde la consola crearemos el Realm _mcm-demo_:
+
+image::./resources/images/keycloak-create-realm.png[Realm creation, width=600, align="center"]
+
+Una vez creado el Realm crearemos el cliente "johndoe"
+
+image::./resources/images/keycloak-create-client.png[Client creation, width=600, align="center"]
+
+Una vez creado el cliente crearemos dos grupos de ejemplo:
+
+image::./resources/images/keycloak-create-roles.png[Create roles, width=600, align="center"]
+
+Después crearemos un usuario de ejemplo _johndoe@demo.com_:
+
+image::./resources/images/keycloak-create-user.png[Create user, width=600, align="center"]
+
+Y le asignaremos los dos roles creados anteriormente:
+
+image::./resources/images/keycloak-user-roles.png[User roles, width=600, align="center"]
+
+De tal modo que en el token JWT podamos ver los roles asignados al usuario:
+
+image::./resources/images/jwt-info.png[User roles, width=600, align="center"]
+
+[options="header"]
+|===
+|Usuario            | Roles
+|_customer-manager_ | _customer-manager_, _customer-viewer_
+|_customer-viewer_  | _customer-viewer_
+|_johndoe_          | _user_, _admin_ 
+|===
+
 
 En este ejemplo en primer lugar definiremos una API REST de ejemplo que implementa un CRUD de la entidad Customer y posteriormente dos frontends basados
 tanto en JSF como en Spring Boot + Thymeleaf que se integran con dicha API.
@@ -129,50 +191,6 @@ La imagen docker de este proyecto ejecuta el perfil standalone.xml de Wildfly ya
 === mcm-demo-ui-spring-boot-oauth2
 
 Este proyecto define un CRUD básico de clientes utilizando la API utilizando Thymeleaf y Spring Boot en lugar de Jakarta EE y JSF.
-
-== Configuración de Keycloak
-
-Para la demo utilizaremos una imagen de Keycloak usando Docker:
-
-----
-docker run -d --name mcm-demo-keycloak --network mcm-demo -p 8090:8080 \
-  -e KEYCLOAK_ADMIN=admin \
-  -e KEYCLOAK_ADMIN_PASSWORD=admin \
-  quay.io/keycloak/keycloak:24.0.3 \
-  start-dev
-----
-
-Después abriremos la consola de adminstración desde localhost:8090/ y crearemos el Realm "mcm-demo".
-
-image::./resources/images/keycloak-create-realm.png[Realm creation, width=600, align="center"]
-
-Una vez creado el Realm crearemos el cliente "johndoe"
-
-image::./resources/images/keycloak-create-client.png[Client creation, width=600, align="center"]
-
-Una vez creado el cliente crearemos dos grupos de ejemplo:
-
-image::./resources/images/keycloak-create-roles.png[Create roles, width=600, align="center"]
-
-Después crearemos un usuario de ejemplo _johndoe@demo.com_:
-
-image::./resources/images/keycloak-create-user.png[Create user, width=600, align="center"]
-
-Y le asignaremos los dos roles creados anteriormente:
-
-image::./resources/images/keycloak-user-roles.png[User roles, width=600, align="center"]
-
-De tal modo que en el token JWT podamos ver los roles asignados al usuario:
-
-image::./resources/images/jwt-info.png[User roles, width=600, align="center"]
-
-[options="header"]
-|===
-|Usuario            | Roles
-|_customer-manager_ | _customer-manager_, _customer-viewer_
-|_customer-viewer_  | _customer-viewer_
-|_johndoe_          | _user_, _admin_ 
-|===
 
 == Estructura de paquetes
 
