@@ -1,7 +1,7 @@
 package com.mcm.samples.api.users.infrastructure.api;
 
-import com.mcm.demo.users.model.ApiError;
 import com.mcm.samples.api.users.domain.exception.UserNotFoundException;
+import com.mcm.samples.generated.users.model.ApiError;
 
 import jakarta.validation.ConstraintViolationException;
 import jakarta.ws.rs.ForbiddenException;

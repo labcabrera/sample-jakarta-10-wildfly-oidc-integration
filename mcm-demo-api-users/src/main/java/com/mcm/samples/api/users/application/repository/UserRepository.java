@@ -2,7 +2,7 @@ package com.mcm.samples.api.users.application.repository;
 
 import java.util.Optional;
 
-import com.mcm.demo.users.model.UserInfo;
+import com.mcm.samples.generated.users.model.UserInfo;
 
 public interface UserRepository {
 

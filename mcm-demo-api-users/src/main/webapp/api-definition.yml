@@ -5,7 +5,7 @@ info:
     API de ejemplo de lectura de información de usuarios.
   version: 1.0.0
 servers:
-  - url: /api-users
+  - url: http://127.0.0.1:8082/api
     description: Desarrollo local
 security:
   - bearerAuth: []
@@ -55,7 +55,7 @@ tags:
   - name: Users
     description: Users API Operations
 paths:
-  /api/customers/{id}:
+  /users/{id}:
     get:
       summary: Find customer by id
       description: Find customer by id

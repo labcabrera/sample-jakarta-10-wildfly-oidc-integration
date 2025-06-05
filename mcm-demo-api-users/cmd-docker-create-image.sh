@@ -1,6 +1,6 @@
 #!/bin/bash
 
-mvn clean package -DskipTests
+./mvnw clean package -DskipTests
 
 APP_NAME="mcm-demo-api-users"
 

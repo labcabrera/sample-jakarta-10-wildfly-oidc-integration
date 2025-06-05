@@ -3,8 +3,8 @@ package com.mcm.samples.api.users.infrastructure.jpa;
 import java.util.Arrays;
 import java.util.Optional;
 
-import com.mcm.demo.users.model.UserInfo;
 import com.mcm.samples.api.users.application.repository.UserRepository;
+import com.mcm.samples.generated.users.model.UserInfo;
 
 import jakarta.enterprise.context.ApplicationScoped;
 

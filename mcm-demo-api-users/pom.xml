@@ -153,8 +153,8 @@
                             <inputSpec>${project.basedir}/src/main/webapp/api-definition.yml</inputSpec>
                             <generatorName>jaxrs-spec</generatorName>
                             <output>${project.build.directory}/generated-sources/openapi</output>
-                            <apiPackage>com.mcm.demo.users.api</apiPackage>
-                            <modelPackage>com.mcm.demo.users.model</modelPackage>
+                            <apiPackage>com.mcm.samples.generated.users.api</apiPackage>
+                            <modelPackage>com.mcm.samples.generated.users.model</modelPackage>
                             <configHelp>false</configHelp>
                             <configOptions>
                                 <useJakartaEe>true</useJakartaEe>
