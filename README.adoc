@@ -6,7 +6,7 @@ Este repositorio contiene diferentes ejemplos para la integración de la segurid
 aplicaciones basadas en *Jakarta EE* y *Jakarta Security* a través de OAuth2 y
 OpenID Connect.
 
-Utilizaremos *Keycloak* como IdP y *Wildfly* como servidor de aplicaciones.
+En la demo utilizaremos *Keycloak* como IdP y *Wildfly* como servidor de aplicaciones.
 
 [options="header", cols="1,1"]
 |===
@@ -79,6 +79,8 @@ De tal modo que en el token JWT podamos ver los roles asignados al usuario:
 
 image::./resources/images/jwt-info.png[User roles, width=600, align="center"]
 
+La configuración de los usuarios creados deberá ser la siguiente:
+
 [options="header"]
 |===
 |Usuario            | Roles
@@ -87,6 +89,36 @@ image::./resources/images/jwt-info.png[User roles, width=600, align="center"]
 |_johndoe_          | _user_, _admin_ 
 |===
 
+== Instalación local de las librerías de seguridad
+
+Dado que los otros proyectos dependen de las librerías de seguridad, es necesario instalarlas en el repositorio local de Maven.
+
+Para ello simplemente deberemos hacer ejecutar el comando _./mvnw clean install_
+en los proyectos:
+
+* _mcm-demo-lib-security-jwt_
+* _mcm-demo-lib-security-oidc_
+
+== API de Clientes
+
+Para construir y arrancar en una imagen local el proyecto utilizaremos los
+comandos siguientes dentro del proyecto _mcm-demo-api-customers_:
+
+----
+./cmd-docker-create-image.sh
+./cmd-docker-start.sh
+----
+
+El primero compila el proyecto y crea la imagen de Docker configurando
+la seguridad del perfil _standalone-microprofile.xml_ de Wildfly.
+
+El segundo comando arranca la imagen Docker con las variables de entorno necesarias para la conexión con Keycloak.
+
+La información de la API se puede consultar a través del siguiente
+link:mcm-demo-api-customers[link].
+
+
+== TODO
 
 En este ejemplo en primer lugar definiremos una API REST de ejemplo que implementa un CRUD de la entidad Customer y posteriormente dos frontends basados
 tanto en JSF como en Spring Boot + Thymeleaf que se integran con dicha API.
