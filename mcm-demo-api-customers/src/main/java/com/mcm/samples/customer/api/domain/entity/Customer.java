@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.mcm.samples.customer.api.domain.serialization.CustomerStatusJacksonAdapter;
 
-import jakarta.json.bind.annotation.JsonbPropertyOrder;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,7 +16,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@JsonbPropertyOrder({ "id", "firstName", "lastName", "contactInfo", "status", "auditInfo" })
 public class Customer {
 
     @NotNull
@@ -38,7 +36,6 @@ public class Customer {
 
     @JsonSerialize(using = CustomerStatusJacksonAdapter.Serializer.class)
     @JsonDeserialize(using = CustomerStatusJacksonAdapter.Deserializer.class)
-
     @NotNull
     @Schema(description = "Status of the customer", example = "ACTIVE")
     private CustomerStatus status;
