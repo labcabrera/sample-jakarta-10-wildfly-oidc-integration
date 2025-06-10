@@ -16,14 +16,14 @@ public enum CustomerStatus {
 
     SUSPENDED("suspended");
 
-    private final String description;
+    private final String code;
 
-    CustomerStatus(String description) {
-        this.description = description;
+    CustomerStatus(String code) {
+        this.code = code;
     }
 
-    public String getDescription() {
-        return description;
+    public String getCode() {
+        return code;
     }
 
 }

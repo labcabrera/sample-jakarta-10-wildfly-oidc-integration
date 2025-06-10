@@ -2,8 +2,11 @@ package com.mcm.samples.customer.api.domain.entity;
 
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.mcm.samples.customer.api.domain.serialization.CustomerStatusJacksonAdapter;
+
 import jakarta.json.bind.annotation.JsonbPropertyOrder;
-import jakarta.json.bind.annotation.JsonbTypeAdapter;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -33,7 +36,9 @@ public class Customer {
     @Schema(description = "Contact information of the customer")
     private CustomerContactInfo contactInfo;
 
-    @JsonbTypeAdapter(CustomerStatusAdapter.class)
+    @JsonSerialize(using = CustomerStatusJacksonAdapter.Serializer.class)
+    @JsonDeserialize(using = CustomerStatusJacksonAdapter.Deserializer.class)
+
     @NotNull
     @Schema(description = "Status of the customer", example = "ACTIVE")
     private CustomerStatus status;
