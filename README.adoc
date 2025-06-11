@@ -13,23 +13,14 @@ de seguridad para controlar la autenticación y autorización sin utilizar los
 componentes específicos de cada servidor de aplicaciones de tal modo que la capa
 de seguridad esté desacoplada de la implementación de este.
 
-[options="header", cols="1,1"]
-|===
-|Proyecto                           | Descripción
-|link:mcm-demo-lib-security-jwt[]   | Starter de seguridad para servicios REST basados
-                                      en JWT.
-|link:mcm-demo-lib-security-oidc[]  | Starter de seguridad para aplicaciones web basado
-                                      en OIDC.
-|link:mcm-demo-api-customers[]      | Ejemplo de API REST Code-First con un CRUD básico
-                                      de Clientes.
-|link:mcm-demo-api-users[]          | Ejemplo de API REST Contract-First con consultas
-                                      de usuarios.
-|link:mcm-demo-ui-jsf[]             | Frontal basado en JSF que consume la API de clientes
-                                      y utiliza OIDC para la autenticación.
-|link:mcm-demo-ui-spring-boot[]     | Frontal basado en Spring Boot + Thymeleaf que
-                                      consume la API de clientes y utiliza OIDC para la
-                                      autenticación.
-|===
+Proyectos:
+
+* link:mcm-demo-lib-security-jwt[]: starter de seguridad para servicios REST basados en JWT.
+* link:mcm-demo-lib-security-oidc[]: starter de seguridad para aplicaciones web basado en OIDC.
+* link:mcm-demo-api-customers[]: ejemplo de API REST Code-First con un CRUD básico de clientes.
+* link:mcm-demo-api-users[]: ejemplo de API REST Contract-First con consultas de usuarios.
+* link:mcm-demo-ui-jsf[]: frontal basado en JSF que consume la API de clientes y utiliza OIDC para la autenticación.
+* link:mcm-demo-ui-spring-boot[]: frontal basado en Spring Boot + Thymeleaf que consume la API de clientes y utiliza OIDC para la autenticación.
 
 *TODO*: incluir imagen de modelo de seguridad y flujos de autenticación.
 
