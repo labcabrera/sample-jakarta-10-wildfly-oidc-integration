@@ -41,6 +41,17 @@ servicios locales. Para ello añadiremos las siguiente entradas:
 
 Siendo _192.168.49.4_ la dirección IP resuelta por el comando `minikube ip`.
 
+Para esta demo no hará falta instalar Keycloak en Minikube ya que podremos utilizar la imagen Docker
+en local y que nuestros servicios se conecten a ella a través del host _host.minikube.internal_.
+
+Por ejemplo, para la configuración del almacén de claves en nuestros servicios indicaremos:
+
+----
+JWK_URI: http://host.minikube.internal:8090/realms/mcm-demo/protocol/openid-connect/certs
+----
+
+Y desde los pods se podrá acceder al servicio de Keycloak local.
+
 == Consultas
 
 Consulta de clientes
