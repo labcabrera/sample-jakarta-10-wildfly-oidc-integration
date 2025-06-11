@@ -20,10 +20,20 @@ public class CustomerCreateBean {
     @Getter
     private CreateCustomerCmd createCustomerCmd = new CreateCustomerCmd();
 
+    @Getter
+    private String errorMessage;
+
     public String createCustomer() {
         log.info("Creating customer: {}", createCustomerCmd);
-        customerService.create(createCustomerCmd);
-        return "customers?faces-redirect=true";
+        try {
+            customerService.create(createCustomerCmd);
+            return "customers?faces-redirect=true";
+        }
+        catch (Exception ex) {
+            log.error("Customer creation error", ex);
+            errorMessage = ex.getMessage();
+            return null;
+        }
     }
 
 }

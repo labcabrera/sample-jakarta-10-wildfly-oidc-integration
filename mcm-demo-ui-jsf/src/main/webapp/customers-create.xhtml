@@ -1,8 +1,6 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="jakarta.faces.html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:ui="http://java.sun.com/jsf/facelets">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="jakarta.faces.html" xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
 <h:head>
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
     <title>Alta de Cliente</title>
@@ -12,9 +10,9 @@
     <h2>
         <a href="index.xhtml">Home</a> / <a href="customers.xhtml">Clientes</a> / Alta de Cliente
     </h2>
-    
+
     <ui:include src="/WEB-INF/includes/user-info.xhtml" />
-    
+
     <h:form>
         <h:panelGrid columns="2" styleClass="form-table">
             <h:outputLabel for="firstName" value="Nombre:" />
@@ -27,11 +25,20 @@
             <h:inputText id="email" value="#{customerCreateBean.createCustomerCmd.email}" required="true" />
 
             <h:outputLabel for="phoneNumber" value="Teléfono:" />
-            <h:inputText id="phoneNumber" value="#{customerCreateBean.createCustomerCmd.phoneNumber}" required="false" />
+            <h:inputText id="phoneNumber" value="#{customerCreateBean.createCustomerCmd.phoneNumber}"
+                required="false" />
         </h:panelGrid>
-        <br/>
+        <br />
         <h:commandButton value="Crear" action="#{customerCreateBean.createCustomer}" />
-        <h:messages globalOnly="true" layout="table"/>
+        <h:messages globalOnly="true" layout="table" />
     </h:form>
+
+    <h:panelGroup rendered="#{not empty customerBean.errorMessage}">
+        <div class="error-message" style="color: red;">
+            #{customerBean.errorMessage}
+        </div>
+    </h:panelGroup>
+
 </h:body>
+
 </html>

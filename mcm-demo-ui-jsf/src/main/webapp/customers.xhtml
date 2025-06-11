@@ -48,6 +48,13 @@
             </h:column>
         </h:dataTable>
     </h:form>
+
+    <h:panelGroup rendered="#{not empty customerBean.errorMessage}">
+        <div class="error-message" style="color: red;">
+            #{customerBean.errorMessage}
+        </div>
+    </h:panelGroup>
+
     <ul>
         <li><a href="customers-create.xhtml">Crear cliente</a></li>
     </ul>

@@ -22,18 +22,34 @@ public class CustomerBean {
     @Getter
     private CustomerPage customersPage;
 
+    @Getter
+    private String errorMessage;
+
     @PostConstruct
     public void init() {
         log.info("Fetching customers");
-        customersPage = customerService.find("", 0, 10);
-        log.info("Found customers: {}", customersPage.getContent().size());
+        try {
+            customersPage = customerService.find("", 0, 10);
+            log.info("Found customers: {}", customersPage.getContent().size());
+        }
+        catch (Exception ex) {
+            log.error("Error fetching customers", ex);
+            errorMessage = ex.getMessage();
+        }
     }
 
     public String deleteCustomer() {
-        String customerId = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("customerId");
-        log.info("Deleting customer << {}", customerId);
-        customerService.deleteById(customerId);
-        return "customers?faces-redirect=true";
+        try {
+            String customerId = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("customerId");
+            log.info("Deleting customer << {}", customerId);
+            customerService.deleteById(customerId);
+            return "customers?faces-redirect=true";
+        }
+        catch (Exception ex) {
+            log.error("Error deleting customer", ex);
+            errorMessage = ex.getMessage();
+            return null;
+        }
     }
 
 }

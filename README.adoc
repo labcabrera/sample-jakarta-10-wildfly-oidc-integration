@@ -33,7 +33,7 @@ Ambas librerías están basadas en Jakarta Security. En esta demo se utiliza la 
 aunque es compatible con Jakarta Security 1.0 simplemente actualizando los nombres de paquetes de _javax.*_ a
 _jakarta.*_. 
 
-La implementación está basada en la interface _HttpAuthenticationMechanism_ de Jakarta:
+La implementación está basada en la interface link:https://jakarta.ee/specifications/platform/8/apidocs/javax/security/enterprise/authentication/mechanism/http/httpauthenticationmechanism[HttpAuthenticationMechanism] de Jakarta:
 
 [source, java]
 ----
