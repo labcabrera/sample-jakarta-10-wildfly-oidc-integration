@@ -1,12 +1,10 @@
 package com.mcm.samples.security.oidc;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.Properties;
 import java.util.Set;
 import java.util.UUID;
 
@@ -30,16 +28,6 @@ public class OidcAuthenticationMechanism implements HttpAuthenticationMechanism 
 
     private static final String PARAM_CODE = "code";
     private static final String SESSION_STATE = "OIDC_STATE";
-    private static final Properties config = new Properties();
-
-    static {
-        try (InputStream in = OidcAuthenticationMechanism.class.getClassLoader().getResourceAsStream("config.properties")) {
-            config.load(in);
-        }
-        catch (Exception ex) {
-            throw new OidcInvalidConfigurationException(ex);
-        }
-    }
 
     @Inject
     private OidcIdentityStoreHandler identityStoreHandler;
@@ -69,7 +57,7 @@ public class OidcAuthenticationMechanism implements HttpAuthenticationMechanism 
         log.info("------------------------------------------------------------");
 
         if (request.getSession().getAttribute("principal") != null) {
-            log.info("  Principal in session. Do nothing");
+            log.info("Detected principal in session. Building authentication from session attributes");
             CallerPrincipal principal = (CallerPrincipal) request.getSession().getAttribute("principal");
             Set<String> groups = (Set<String>) request.getSession().getAttribute("groups");
             return context.notifyContainerAboutLogin(principal, groups);
@@ -179,8 +167,8 @@ public class OidcAuthenticationMechanism implements HttpAuthenticationMechanism 
             return context.doNothing();
         }
         catch (IOException ex) {
-            log.error("Redirect error", ex);
-            throw new AuthenticationException("Error al redirigir a Keycloak", ex);
+            log.error("IdP redirect error", ex);
+            throw new AuthenticationException("IdP redirect error", ex);
         }
     }
 
