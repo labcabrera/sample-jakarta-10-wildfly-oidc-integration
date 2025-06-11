@@ -18,6 +18,8 @@ Una vez arrancado desplegaremos los recursos con:
 ./cmd-minikube-deploy.sh
 ----
 
+Este comando realizara el `kubectl apply` de los recursos necesarios para la demo.
+
 Una vez desplegados los recursos, podremos acceder al dashboard ejecutando:
 
 [source,bash]
@@ -28,6 +30,16 @@ minikube dashboard
 Esto abrirá una nueva pestaña en el navegador con el dashboard de Minikube. En el selector de namespace seleccionaremos `mcm-dev` para ver los recursos desplegados en este namespace.
 
 image::../resources/images/minikube-namespace.png[Minikube Namespace, width=600, align="center"]
+
+Una vez desplegados los recurso necesitaremos configurar en el _/etc/hosts_ los nombres de los
+servicios locales. Para ello añadiremos las siguiente entradas:
+
+----
+192.168.49.2 mcm-demo-api-customers.local
+192.168.49.4 mcm-demo-ui-jsf.local
+----
+
+Siendo _192.168.49.4_ la dirección IP resuelta por el comando `minikube ip`.
 
 == Consultas
 
