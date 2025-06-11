@@ -27,6 +27,8 @@ minikube dashboard
 
 Esto abrirá una nueva pestaña en el navegador con el dashboard de Minikube. En el selector de namespace seleccionaremos `mcm-dev` para ver los recursos desplegados en este namespace.
 
+image::../resources/images/minikube-namespace.png[Minikube Namespace, width=600, align="center"]
+
 == Consultas
 
 Consulta de clientes
