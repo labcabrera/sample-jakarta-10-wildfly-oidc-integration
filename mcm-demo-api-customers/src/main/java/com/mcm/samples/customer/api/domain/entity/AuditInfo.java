@@ -21,8 +21,8 @@ import lombok.NoArgsConstructor;
 public class AuditInfo {
 
     @NotNull
-    @Schema(description = "Creation timestamp of the customer record", example = "2023-10-01T12:00:00")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
+    @Schema(description = "Creation timestamp of the customer record", example = "2023-10-01T12:00:00")
     private LocalDateTime createdAt;
 
     @Schema(description = "Last update timestamp of the customer record", example = "2023-10-01T12:00:00")

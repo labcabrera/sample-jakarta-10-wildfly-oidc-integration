@@ -34,9 +34,9 @@ public class Customer {
     @Schema(description = "Contact information of the customer")
     private CustomerContactInfo contactInfo;
 
+    @NotNull
     @JsonSerialize(using = CustomerStatusJacksonAdapter.Serializer.class)
     @JsonDeserialize(using = CustomerStatusJacksonAdapter.Deserializer.class)
-    @NotNull
     @Schema(description = "Status of the customer", example = "ACTIVE")
     private CustomerStatus status;
 
