@@ -47,8 +47,8 @@ public class OidcIdentityStoreHandler implements IdentityStoreHandler {
     }
 
     @Override
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public CredentialValidationResult validate(Credential credential) {
-
         OidcCredential customCredential = (OidcCredential) credential;
         String accessToken = customCredential.getAccessToken();
         log.info("Access token: {}", accessToken);

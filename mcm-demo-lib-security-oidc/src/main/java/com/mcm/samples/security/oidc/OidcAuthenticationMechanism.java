@@ -28,6 +28,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class OidcAuthenticationMechanism implements HttpAuthenticationMechanism {
 
+    private static final String PARAM_CODE = "code";
+    private static final String SESSION_STATE = "OIDC_STATE";
     private static final Properties config = new Properties();
 
     static {
@@ -38,14 +40,6 @@ public class OidcAuthenticationMechanism implements HttpAuthenticationMechanism 
             throw new OidcInvalidConfigurationException(ex);
         }
     }
-
-    // private static final String CLIENT_ID = config.getProperty("client.id");
-    // private static final String CLIENT_SECRET = config.getProperty("client.secret");
-    //private static final String REDIRECT_URI = config.getProperty("redirect.uri");
-    // private static final String BASE_URL = config.getProperty("base.url");
-
-    private static final String PARAM_CODE = "code";
-    private static final String SESSION_STATE = "OIDC_STATE";
 
     @Inject
     private OidcIdentityStoreHandler identityStoreHandler;
