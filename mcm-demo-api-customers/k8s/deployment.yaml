@@ -18,23 +18,23 @@ spec:
       - name: registrykey
       containers:
       - name: mcm-demo-api-customers
-        image: {{DOCKER_REGISTRY}}
+        image: labcabrera/mcm-demo-api-customers:latest
         env:
-        - name: SAMPLE_APP_PROPERTY
+        - name: JWK_URI
           valueFrom:
             configMapKeyRef:
-              name: mcm-java-properties
-              key: SAMPLE_APP_PROPERTY
-        - name: SAMPLE_APP_SECRET
+              name: mcm-demo-config-map
+              key: JWK_URI
+        - name: FOO
+          valueFrom:
+            configMapKeyRef:
+              name: mcm-demo-config-map
+              key: FOO
+        - name: FOO_SECRET
           valueFrom:
             secretKeyRef:
-              name: mcm-java-secrets
-              key: APP_MONGO_REPLICA
-        - name: JAVA_OPTS
-          valueFrom:
-            configMapKeyRef:
-              name: mcm-java-config
-              key: JAVA_OPTS
+              name: mcm-demo-secrets
+              key: FOO_SECRET
         - name: TZ
           value: Europe/Madrid
         imagePullPolicy: Always

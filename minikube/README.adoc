@@ -1,0 +1,19 @@
+= Minikube
+
+Consulta de clientes
+
+https://mcm-demo-api-customers.local/api-customers/api/customers
+
+== Comandos
+
+=== Listado de servicios
+
+----
+kubectl get service -n mcm-dev
+----
+
+=== Comprobación del servicio de la API de clientes
+
+----
+kubectl run -it --rm --image=busybox --restart=Never test --namespace mcm-dev -- wget -qO- http://mcm-demo-api-customers:80/openapi
+----

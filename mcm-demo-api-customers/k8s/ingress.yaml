@@ -3,10 +3,10 @@ kind: Ingress
 metadata:
   name: mcm-demo-api-customers
   annotations:
-    kubernetes.io/ingress.class: nginx-ingress
+    kubernetes.io/ingress.className: nginx-ingress
 spec:
   rules:
-    - host: {{INGRESS_HOSTNAME}}
+    - host: mcm-demo-api-customers.local
       http:
         paths:
           - path: /

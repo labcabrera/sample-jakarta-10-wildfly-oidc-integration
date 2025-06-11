@@ -13,10 +13,10 @@ import lombok.NoArgsConstructor;
 @Builder
 public class Page<E> {
 
+    private List<E> content;
     private int page;
     private int size;
     private long totalElements;
     private int totalPages;
-    private List<E> content;
 
 }
