@@ -52,6 +52,10 @@ JWK_URI: http://host.minikube.internal:8090/realms/mcm-demo/protocol/openid-conn
 
 Y desde los pods se podrá acceder al servicio de Keycloak local.
 
+Una vez desplegados los servicios podremos acceder a la aplicación de cliente a través de la URL:
+
+https://mcm-demo-ui-jsf.local/demo-ui
+
 == Consultas
 
 Consulta de clientes

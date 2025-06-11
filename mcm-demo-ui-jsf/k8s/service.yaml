@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mcm-demo-ui-jsf
+  labels:
+    k8s-app: mcm-demo-ui-jsf
+spec:
+  selector:
+    k8s-app: mcm-demo-ui-jsf
+  type: ClusterIP
+  ports:
+  - name: web
+    port: 80
+    targetPort: 8080
+    protocol: TCP

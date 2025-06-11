@@ -1,5 +1,5 @@
 #!/bin/bash
 
-./mvnw clean package -DskipTests
+mvn clean package -DskipTests
 
 docker build -t mcm-demo-ui-jsf .

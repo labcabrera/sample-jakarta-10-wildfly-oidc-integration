@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mcm-demo-ui-jsf
+  labels:
+    k8s-app: mcm-demo-ui-jsf
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: mcm-demo-ui-jsf
+  template:
+    metadata:
+      labels:
+        k8s-app: mcm-demo-ui-jsf
+    spec:
+      imagePullSecrets:
+      - name: registrykey
+      containers:
+      - name: mcm-demo-ui-jsf
+        image: labcabrera/mcm-demo-ui-jsf:latest
+        env:
+        - name: JWK_URI
+          valueFrom:
+            configMapKeyRef:
+              name: mcm-demo-config-map
+              key: JWK_URI
+        - name: FOO
+          valueFrom:
+            configMapKeyRef:
+              name: mcm-demo-config-map
+              key: FOO
+        - name: FOO_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: mcm-demo-secrets
+              key: FOO_SECRET
+        - name: TZ
+          value: Europe/Madrid
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+          name: web
+          protocol: TCP
