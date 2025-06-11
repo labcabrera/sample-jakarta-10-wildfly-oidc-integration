@@ -1,5 +1,34 @@
 = Minikube
 
+Este documento describe como desplegar la demo en un entorno local de Minikube.
+
+En primer lugar iniciaremos Minikube a través del comando:
+
+[source,bash]
+----
+./cmd-minikube-start.sh
+----
+
+Este comando creará el namespace `mcm-dev`, habilitará el addon de Ingress y creará el ConfigMap y Secret necesarios para la demo.
+
+Una vez arrancado desplegaremos los recursos con:
+
+[source,bash]
+----
+./cmd-minikube-deploy.sh
+----
+
+Una vez desplegados los recursos, podremos acceder al dashboard ejecutando:
+
+[source,bash]
+----
+minikube dashboard
+----
+
+Esto abrirá una nueva pestaña en el navegador con el dashboard de Minikube. En el selector de namespace seleccionaremos `mcm-dev` para ver los recursos desplegados en este namespace.
+
+== Consultas
+
 Consulta de clientes
 
 https://mcm-demo-api-customers.local/api-customers/api/customers
