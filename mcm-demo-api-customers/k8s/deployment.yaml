@@ -25,16 +25,6 @@ spec:
             configMapKeyRef:
               name: mcm-demo-config-map
               key: JWK_URI
-        - name: FOO
-          valueFrom:
-            configMapKeyRef:
-              name: mcm-demo-config-map
-              key: FOO
-        - name: FOO_SECRET
-          valueFrom:
-            secretKeyRef:
-              name: mcm-demo-secrets
-              key: FOO_SECRET
         - name: TZ
           value: Europe/Madrid
         imagePullPolicy: Always

@@ -20,21 +20,61 @@ spec:
       - name: mcm-demo-ui-jsf
         image: labcabrera/mcm-demo-ui-jsf:latest
         env:
-        - name: JWK_URI
+        - name: CUSTOMER_API_URL
+          valueFrom:
+            configMapKeyRef:
+              name: mcm-demo-config-map
+              key: CUSTOMER_API_URL
+        - name: TOKEN_URL
+          valueFrom:
+            configMapKeyRef:
+              name: mcm-demo-config-map
+              key: TOKEN_URL
+        - name: JWK_URL
           valueFrom:
             configMapKeyRef:
               name: mcm-demo-config-map
               key: JWK_URI
-        - name: FOO
+        - name: CLIENT_ID
           valueFrom:
             configMapKeyRef:
               name: mcm-demo-config-map
-              key: FOO
-        - name: FOO_SECRET
+              key: CLIENT_ID
+        - name: AUTH_SERVER_URL
+          valueFrom:
+            configMapKeyRef:
+              name: mcm-demo-config-map
+              key: AUTH_SERVER_URL
+        - name: LOGOUT_URL
+          valueFrom:
+            configMapKeyRef:
+              name: mcm-demo-config-map
+              key: LOGOUT_URL
+        - name: LOGIN_REDIRECT_URL
+          valueFrom:
+            configMapKeyRef:
+              name: mcm-demo-config-map
+              key: LOGIN_REDIRECT_URL
+        - name: CALLBACK_URL
+          valueFrom:
+            configMapKeyRef:
+              name: mcm-demo-config-map
+              key: CALLBACK_URL
+        - name: LOGOUT_REDIRECT_URL
+          valueFrom:
+            configMapKeyRef:
+              name: mcm-demo-config-map
+              key: LOGOUT_REDIRECT_URL
+        - name: SCOPE
+          valueFrom:
+            configMapKeyRef:
+              name: mcm-demo-config-map
+              key: SCOPE
+        - name: CLIENT_SECRET
           valueFrom:
             secretKeyRef:
               name: mcm-demo-secrets
-              key: FOO_SECRET
+              key: CLIENT_SECRET
         - name: TZ
           value: Europe/Madrid
         imagePullPolicy: Always

@@ -4,6 +4,17 @@ metadata:
   name: mcm-demo-config-map
   namespace: mcm-dev
 data:
+  AUTH_SERVER_URL: http://127.0.0.1:8090/realms/mcm-demo/protocol/openid-connect/auth
+  LOGOUT_URL: http://127.0.0.1:8090/realms/mcm-demo/protocol/openid-connect/logout
+
+  CUSTOMER_API_URL: http://mcm-demo-api-customers/api-customers
+
   JWK_URI: http://host.minikube.internal:8090/realms/mcm-demo/protocol/openid-connect/certs
-  FOO: foo-value
-  BAR: bar-value
+  TOKEN_URL: http://host.minikube.internal:8090/realms/mcm-demo/protocol/openid-connect/token
+
+  LOGIN_REDIRECT_URL: http://mcm-demo-ui-jsf.local/demo-ui
+  CALLBACK_URL: http://mcm-demo-ui-jsf.local/demo-ui/callback
+  LOGOUT_REDIRECT_URL: http://mcm-demo-ui-jsf.local/demo-ui
+
+  CLIENT_ID: mcm-demo-client-jsf
+  SCOPE: openid profile roles
