@@ -9,7 +9,7 @@ spec:
     - host: mcm-demo-ui-jsf.local
       http:
         paths:
-          - path: /demo-ui
+          - path: /
             pathType: ImplementationSpecific
             backend:
               service:

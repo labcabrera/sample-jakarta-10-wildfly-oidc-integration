@@ -24,6 +24,43 @@ Proyectos:
 
 *TODO*: incluir imagen de modelo de seguridad y flujos de autenticación.
 
+== Implementación de la capa de seguridad
+
+En esta demo se utilizan dos librerías de seguridad, una para la autenticación basada en OIDC utilizada en la
+aplicación web y otra para la autenticación basada en JWT utilizada en la API REST.
+
+Ambas librerías están basadas en Jakarta Security. En esta demo se utiliza la versión 3.0 de Jakarta Security
+aunque es compatible con Jakarta Security 1.0 simplemente actualizando los nombres de paquetes de _javax.*_ a
+_jakarta.*_. 
+
+La implementación está basada en la interface _HttpAuthenticationMechanism_ de Jakarta:
+
+[source, java]
+----
+@ApplicationScoped
+public class CustomAuthenticationMechanism implements HttpAuthenticationMechanism {
+
+    @Override
+    public AuthenticationStatus validateRequest(
+        HttpServletRequest request,
+        HttpServletResponse response,
+        HttpMessageContext context)
+        throws AuthenticationException {
+            // do some stuff
+        }
+}
+----
+
+En el caso de la librería OIDC en primer lugar comprobaremos la sesión para verificar si el usuario está autenticado. En caso de que no lo esté, redirigiremos al usuario a la página de login de Keycloak enviando
+la URL de callback.
+En el caso de recibir el callback realizaremos una consulta a Keycloak a partir del código recibido para
+obtener el token de acceso y si este es válido crearemos la sesión del usuario.
+
+En el caso de la librería JWT simplemente comprobaremos que este token viene correctamente informado en la
+cabecera de la petición. Validaremos la firla del token a partir de la clave pública de Keycloak obtenida
+desde el endpoint _/realms/mcm-demo/protocol/openid-connect/certs_ y si es válido establecereos el contexto
+de seguridad con los roles obtenidos del token.
+
 == Configuración local de Keycloak
 
 Antes de arrancar los proyectos es necesario configurar el Realm, los clientes y los
