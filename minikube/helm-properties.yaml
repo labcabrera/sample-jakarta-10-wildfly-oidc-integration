@@ -1,0 +1,9 @@
+app:
+  baseUrl: http://mcm-demo-ui-jsf.local
+api:
+  customers:
+    baseUrl: http://mcm-demo-api-customers/api-customers
+oidc:
+  baseUrl: http://127.0.0.1:8090
+  clientId: mcm-demo-client-jsf
+  clientSecret: SHRzQ2RhUjdvNUtvTlFwSTBCT09Xd3RkczFzeG9yQ1Q=

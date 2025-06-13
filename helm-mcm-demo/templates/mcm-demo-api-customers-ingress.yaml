@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mcm-demo-api-customers
+  annotations:
+    kubernetes.io/ingress.className: nginx-ingress
+spec:
+  rules:
+    - host: mcm-demo-api-customers.local
+      http:
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: mcm-demo-api-customers
+                port:
+                  number: 80

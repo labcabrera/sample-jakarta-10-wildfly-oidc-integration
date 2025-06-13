@@ -9,7 +9,7 @@ En primer lugar iniciaremos Minikube a través del comando:
 ./cmd-minikube-start.sh
 ----
 
-Este comando creará el namespace `mcm-dev`, habilitará el addon de Ingress y creará el ConfigMap y Secret necesarios para la demo.
+Este comando creará el namespace `mcm-dev`, habilitará el addon de Ingress necesario para la demo.
 
 TIP: antes de ejecutar este comando deberemos actualizar el valor del ClientSecret de Keycloak en
 el fichero _mcm-demo-secrets.yaml_. Para ello deberemos establecer el valor en Base64 que podremos
