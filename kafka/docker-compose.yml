@@ -1,0 +1,63 @@
+# This setup allows you to both connect from within the docker-compose context as well as from services running on your local
+# machine but not as part of the docker-compose setup. Any client connecting to the broker from the outside can connect to
+# localhost:9092 while services running as part of the docker-compose connect to broker:9093.
+#
+# To access kafka-ui: http://localhost:7777
+#
+# I hope this helps someone out there! :)
+
+version: '3'
+networks:
+  mcm-demo:
+    external: true
+
+services:
+  mcm-demo-zookeeper:
+    image: confluentinc/cp-zookeeper:7.0.1
+    container_name: mcm-demo-zookeeper
+    networks:
+      - mcm-demo
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  mcm-demo-broker:
+    image: confluentinc/cp-kafka:7.0.1
+    container_name: mcm-demo-broker
+    networks:
+      - mcm-demo
+    ports:
+    # To learn about configuring Kafka for access across networks see
+    # https://www.confluent.io/blog/kafka-client-cannot-connect-to-broker-on-aws-on-docker-etc/
+      - "9092:9092"
+      - "9093:9093"
+    depends_on:
+      - mcm-demo-zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: 'mcm-demo-zookeeper:2181'
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_LISTENERS: PLAINTEXT_INTERNAL://0.0.0.0:29092,PLAINTEXT_C://0.0.0.0:9093,PLAINTEXT_L://0.0.0.0:9092,
+      
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT_INTERNAL://mcm-demo-broker:29092,PLAINTEXT_L://localhost:9092,PLAINTEXT_C://mcm-demo-broker:9093
+      #KAFKA_ADVERTISED_LISTENERS: PLAINTEXT_INTERNAL://mcm-demo-broker:29092,PLAINTEXT_L://localhost:9092,PLAINTEXT_C://host.minikube.internal:9093
+      
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT_INTERNAL:PLAINTEXT,PLAINTEXT_L:PLAINTEXT,PLAINTEXT_C:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT_INTERNAL
+
+  mcm-demo-kafka-ui:
+    image: provectuslabs/kafka-ui
+    container_name: mcm-demo-kafka-ui
+    networks:
+      - mcm-demo
+    depends_on: 
+      - mcm-demo-broker
+    ports:
+      - "7777:8080"
+    restart: always
+    environment:
+      - KAFKA_CLUSTERS_0_NAME=mcm-demo-broker
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=mcm-demo-broker:9093
+      - KAFKA_CLUSTERS_0_ZOOKEEPER=mcm-demo-zookeeper:2181

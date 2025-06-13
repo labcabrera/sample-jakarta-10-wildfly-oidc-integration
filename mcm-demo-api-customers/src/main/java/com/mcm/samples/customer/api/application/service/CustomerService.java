@@ -26,6 +26,9 @@ public class CustomerService {
     @Inject
     private CustomerUpdateService customerUpdateService;
 
+    @Inject
+    private CustomerMessageProducer customerMessageProducer;
+
     public Optional<Customer> findById(String id) {
         return customerRepository.findById(id);
     }
@@ -35,7 +38,9 @@ public class CustomerService {
     }
 
     public Customer create(CreateCustomerCmd cmd) {
-        return customerCreationService.create(cmd);
+        Customer customer = customerCreationService.create(cmd);
+        customerMessageProducer.sendCreatedCustomerEvent(customer.getId(), customer.getContactInfo().getEmail());
+        return customer;
     }
 
     public Customer update(String customerId, UpdateCustomerCmd cmd) {

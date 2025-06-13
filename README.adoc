@@ -22,7 +22,7 @@ Proyectos:
 * link:mcm-demo-ui-jsf[]: frontal basado en JSF que consume la API de clientes y utiliza OIDC para la autenticación.
 * link:mcm-demo-ui-spring-boot[]: frontal basado en Spring Boot + Thymeleaf que consume la API de clientes y utiliza OIDC para la autenticación.
 
-*TODO*: incluir imagen de modelo de seguridad y flujos de autenticación.
+image::./resources/images/oidc-flow-c4-context.png[][OIDC Flow, width=600, align="center"]
 
 == Implementación de la capa de seguridad
 

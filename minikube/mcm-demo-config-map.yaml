@@ -18,3 +18,5 @@ data:
 
   CLIENT_ID: mcm-demo-client-jsf
   SCOPE: openid profile roles
+
+  KAFKA_BROKER: host.minikube.internal:9093

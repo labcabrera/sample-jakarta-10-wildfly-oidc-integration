@@ -73,3 +73,10 @@ https://mcm-demo-api-customers.local/api-customers/api/customers
 ----
 kubectl run -it --rm --image=busybox --restart=Never test --namespace mcm-dev -- wget -qO- http://mcm-demo-api-customers:80/openapi
 ----
+
+Una vez ejecutada la demo podremos eliminar los recusos desplegados ejecutando:
+
+[source,bash]
+----
+miinikube delete
+----

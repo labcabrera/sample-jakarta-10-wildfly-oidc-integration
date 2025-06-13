@@ -25,6 +25,11 @@ spec:
             configMapKeyRef:
               name: mcm-demo-config-map
               key: JWK_URI
+        - name: KAFKA_BROKER
+          valueFrom:
+            configMapKeyRef:
+              name: mcm-demo-config-map
+              key: KAFKA_BROKER
         - name: TZ
           value: Europe/Madrid
         imagePullPolicy: Always

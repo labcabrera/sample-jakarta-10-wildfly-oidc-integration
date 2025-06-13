@@ -1,0 +1,43 @@
+@startuml Demo Authorization Flow - C4 Context
+title Demo Authorization Flow - C4 Context
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+'LAYOUT_LEFT_RIGHT()
+
+LAYOUT_WITH_LEGEND()
+
+Person(user, "User")
+
+Boundary(k8s, "Kubernetes") {
+    Boundary(namespace_mcm_demo, "Namespace mcm-demo") {
+        Boundary(wildfly_customer_api, "Wildfly Standalone Microprofile") {
+            System(customer_api, "Customer API", "Jakarta", $sprite="java", $tags="System")
+            System_Ext(db, "Database", "Memory", $tags="System_Ext")
+        }
+        Boundary(wildfly_customer_fe, "Wildfly Standalone") {
+            System(customer_fe, "Customer Frontend", "Jakarta + JSF", $sprite="java", $tags="System")
+        }
+        Boundary(wildfly_user_api, "Wildfly Standalone Microprofile") {
+            System(user_api, "User API", "Jakarta", $sprite="java", $tags="System")
+        }
+    }
+}
+
+System_Ext(keycloak, "Keycloak", "24.0", $tags="System_Ext")
+System_Ext(kafka, "Kafka", "", $tags="System_Ext")
+
+Rel(user, customer_fe, "1.- Request resource", "HTTP / OIDC")
+
+Rel(customer_fe, keycloak, "2.- Login redirect", "HTTP / OIDC")
+
+Rel(keycloak, customer_fe, "3.- Callback with code", "HTTP / OIDC")
+
+Rel(customer_fe, keycloak, "4.- Request token access", "HTTP / OIDC")
+
+Rel(customer_fe, customer_api, "5.- API call with access token", "HTTPS")
+
+Rel(customer_api, db, "JDBC")
+Rel(customer_api, kafka, "Event")
+
+@enduml
