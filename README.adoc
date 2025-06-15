@@ -25,7 +25,7 @@ Proyectos:
 * link:mcm-demo-ui-spring-boot[]: frontal basado en Spring Boot + Thymeleaf que consume la API de clientes y utiliza OIDC para la
   autenticación.
 
-image::./resources/images/oidc-flow-c4-context.png[][OIDC Flow, width=600, align="center"]
+image::./resources/images/oidc-flow-c4-context.png[]
 
 == Implementación de la capa de seguridad
 
