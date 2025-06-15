@@ -1,11 +1,3 @@
-# This setup allows you to both connect from within the docker-compose context as well as from services running on your local
-# machine but not as part of the docker-compose setup. Any client connecting to the broker from the outside can connect to
-# localhost:9092 while services running as part of the docker-compose connect to broker:9093.
-#
-# To access kafka-ui: http://localhost:7777
-#
-# I hope this helps someone out there! :)
-
 version: '3'
 networks:
   mcm-demo:
@@ -27,8 +19,6 @@ services:
     networks:
       - mcm-demo
     ports:
-    # To learn about configuring Kafka for access across networks see
-    # https://www.confluent.io/blog/kafka-client-cannot-connect-to-broker-on-aws-on-docker-etc/
       - "9092:9092"
       - "9093:9093"
     depends_on:
