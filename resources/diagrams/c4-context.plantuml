@@ -1,31 +1,31 @@
 @startuml Demo Authorization Flow - C4 Context
 title Demo Authorization Flow - C4 Context
 
-!include ./c4-context-system-shared.puml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+!define COLOR_SYSTEM #f9b000
+!define COLOR_SYSTEM_EXT #005b72
 
 LAYOUT_LEFT_RIGHT()
 
-LAYOUT_WITH_LEGEND()
+LAYOUT_WITH_LEGEND() 
 
 Person(user, "User")
 
-Boundary(k8s, "Kubernetes") {
+Boundary(k8s, "Kubernetes (Minikube)") {
     Boundary(namespace_mcm_demo, "Namespace mcm-demo") {
-        Boundary(wildfly_customer_api, "Wildfly Standalone Microprofile") {
-            System(customer_api, "Customer API", "Jakarta 10")
-            System_Ext(db, "Database", "Memory")
-        }
-        Boundary(wildfly_customer_fe, "Wildfly Standalone") {
-            System(customer_fe, "Customer Frontend", "Jakarta 10 + JSF", $sprite="java", $tags="java")
-        }
-        Boundary(wildfly_user_api, "Wildfly Standalone Microprofile") {
-            System(user_api, "User API", "Jakarta 10", $sprite="java", $tags="System")
-        }
+        System(customer_api, "Customer API", "Jakarta 10")
+        System(customer_fe, "Customer Frontend", "Jakarta 10 + JSF")
+        System(user_api, "User API", "Jakarta 10")
     }
 }
 
-System_Ext(keycloak, "Keycloak", "24.x", $tags="System_Ext")
-System_Ext(kafka, "Kafka", "3.x", $tags="System_Ext")
+Boundary(localDockerNetwork, "Local Docker Network") {
+    System_Ext(keycloak, "Keycloak", "24.x")
+    System_Ext(kafka, "Kafka", "3.x")
+    System_Ext(postgres, "Postgres", "17.x")
+}
+
 
 Rel(user, customer_fe, "1.- Request resource", "HTTP / OIDC")
 
@@ -37,10 +37,10 @@ Rel(customer_fe, keycloak, "4.- Request token access", "HTTP / OIDC")
 
 Rel(customer_fe, customer_api, "5.- API call with access token", "HTTPS")
 
-Rel(customer_api, db, "JDBC")
+Rel(customer_api, postgres, "JDBC")
 Rel(customer_api, kafka, "Event")
 
-Rel(customer_fe, user_api, "User mapping", "HTTP")
-Rel(customer_api, user_api, "User mapping", "HTTP")
+Rel(customer_fe, user_api, "Override user mapping", "HTTP")
+Rel(customer_api, user_api, "Override user mapping", "HTTP")
 
 @enduml

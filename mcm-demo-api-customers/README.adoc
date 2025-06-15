@@ -46,3 +46,52 @@ La seguridad de la API se gestiona mediante la validación del token JWT que se 
 
 Durante la verificación del token se consulta al almacén de cerfificados de Keycloak
 para recuperar la clave pública.
+
+== Notas sobre la creación de la imagen Docker
+
+A partir de la imagen base de WildFly en primer lugar instalaremos el módulo de PostgreSQL descargando el
+driver a través de wget:
+
+----
+RUN microdnf install -y wget && \
+    wget -O /tmp/postgresql.jar https://jdbc.postgresql.org/download/postgresql-42.7.3.jar && \
+    mkdir -p $WILDFLY_HOME/modules/org/postgresql/main && \
+    mv /tmp/postgresql.jar $WILDFLY_HOME/modules/org/postgresql/main/ && \
+    echo '<module name="org.postgresql" slot="main" xmlns="urn:jboss:module:1.1">' \
+         '<resources>' \
+         '<resource-root path="postgresql.jar"/>' \
+         '</resources>' \
+         '<dependencies>' \
+         '<module name="javax.api"/>' \
+         '<module name="javax.transaction.api"/>' \
+         '</dependencies>' \
+         '</module>' > $WILDFLY_HOME/modules/org/postgresql/main/module.xml && \
+    microdnf clean all
+----
+
+Posteriormente crearemos el datasource y cambiaremos la configuración de seguridad de Undertow para desactivar la seguridad integrada de Jaspi utilizando la CLI de WildFly:
+
+----
+embed-server --std-out=echo --server-config=standalone-microprofile.xml
+
+/subsystem=datasources/jdbc-driver=postgresql:add(driver-name=postgresql, \
+  driver-module-name=org.postgresql,  \
+  driver-class-name=org.postgresql.Driver)
+
+/subsystem=datasources/data-source=PostgresDS:add( \
+  jndi-name=java:/jdbc/PostgresDS, \
+  driver-name=postgresql, \
+  connection-url=jdbc:postgresql://${env.APP_DB_HOST:mcm-demo-postgres}:${env.APP_DB_PORT:5432}/${env.APP_DB_SCHEMA:mcmdemo}, \
+  user-name=${env.APP_DB_USERNAME}, \
+  password=${env.APP_DB_PASSWORD, \
+  use-ccm=false,min-pool-size=5,max-pool-size=20,enabled=true)
+
+/subsystem=undertow/application-security-domain=other:write-attribute(name=integrated-jaspi,value=false)
+
+stop-embedded-server
+----
+
+En este caso establecemos la configuración _standalone-microprofile.xml_ que es la que vamos a utilizar para
+levantar el servidor. Wildfly nos permite establecer variables de entorno dentro de este fichero de configuración
+de modo que podremos inyectarlas posteriormente tanto al ejecutar la imagen Docker como en nuestro _deployment_
+de Kubernetes.

@@ -21,3 +21,8 @@ data:
   APP_OIDC_SCOPE: openid profile roles
 
   APP_KAFKA_BROKER: host.minikube.internal:9093
+
+  APP_DB_HOST: host.minikube.internal
+  APP_DB_PORT: "5432"
+  APP_DB_SCHEMA: mcmdemo
+  APP_DB_USERNAME: user

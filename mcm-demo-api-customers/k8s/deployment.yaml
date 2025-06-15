@@ -20,6 +20,31 @@ spec:
       - name: mcm-demo-api-customers
         image: labcabrera/mcm-demo-api-customers:latest
         env:
+        - name: APP_DB_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: mcm-demo-config-map
+              key: APP_DB_HOST
+        - name: APP_DB_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: mcm-demo-config-map
+              key: APP_DB_PORT
+        - name: APP_DB_SCHEMA
+          valueFrom:
+            configMapKeyRef:
+              name: mcm-demo-config-map
+              key: APP_DB_SCHEMA
+        - name: APP_DB_USERNAME
+          valueFrom:
+            configMapKeyRef:
+              name: mcm-demo-config-map
+              key: APP_DB_USERNAME
+        - name: APP_DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mcm-demo-secrets
+              key: APP_DB_PASSWORD
         - name: APP_USERS_API_URL
           valueFrom:
             configMapKeyRef:
