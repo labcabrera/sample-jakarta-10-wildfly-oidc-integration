@@ -19,8 +19,7 @@ public class UserApiImpl implements UsersApi {
     @Override
     public UserInfo findCustomerById(String idUser) {
         log.info("Customer find by id << {}", idUser);
-        UserInfo userInfo = userRepository.findById(idUser).orElseThrow(UserNotFoundException::new);
-        return userInfo;
+        return userRepository.findById(idUser).orElseThrow(UserNotFoundException::new);
     }
 
 }
