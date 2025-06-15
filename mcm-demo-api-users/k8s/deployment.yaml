@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mcm-demo-api-users
+  labels:
+    k8s-app: mcm-demo-api-users
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: mcm-demo-api-users
+  template:
+    metadata:
+      labels:
+        k8s-app: mcm-demo-api-users
+    spec:
+      imagePullSecrets:
+      - name: registrykey
+      containers:
+      - name: mcm-demo-api-users
+        image: labcabrera/mcm-demo-api-users:latest
+        env:
+        - name: TZ
+          value: Europe/Madrid
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+          name: web
+          protocol: TCP

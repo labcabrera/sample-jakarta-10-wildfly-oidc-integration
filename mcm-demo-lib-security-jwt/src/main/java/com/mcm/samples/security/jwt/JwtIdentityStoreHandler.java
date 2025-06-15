@@ -7,7 +7,7 @@ import java.text.ParseException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import com.nimbusds.jose.JWSVerifier;
@@ -17,7 +17,6 @@ import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jwt.SignedJWT;
 
-import jakarta.annotation.Nullable;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -34,7 +33,6 @@ public class JwtIdentityStoreHandler implements IdentityStoreHandler {
     private JwtConfig appConfig;
 
     @Inject
-    @Nullable
     private JwtUserInfoMapper userInfoMapper;
 
     private JWKSet jwkSet;
@@ -84,16 +82,15 @@ public class JwtIdentityStoreHandler implements IdentityStoreHandler {
 
     private boolean validateIdToken(SignedJWT signedJWT) {
         try {
-            JWK jwk = jwkSet.getKeyByKeyId(signedJWT.getHeader().getKeyID());
+            String key = signedJWT.getHeader().getKeyID();
+            JWK jwk = jwkSet.getKeyByKeyId(key);
             if (jwk == null) {
-                throw new IllegalStateException("No se encontró la clave pública para el kid: " + signedJWT.getHeader().getKeyID());
+                throw new RuntimeException(String.format("Missing public key '%s'", key));
             }
             RSAKey rsaKey = (RSAKey) jwk;
             RSAPublicKey publicKey = rsaKey.toRSAPublicKey();
             JWSVerifier verifier = new RSASSAVerifier(publicKey);
-            boolean signatureValid = signedJWT.verify(verifier);
-            log.info("Signature validated: {}", signatureValid);
-            return signatureValid;
+            return signedJWT.verify(verifier);
         }
         catch (Exception ex) {
             log.error("Error validating token", ex);
@@ -118,16 +115,11 @@ public class JwtIdentityStoreHandler implements IdentityStoreHandler {
     }
 
     private CredentialValidationResult mapCredentialValidationResult(String username, Set<String> roles) {
-        log.info("Mapping credential validation result for user: {}", username);
-        if (userInfoMapper != null) {
-            log.info("Using user info mapper to map username: {}", username);
-            Optional<JwtUserInfo> userInfo = userInfoMapper.map(username);
-            if (userInfo.isPresent()) {
-                username = userInfo.get().getCode();
-                roles.addAll(userInfo.get().getRoles());
-            }
-        }
-        return new CredentialValidationResult(username, roles);
+        log.info("Using user info mapper to map username: {}", username);
+        Entry<String, List<String>> userInfo = userInfoMapper.map(username);
+        String mappedUsername = userInfo.getKey();
+        roles.addAll(userInfo.getValue());
+        return new CredentialValidationResult(mappedUsername, roles);
     }
 
 }

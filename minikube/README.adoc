@@ -42,6 +42,7 @@ servicios locales. Para ello añadiremos las siguiente entradas:
 
 ----
 192.168.49.2 mcm-demo-api-customers.local
+192.168.49.2 mcm-demo-api-users.local
 192.168.49.4 mcm-demo-ui-jsf.local
 ----
 
@@ -79,4 +80,18 @@ Una vez ejecutada la demo podremos eliminar los recusos desplegados ejecutando:
 [source,bash]
 ----
 miinikube delete
+----
+
+
+
+
+
+----
+helm repo add confluentinc https://packages.confluent.io/helm
+
+helm repo update
+
+helm upgrade --install confluent-operator \
+  confluentinc/confluent-for-kubernetes \
+  --namespace mcm-dev
 ----

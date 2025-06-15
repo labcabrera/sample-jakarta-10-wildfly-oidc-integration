@@ -8,6 +8,7 @@ data:
   LOGOUT_URL: http://127.0.0.1:8090/realms/mcm-demo/protocol/openid-connect/logout
 
   CUSTOMER_API_URL: http://mcm-demo-api-customers/api-customers
+  APP_USERS_API_URL: http://mcm-demo-api-users/api-users
 
   JWK_URI: http://host.minikube.internal:8090/realms/mcm-demo/protocol/openid-connect/certs
   TOKEN_URL: http://host.minikube.internal:8090/realms/mcm-demo/protocol/openid-connect/token
