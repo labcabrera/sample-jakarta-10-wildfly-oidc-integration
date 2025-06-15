@@ -3,11 +3,7 @@ title Demo Authorization Flow - C4 Context
 
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
 
-!define COLOR_SYSTEM #f9b000
-!define COLOR_SYSTEM_EXT #005b72
-
 LAYOUT_LEFT_RIGHT()
-
 LAYOUT_WITH_LEGEND() 
 
 Person(user, "User")

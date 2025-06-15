@@ -5,6 +5,7 @@
 
     <persistence-unit name="default" transaction-type="JTA">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <!-- Uncomment the following line if you want to use the H2 database for testing -->
         <!-- <jta-data-source>java:jboss/datasources/ExampleDS</jta-data-source> -->
         <jta-data-source>java:/jdbc/PostgresDS</jta-data-source>
         <class>com.mcm.samples.rest.client.infrastructure.jpa.entities.CustomerEntity</class>
@@ -12,6 +13,7 @@
             <property name="jakarta.persistence.schema-generation.database.action" value="update"/>
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="true"/>
+            <!-- Uncomment the following line if you want to use the H2 database for testing -->
             <!-- <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/> -->
             <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
         </properties>
