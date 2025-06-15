@@ -139,6 +139,19 @@ en los proyectos:
 * _mcm-demo-lib-security-oidc_
 * _mcm-demo-lib-user-client_
 
+== Instalación local de Postgres
+
+----
+docker run -d \
+  --name mcm-demo-postgres \
+  --network mcm-demo \
+  -e POSTGRES_USER=user \
+  -e POSTGRES_PASSWORD=changeit \
+  -e POSTGRES_DB=mcmdemo \
+  -p 5432:5432 \
+  postgres:latest
+----
+
 == API de Clientes
 
 Este proyecto expone una API REST con el CRUD básico de la entidad _Customer_ guardando la información en una base de datos a través de JPA.

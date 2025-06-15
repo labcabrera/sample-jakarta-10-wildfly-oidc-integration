@@ -5,13 +5,15 @@
 
     <persistence-unit name="default" transaction-type="JTA">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-        <jta-data-source>java:jboss/datasources/ExampleDS</jta-data-source>
+        <!-- <jta-data-source>java:jboss/datasources/ExampleDS</jta-data-source> -->
+        <jta-data-source>java:/jdbc/PostgresDS</jta-data-source>
         <class>com.mcm.samples.rest.client.infrastructure.jpa.entities.CustomerEntity</class>
         <properties>
             <property name="jakarta.persistence.schema-generation.database.action" value="update"/>
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="true"/>
-            <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
+            <!-- <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/> -->
+            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
         </properties>
     </persistence-unit>
 

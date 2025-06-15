@@ -1,5 +1,17 @@
 embed-server --std-out=echo --server-config=standalone-microprofile.xml
 
+/subsystem=datasources/jdbc-driver=postgresql:add(driver-name=postgresql, \
+  driver-module-name=org.postgresql,  \
+  driver-class-name=org.postgresql.Driver)
+
+/subsystem=datasources/data-source=PostgresDS:add( \
+  jndi-name=java:/jdbc/PostgresDS, \
+  driver-name=postgresql, \
+  connection-url=jdbc:postgresql://mcm-demo-postgres:5432/mcmdemo, \
+  user-name=user, \
+  password=changeit, \
+  use-ccm=false,min-pool-size=5,max-pool-size=20,enabled=true)
+
 /subsystem=undertow/application-security-domain=other:write-attribute(name=integrated-jaspi,value=false)
 
 stop-embedded-server
