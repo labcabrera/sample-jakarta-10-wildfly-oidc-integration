@@ -6,12 +6,12 @@ Este repositorio contiene diferentes ejemplos para la integración de la segurid
 aplicaciones basadas en *Jakarta EE* y *Jakarta Security* a través de OAuth2 y
 OpenID Connect.
 
-En la demo utilizaremos *Keycloak* como IdP y *Wildfly* como servidor de aplicaciones.
+En la demo utilizaremos *Keycloak 24.x* como IdP y *Wildfly 36.x* como servidor de aplicaciones compatible con Jakarta 10 y Jakarta
+Security 3.x.
 
-Utilizaremos una implementación ad-hoc basada en Jakarta Security de los flujos
-de seguridad para controlar la autenticación y autorización sin utilizar los
-componentes específicos de cada servidor de aplicaciones de tal modo que la capa
-de seguridad esté desacoplada de la implementación de este.
+Utilizaremos una implementación ad-hoc basada en Jakarta Security de los flujos de seguridad para controlar la autenticación y
+autorización sin utilizar los componentes específicos de cada servidor de aplicaciones de tal modo que la capa de seguridad esté
+desacoplada de la implementación de servidor.
 
 Proyectos:
 
@@ -25,16 +25,17 @@ Proyectos:
 * link:mcm-demo-ui-spring-boot[]: frontal basado en Spring Boot + Thymeleaf que consume la API de clientes y utiliza OIDC para la
   autenticación.
 
+== Flujo de autenticación
+
 image::./resources/images/oidc-flow-c4-context.png[]
 
 == Implementación de la capa de seguridad
 
-En esta demo se utilizan dos librerías de seguridad, una para la autenticación basada en OIDC utilizada en la
-aplicación web y otra para la autenticación basada en JWT utilizada en la API REST.
+En esta demo se utilizan dos librerías de seguridad, una para la autenticación basada en OIDC utilizada en la aplicación web y otra para
+la autenticación basada en JWT utilizada en la API REST.
 
-Ambas librerías están basadas en Jakarta Security. En esta demo se utiliza la versión 3.0 de Jakarta Security
-aunque es compatible con Jakarta Security 1.0 simplemente actualizando los nombres de paquetes de _javax.*_ a
-_jakarta.*_. 
+Ambas librerías están basadas en Jakarta Security. En esta demo se utiliza la versión 3.0 de Jakarta Security aunque es compatible con
+Jakarta Security 1.0 simplemente actualizando los nombres de paquetes de _javax.*_ a _jakarta.*_. 
 
 La implementación está basada en la interface link:https://jakarta.ee/specifications/platform/8/apidocs/javax/security/enterprise/authentication/mechanism/http/httpauthenticationmechanism[HttpAuthenticationMechanism] de Jakarta:
 
@@ -136,14 +137,13 @@ en los proyectos:
 
 * _mcm-demo-lib-security-jwt_
 * _mcm-demo-lib-security-oidc_
+* _mcm-demo-lib-user-client_
 
 == API de Clientes
 
-Este proyecto expone una API REST con el CRUD básico de la entidad _Customer_
-guardando la información en una base de datos a través de JPA.
+Este proyecto expone una API REST con el CRUD básico de la entidad _Customer_ guardando la información en una base de datos a través de JPA.
 
-Para construir y arrancar en una imagen local el proyecto utilizaremos los
-comandos siguientes dentro del proyecto _mcm-demo-api-customers_:
+Para construir y arrancar en una imagen local el proyecto utilizaremos los comandos siguientes dentro del proyecto _mcm-demo-api-customers_:
 
 ----
 ./cmd-docker-create-image.sh
