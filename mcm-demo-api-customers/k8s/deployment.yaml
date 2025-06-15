@@ -20,16 +20,21 @@ spec:
       - name: mcm-demo-api-customers
         image: labcabrera/mcm-demo-api-customers:latest
         env:
-        - name: JWK_URI
+        - name: APP_USERS_API_URL
           valueFrom:
             configMapKeyRef:
               name: mcm-demo-config-map
-              key: JWK_URI
-        - name: KAFKA_BROKER
+              key: APP_USERS_API_URL
+        - name: APP_JWK_URL
           valueFrom:
             configMapKeyRef:
               name: mcm-demo-config-map
-              key: KAFKA_BROKER
+              key: APP_JWK_URL
+        # - name: APP_KAFKA_BROKER
+        #   valueFrom:
+        #     configMapKeyRef:
+        #       name: mcm-demo-config-map
+        #       key: APP_KAFKA_BROKER
         - name: TZ
           value: Europe/Madrid
         imagePullPolicy: Always

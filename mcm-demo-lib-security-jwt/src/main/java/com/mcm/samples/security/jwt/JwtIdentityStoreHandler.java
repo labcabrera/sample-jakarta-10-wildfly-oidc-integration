@@ -70,7 +70,7 @@ public class JwtIdentityStoreHandler implements IdentityStoreHandler {
         }
 
         try {
-            String username = signedJWT.getJWTClaimsSet().getStringClaim("name");
+            String username = signedJWT.getJWTClaimsSet().getStringClaim("preferred_username");
             Set<String> roles = getRolesFromClaims(signedJWT);
             return mapCredentialValidationResult(username, roles);
         }

@@ -8,6 +8,7 @@ import java.text.ParseException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import com.nimbusds.jose.JWSVerifier;
 import com.nimbusds.jose.crypto.RSASSAVerifier;
@@ -30,6 +31,9 @@ public class OidcIdentityStoreHandler implements IdentityStoreHandler {
 
     @Inject
     private OidcConfig appConfig;
+
+    @Inject
+    private OidcUserInfoMapper userInfoMapper;
 
     private JWKSet jwkSet;
 
@@ -68,10 +72,10 @@ public class OidcIdentityStoreHandler implements IdentityStoreHandler {
         }
 
         try {
-            String username = signedJWT.getJWTClaimsSet().getStringClaim("name");
+            String username = signedJWT.getJWTClaimsSet().getStringClaim("preferred_username");
             Map realmAccess = (Map) signedJWT.getJWTClaimsSet().getClaim("realm_access");
             List<String> roles = (List<String>) realmAccess.get("roles");
-            return new CredentialValidationResult(username, new HashSet<>(roles));
+            return mapCredentialValidationResult(username, roles);
         }
         catch (Exception e) {
             log.error("Error parsing JWT claims", e);
@@ -96,6 +100,14 @@ public class OidcIdentityStoreHandler implements IdentityStoreHandler {
             log.error("Error validating token", ex);
             return false;
         }
+    }
+
+    private CredentialValidationResult mapCredentialValidationResult(String username, List<String> roles) {
+        log.info("Using user info mapper to map username: {}", username);
+        Entry<String, List<String>> userInfo = userInfoMapper.map(username);
+        String mappedUsername = userInfo.getKey();
+        roles.addAll(userInfo.getValue());
+        return new CredentialValidationResult(mappedUsername, new HashSet<>(roles));
     }
 
 }

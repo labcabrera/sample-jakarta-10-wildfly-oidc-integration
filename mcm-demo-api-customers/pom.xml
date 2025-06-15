@@ -34,7 +34,7 @@
         <dependency>
             <groupId>com.mcm.demo</groupId>
             <artifactId>mcm-demo-lib-user-client</artifactId>
-            <version>${mcm.security.jwt.version}</version>
+            <version>${mcm.user.client.version}</version>
         </dependency>
         <dependency>
             <groupId>jakarta.platform</groupId>

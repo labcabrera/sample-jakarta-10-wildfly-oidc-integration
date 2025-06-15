@@ -1,53 +1,32 @@
 package com.mcm.samples.ui.infrastructure.config;
 
-import java.io.InputStream;
-import java.util.Properties;
-
 import jakarta.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
 public class AppConfig {
 
-    private final Properties config = new Properties();
-
-    public AppConfig() {
-        try (InputStream in = AppConfig.class.getClassLoader().getResourceAsStream("config.properties")) {
-            config.load(in);
-        }
-        catch (Exception ex) {
-            throw new RuntimeException("Error reading config.properties", ex);
-        }
-    }
-
     public String authorizationServerUrl() {
-        return getProperty("AUTH_SERVER_URL", "auth.server.url", null);
+        return readFromEnv("APP_AUTH_SERVER_URL");
     }
 
     public String tokenUrl() {
-        return getProperty("TOKEN_URL", "token.endpoint", null);
+        return readFromEnv("APP_TOKEN_URL");
     }
 
-    public String jwkUri() {
-        return getProperty("JWK_URL", "jwk.url", null);
+    public String jwkUrl() {
+        return readFromEnv("APP_JWK_URL");
     }
 
     public String customerApiUrl() {
-        return getProperty("CUSTOMER_API_URL", "customers.api.url", null);
+        return readFromEnv("APP_CUSTOMER_API_URL");
     }
 
-    private String getProperty(String env, String key, String defaultValue) {
-        String value = System.getenv(env);
-        if (value != null) {
+    private String readFromEnv(String key) {
+        String value = System.getenv(key);
+        if (value != null && !value.isBlank()) {
             return value;
         }
-        value = config.getProperty(key);
-        if (value != null) {
-            return value;
-        }
-        if (defaultValue == null) {
-            throw new RuntimeException("Property '" + key + "' is not configured and no default value provided");
-        }
-        return defaultValue;
+        throw new RuntimeException(String.format("Required environment variable not set: '%s'", key));
     }
 
 }

@@ -29,7 +29,7 @@ public class UserMapper implements Function<String, Entry<String, List<String>>>
     @PostConstruct
     public void init() {
         ApiClient apiClient = new ApiClient();
-        apiClient.updateBaseUri(userClientConfig.getUserApiUrl());
+        apiClient.updateBaseUri(userClientConfig.userApiUrl());
         usersApi = new UsersApi(apiClient);
     }
 
@@ -40,7 +40,7 @@ public class UserMapper implements Function<String, Entry<String, List<String>>>
             return Map.entry(userInfo.getCode(), userInfo.getRoles());
         }
         catch (Exception ex) {
-            log.warn("Error fetching user info for userId: {} using {}", userId, userClientConfig.getUserApiUrl(), ex);
+            log.warn("Error fetching user info for userId: {} using {}", userId, userClientConfig.userApiUrl(), ex);
             return Map.entry(userId, new ArrayList<>());
         }
     }

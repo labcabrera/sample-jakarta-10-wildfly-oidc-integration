@@ -20,9 +20,9 @@ public class KafkaCustomerProducer implements CustomerMessageProducer {
 
     public KafkaCustomerProducer() {
         try {
-            String kafkaBroker = System.getenv("KAFKA_BROKER");
+            String kafkaBroker = System.getenv("APP_KAFKA_BROKER");
             if (kafkaBroker == null || kafkaBroker.isEmpty()) {
-                throw new RuntimeException("Required environment variable KAFKA_BROKER is not set");
+                return;
             }
             log.info("Creating Kafka producer with broker: {}", kafkaBroker);
             Properties props = new Properties();
@@ -43,7 +43,6 @@ public class KafkaCustomerProducer implements CustomerMessageProducer {
             log.error("Kafka producer is not initialized");
             return;
         }
-        //TODO read from configuration
         try {
             ProducerRecord<String, String> record = new ProducerRecord<>("created-users-topic", userId, email);
             producer.send(record);

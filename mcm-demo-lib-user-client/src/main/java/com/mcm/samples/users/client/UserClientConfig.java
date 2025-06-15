@@ -5,7 +5,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class UserClientConfig {
 
-    public String getUserApiUrl() {
+    public String userApiUrl() {
         return readFromEnv("APP_USERS_API_URL");
     }
 

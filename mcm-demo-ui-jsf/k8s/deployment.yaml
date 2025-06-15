@@ -20,61 +20,61 @@ spec:
       - name: mcm-demo-ui-jsf
         image: labcabrera/mcm-demo-ui-jsf:latest
         env:
-        - name: CUSTOMER_API_URL
+        - name: APP_CUSTOMER_API_URL
           valueFrom:
             configMapKeyRef:
               name: mcm-demo-config-map
-              key: CUSTOMER_API_URL
-        - name: TOKEN_URL
+              key: APP_CUSTOMER_API_URL
+        - name: APP_TOKEN_URL
           valueFrom:
             configMapKeyRef:
               name: mcm-demo-config-map
-              key: TOKEN_URL
-        - name: JWK_URL
+              key: APP_TOKEN_URL
+        - name: APP_JWK_URL
           valueFrom:
             configMapKeyRef:
               name: mcm-demo-config-map
-              key: JWK_URI
-        - name: CLIENT_ID
+              key: APP_JWK_URL
+        - name: APP_CLIENT_ID
           valueFrom:
             configMapKeyRef:
               name: mcm-demo-config-map
-              key: CLIENT_ID
-        - name: AUTH_SERVER_URL
+              key: APP_CLIENT_ID
+        - name: APP_AUTH_SERVER_URL
           valueFrom:
             configMapKeyRef:
               name: mcm-demo-config-map
-              key: AUTH_SERVER_URL
-        - name: LOGOUT_URL
+              key: APP_AUTH_SERVER_URL
+        - name: APP_LOGOUT_URL
           valueFrom:
             configMapKeyRef:
               name: mcm-demo-config-map
-              key: LOGOUT_URL
-        - name: LOGIN_REDIRECT_URL
+              key: APP_LOGOUT_URL
+        - name: APP_LOGIN_REDIRECT_URL
           valueFrom:
             configMapKeyRef:
               name: mcm-demo-config-map
-              key: LOGIN_REDIRECT_URL
-        - name: CALLBACK_URL
+              key: APP_LOGIN_REDIRECT_URL
+        - name: APP_CALLBACK_URL
           valueFrom:
             configMapKeyRef:
               name: mcm-demo-config-map
-              key: CALLBACK_URL
-        - name: LOGOUT_REDIRECT_URL
+              key: APP_CALLBACK_URL
+        - name: APP_LOGOUT_REDIRECT_URL
           valueFrom:
             configMapKeyRef:
               name: mcm-demo-config-map
-              key: LOGOUT_REDIRECT_URL
-        - name: SCOPE
+              key: APP_LOGOUT_REDIRECT_URL
+        - name: APP_OIDC_SCOPE
           valueFrom:
             configMapKeyRef:
               name: mcm-demo-config-map
-              key: SCOPE
-        - name: CLIENT_SECRET
+              key: APP_OIDC_SCOPE
+        - name: APP_CLIENT_SECRET
           valueFrom:
             secretKeyRef:
               name: mcm-demo-secrets
-              key: CLIENT_SECRET
+              key: APP_CLIENT_SECRET
         - name: TZ
           value: Europe/Madrid
         imagePullPolicy: Always

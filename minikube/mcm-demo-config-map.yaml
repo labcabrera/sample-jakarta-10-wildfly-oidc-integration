@@ -4,20 +4,20 @@ metadata:
   name: mcm-demo-config-map
   namespace: mcm-dev
 data:
-  AUTH_SERVER_URL: http://127.0.0.1:8090/realms/mcm-demo/protocol/openid-connect/auth
-  LOGOUT_URL: http://127.0.0.1:8090/realms/mcm-demo/protocol/openid-connect/logout
+  APP_AUTH_SERVER_URL: http://127.0.0.1:8090/realms/mcm-demo/protocol/openid-connect/auth
+  APP_LOGOUT_URL: http://127.0.0.1:8090/realms/mcm-demo/protocol/openid-connect/logout
 
-  CUSTOMER_API_URL: http://mcm-demo-api-customers/api-customers
-  APP_USERS_API_URL: http://mcm-demo-api-users/api-users
+  APP_CUSTOMER_API_URL: http://mcm-demo-api-customers/api-customers
+  APP_USERS_API_URL: http://mcm-demo-api-users/api-users/api
 
-  JWK_URI: http://host.minikube.internal:8090/realms/mcm-demo/protocol/openid-connect/certs
-  TOKEN_URL: http://host.minikube.internal:8090/realms/mcm-demo/protocol/openid-connect/token
+  APP_JWK_URL: http://host.minikube.internal:8090/realms/mcm-demo/protocol/openid-connect/certs
+  APP_TOKEN_URL: http://host.minikube.internal:8090/realms/mcm-demo/protocol/openid-connect/token
 
-  LOGIN_REDIRECT_URL: http://mcm-demo-ui-jsf.local/demo-ui
-  CALLBACK_URL: http://mcm-demo-ui-jsf.local/demo-ui/callback
-  LOGOUT_REDIRECT_URL: http://mcm-demo-ui-jsf.local/demo-ui
+  APP_LOGIN_REDIRECT_URL: http://mcm-demo-ui-jsf.local/demo-ui
+  APP_CALLBACK_URL: http://mcm-demo-ui-jsf.local/demo-ui/callback
+  APP_LOGOUT_REDIRECT_URL: http://mcm-demo-ui-jsf.local/demo-ui
 
-  CLIENT_ID: mcm-demo-client-jsf
-  SCOPE: openid profile roles
+  APP_CLIENT_ID: mcm-demo-client-jsf
+  APP_OIDC_SCOPE: openid profile roles
 
-  KAFKA_BROKER: host.minikube.internal:9093
+  APP_KAFKA_BROKER: host.minikube.internal:9093

@@ -10,9 +10,9 @@ docker stop "$APP_NAME"
 docker rm "$APP_NAME"
 
 docker run -d --name "$APP_NAME" --network "$NETWORK_NAME" -p 8081:8080 \
-    -e JWK_URI=http://mcm-demo-keycloak:8080/realms/mcm-demo/protocol/openid-connect/certs \
-    -e APP_USERS_API_URL=http://mcm-demo-api-users:8082/api-users \
-    -e KAFKA_BROKER=mcm-demo-broker:9093 \
+    -e APP_JWK_URL=http://mcm-demo-keycloak:8080/realms/mcm-demo/protocol/openid-connect/certs \
+    -e APP_USERS_API_URL=http://mcm-demo-api-users:8080/api-users/api \
+    -e EXCLUDED_APP_KAFKA_BROKER=mcm-demo-broker:9093 \
     "$APP_NAME"
 
 docker logs -f "$APP_NAME"
