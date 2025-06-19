@@ -1,7 +1,5 @@
 package com.mcm.samples.security.oidc;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.interfaces.RSAPublicKey;
 import java.text.ParseException;
@@ -38,14 +36,13 @@ public class OidcIdentityStoreHandler implements IdentityStoreHandler {
     private JWKSet jwkSet;
 
     @PostConstruct
-    public void init() throws MalformedURLException, IOException, ParseException {
-        log.info("Initializing CustomIdentityStoreHandler with AppConfig: {}", appConfig);
+    public void init() {
         String jwtUrl = appConfig.jwkUri();
+        log.info("Initializing OidcIdentityStoreHandler using keystore '{}'", jwtUrl);
         try {
             jwkSet = JWKSet.load(new URL(jwtUrl));
         }
         catch (Exception ex) {
-            log.error("Error loading JWK set from URL: {}", jwtUrl, ex);
             throw new OidcInvalidConfigurationException("Failed to load JWK set", ex);
         }
     }
