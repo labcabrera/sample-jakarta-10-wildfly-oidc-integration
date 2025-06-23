@@ -24,6 +24,7 @@ Proyectos:
 * link:mcm-demo-ui-jsf[]: frontal basado en JSF que consume la API de clientes y utiliza OIDC para la autenticación.
 * link:mcm-demo-ui-spring-boot[]: frontal basado en Spring Boot + Thymeleaf que consume la API de clientes y utiliza OIDC para la
   autenticación.
+* link:mcm-demo-consumer-customers-activation[]: consumidor de eventos de activación de clientes a a través de Kafka basado en Spring Cloud Stream.
 
 == Flujo de autenticación
 

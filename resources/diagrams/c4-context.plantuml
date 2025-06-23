@@ -9,19 +9,20 @@ LAYOUT_WITH_LEGEND()
 Person(user, "User")
 
 Boundary(k8s, "Kubernetes (Minikube)") {
-    Boundary(namespace_mcm_demo, "Namespace mcm-demo") {
+    Boundary(namespace_mcm_local, "Namespace mcm-local") {
         System(customer_api, "Customer API", "Jakarta 10")
         System(customer_fe, "Customer Frontend", "Jakarta 10 + JSF")
         System(user_api, "User API", "Jakarta 10")
+    }
+    Boundary(namespace_mcm_local_kafka, "Namespace mcm-local-kafka") {
+        System_Ext(kafka, "Kafka", "3.x")
     }
 }
 
 Boundary(localDockerNetwork, "Local Docker Network") {
     System_Ext(keycloak, "Keycloak", "24.x")
-    System_Ext(kafka, "Kafka", "3.x")
     System_Ext(postgres, "Postgres", "17.x")
 }
-
 
 Rel(user, customer_fe, "1.- Request resource", "HTTP / OIDC")
 
