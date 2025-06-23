@@ -28,7 +28,18 @@ Proyectos:
 
 == Flujo de autenticación
 
-image::./resources/images/oidc-flow-c4-context.png[]
+Consulta de usuarios:
+
+image::./resources/images/oidc-flow-c4-context-customer-search.png[]
+
+En este caso simplemente utilizaremos la propagación del token OIDC obtenido en la aplicación web para consultar la API de clientes.
+
+Creación de usuarios:
+
+image::./resources/images/oidc-flow-c4-context-customer-creation.png[]
+
+En este caso durante la creación del cliente se notificará el evento de creación a una topic de Kafka que actualizará el estado a través de
+la API de clientes.
 
 == Implementación de la capa de seguridad
 
