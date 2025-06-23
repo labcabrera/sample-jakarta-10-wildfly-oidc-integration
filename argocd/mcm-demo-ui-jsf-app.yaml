@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: mcm-demo-ui-jsf
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: mcm-local
+  source:
+    path: mcm-demo-ui-jsf/k8s
+    repoURL: https://github.com/labcabrera/sample-jakarta-10-wildfly-oidc-integration
+    targetRevision: HEAD
+  sources: []
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

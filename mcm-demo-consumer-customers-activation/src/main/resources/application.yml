@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: mcm-demo-consumer-customers-activation
+  cloud:
+    stream:
+      bindings:
+        customerCreated-in-0:
+          destination: created-users-topic
+          group: customer-consumer-group
+      kafka:
+        binder:
+          #brokers: localhost:9092
+          brokers: 192.168.49.2:30627

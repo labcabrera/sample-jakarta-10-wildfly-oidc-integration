@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: mcm-demo-config-map
-  namespace: mcm-dev
+  #namespace: mcm-dev
 data:
   APP_AUTH_SERVER_URL: http://127.0.0.1:8090/realms/mcm-demo/protocol/openid-connect/auth
   APP_LOGOUT_URL: http://127.0.0.1:8090/realms/mcm-demo/protocol/openid-connect/logout
