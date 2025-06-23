@@ -1,1 +1,0 @@
-TODO: kafka basico para desarrollo local. En la demo Kafka estará instalado en Minikube.
