@@ -9,8 +9,7 @@ spring:
           #group: customer-consumer-group
       kafka:
         binder:
-          #brokers: localhost:9092
-          brokers: ${APP_KAFKA_BROKER_CONSUMER:192.168.49.2:30627}
+          brokers: ${APP_KAFKA_BROKER:192.168.49.2:30627}
           configuration:
             security.protocol: SASL_PLAINTEXT
             sasl.mechanism: PLAIN
