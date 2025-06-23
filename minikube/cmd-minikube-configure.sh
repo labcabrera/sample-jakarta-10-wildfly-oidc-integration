@@ -54,3 +54,5 @@ kubectl apply -f ../argocd/mcm-demo-api-customers-app.yaml -n argocd
 kubectl apply -f ../argocd/mcm-demo-api-users-app.yaml -n argocd
 
 kubectl apply -f ../argocd/mcm-demo-ui-jsf-app.yaml -n argocd
+
+kubectl apply -f ../argocd/mcm-demo-consumer-customers-activation-app.yaml -n argocd

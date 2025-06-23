@@ -20,11 +20,21 @@ spec:
       - name: mcm-demo-consumer-customers-activation
         image: labcabrera/mcm-demo-consumer-customers-activation:latest
         env:
-        - name: APP_DB_HOST
+        - name: APP_KAFKA_BROKER_CONSUMER
           valueFrom:
             configMapKeyRef:
               name: mcm-demo-config-map
-              key: APP_DB_HOST
+              key: APP_KAFKA_BROKER_CONSUMER
+        - name: APP_KAFKA_USERNAME
+          valueFrom:
+            configMapKeyRef:
+              name: mcm-demo-config-map
+              key: APP_KAFKA_USERNAME
+        - name: APP_KAFKA_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mcm-demo-secrets
+              key: APP_KAFKA_PASSWORD
         - name: TZ
           value: Europe/Madrid
         imagePullPolicy: Always
