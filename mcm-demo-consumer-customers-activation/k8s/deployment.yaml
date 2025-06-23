@@ -20,11 +20,11 @@ spec:
       - name: mcm-demo-consumer-customers-activation
         image: labcabrera/mcm-demo-consumer-customers-activation:latest
         env:
-        - name: APP_KAFKA_BROKER_CONSUMER
+        - name: APP_KAFKA_BROKER
           valueFrom:
             configMapKeyRef:
               name: mcm-demo-config-map
-              key: APP_KAFKA_BROKER_CONSUMER
+              key: APP_KAFKA_BROKER
         - name: APP_KAFKA_USERNAME
           valueFrom:
             configMapKeyRef:
