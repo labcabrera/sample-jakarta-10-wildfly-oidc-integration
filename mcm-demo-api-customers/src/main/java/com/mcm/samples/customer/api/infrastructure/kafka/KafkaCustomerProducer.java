@@ -36,13 +36,16 @@ public class KafkaCustomerProducer implements CustomerMessageProducer {
 
             String username = System.getenv("APP_KAFKA_USERNAME");
             String password = System.getenv("APP_KAFKA_PASSWORD");
-            props.put("security.protocol", "SASL_PLAINTEXT");
-            props.put("sasl.mechanism", "PLAIN");
-
             if (username != null && password != null) {
-                props.put("sasl.jaas.config",
-                    "org.apache.kafka.common.security.plain.PlainLoginModule required " +
-                        "username=\"" + username + "\" password=\"" + password + "\";");
+                props.put("security.protocol", "SASL_PLAINTEXT");
+                props.put("sasl.mechanism", "PLAIN");
+                String saslJaasConfig = String
+                .format("org.apache.kafka.common.security.plain.PlainLoginModule required\nusername=\"%s\"\npassword=\"%s\";",
+                username,
+                password);
+                log.info("Kafka SASL config: {}", saslJaasConfig);
+                props.put("sasl.jaas.config", saslJaasConfig);
+
             }
             producer = new KafkaProducer<>(props);
         }

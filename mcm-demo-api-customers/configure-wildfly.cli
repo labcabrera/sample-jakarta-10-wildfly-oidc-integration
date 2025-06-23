@@ -9,7 +9,7 @@ embed-server --std-out=echo --server-config=standalone-microprofile.xml
   driver-name=postgresql, \
   connection-url=jdbc:postgresql://${env.APP_DB_HOST:mcm-demo-postgres}:${env.APP_DB_PORT:5432}/${env.APP_DB_SCHEMA:mcmdemo}, \
   user-name=${env.APP_DB_USERNAME}, \
-  password=${env.APP_DB_PASSWORD, \
+  password=${env.APP_DB_PASSWORD}, \
   use-ccm=false,min-pool-size=5,max-pool-size=20,enabled=true)
 
 /subsystem=undertow/application-security-domain=other:write-attribute(name=integrated-jaspi,value=false)
