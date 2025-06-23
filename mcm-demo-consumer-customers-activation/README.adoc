@@ -10,12 +10,13 @@ Enviar un mensaje al topic:
 [source, bash]
 ----
 echo "foo" | kcat \
-  -b 192.168.49.2:31179 \
+  -b 192.168.49.2:31108 \
   -X security.protocol=SASL_PLAINTEXT \
   -X sasl.mechanisms=PLAIN \
   -X sasl.username=user1 \
-  -X sasl.password=teVM3iV3V8 \
-  -t created-users-topic
+  -X sasl.password=879P1qgPkc \
+  -t customers-created-topic \
+  -P
 ----
 
 Escuchar los mensajes del topic:
@@ -28,6 +29,6 @@ kcat \
   -X sasl.mechanisms=PLAIN \
   -X sasl.username=user1 \
   -X sasl.password=teVM3iV3V8 \
-  -t created-users-topic \
+  -t customers-created-topic \
   -C
 ----

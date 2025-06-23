@@ -18,9 +18,12 @@ public class KafkaCustomerProducer implements CustomerMessageProducer {
 
     private Producer<String, String> producer;
 
+    private String topicName;
+
     public KafkaCustomerProducer() {
         try {
             String kafkaBroker = System.getenv("APP_KAFKA_BROKER");
+            topicName = System.getenv("APP_KAFKA_TOPIC_CUSTOMER_CREATED");
             if (kafkaBroker == null || kafkaBroker.isEmpty()) {
                 return;
             }
@@ -30,6 +33,17 @@ public class KafkaCustomerProducer implements CustomerMessageProducer {
             props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer");
             props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer");
             props.put(ProducerConfig.ACKS_CONFIG, "all");
+
+            String username = System.getenv("APP_KAFKA_USERNAME");
+            String password = System.getenv("APP_KAFKA_PASSWORD");
+            props.put("security.protocol", "SASL_PLAINTEXT");
+            props.put("sasl.mechanism", "PLAIN");
+
+            if (username != null && password != null) {
+                props.put("sasl.jaas.config",
+                    "org.apache.kafka.common.security.plain.PlainLoginModule required " +
+                        "username=\"" + username + "\" password=\"" + password + "\";");
+            }
             producer = new KafkaProducer<>(props);
         }
         catch (Exception ex) {
@@ -44,7 +58,7 @@ public class KafkaCustomerProducer implements CustomerMessageProducer {
             return;
         }
         try {
-            ProducerRecord<String, String> record = new ProducerRecord<>("created-users-topic", userId, email);
+            ProducerRecord<String, String> record = new ProducerRecord<>(topicName, userId, email);
             producer.send(record);
         }
         catch (Exception ex) {

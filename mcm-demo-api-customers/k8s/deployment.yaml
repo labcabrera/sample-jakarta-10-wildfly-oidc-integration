@@ -55,11 +55,26 @@ spec:
             configMapKeyRef:
               name: mcm-demo-config-map
               key: APP_JWK_URL
-        # - name: APP_KAFKA_BROKER
-        #   valueFrom:
-        #     configMapKeyRef:
-        #       name: mcm-demo-config-map
-        #       key: APP_KAFKA_BROKER
+        - name: APP_KAFKA_BROKER
+          valueFrom:
+            configMapKeyRef:
+              name: mcm-demo-config-map
+              key: APP_KAFKA_BROKER
+        - name: APP_KAFKA_USERNAME
+          valueFrom:
+            configMapKeyRef:
+              name: mcm-demo-config-map
+              key: APP_KAFKA_USERNAME
+        - name: APP_KAFKA_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mcm-demo-secrets
+              key: APP_KAFKA_PASSWORD
+        - name: APP_KAFKA_TOPIC_CUSTOMER_CREATED
+          valueFrom:
+            configMapKeyRef:
+              name: mcm-demo-config-map
+              key: APP_KAFKA_TOPIC_CUSTOMER_CREATED
         - name: TZ
           value: Europe/Madrid
         imagePullPolicy: Always
