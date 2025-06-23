@@ -6,8 +6,15 @@ spring:
       bindings:
         customerCreated-in-0:
           destination: created-users-topic
-          group: customer-consumer-group
+          #group: customer-consumer-group
       kafka:
         binder:
           #brokers: localhost:9092
-          brokers: 192.168.49.2:30627
+          brokers: ${KAFKA_BROKERS:192.168.49.2:30627}
+          configuration:
+            security.protocol: SASL_PLAINTEXT
+            sasl.mechanism: PLAIN
+            sasl.jaas.config: >
+              org.apache.kafka.common.security.plain.PlainLoginModule required
+              username="${KAFKA_USERNAME:192.168.49.2:30627:user1}"
+              password="${KAFKA_PASSWORD:Ho6d2t4SeH"};

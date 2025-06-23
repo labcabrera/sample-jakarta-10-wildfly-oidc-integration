@@ -6,6 +6,8 @@ minikube start
 
 #kubectl patch serviceaccount default -p '{"imagePullSecrets": [{"name": "regcred"}]}' -n mcm-dev
 
+minikube addons enable metrics-server
+
 # Install Ingress
 
 minikube addons enable ingress

@@ -1,0 +1,33 @@
+= mcm-demo-consumer-customer-activation
+
+Aplicación basada en Spring Boot que consume eventos de creación de clientes a través de Kafka.
+
+
+Podemos probar la aplicación utilizando _kcat_:
+
+Enviar un mensaje al topic:
+
+[source, bash]
+----
+echo "foo" | kcat \
+  -b 192.168.49.2:30627 \
+  -X security.protocol=SASL_PLAINTEXT \
+  -X sasl.mechanisms=PLAIN \
+  -X sasl.username=user1 \
+  -X sasl.password=Ho6d2t4SeH \
+  -t created-users-topic
+----
+
+Escuchar los mensajes del topic:
+
+[source, bash]
+----
+kcat \
+  -b 192.168.49.2:30627 \
+  -X security.protocol=SASL_PLAINTEXT \
+  -X sasl.mechanisms=PLAIN \
+  -X sasl.username=user1 \
+  -X sasl.password=Ho6d2t4SeH \
+  -t created-users-topic \
+  -C
+----
