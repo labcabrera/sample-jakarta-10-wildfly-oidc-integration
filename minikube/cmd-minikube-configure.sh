@@ -45,12 +45,13 @@ kubectl patch secret mcm-demo-secrets -n mcm-local --type='merge' -p '{"data":{"
 
 echo "✨ Installing ArgoCD and configuring demo applications..."
 
-# Install ArgoCD with fized admin passoword
+# Install ArgoCD with fixed admin password 'changeit'
 
 helm install argocd argo/argo-cd \
   --namespace argocd \
   --create-namespace \
-  --set server.service.type=NodePort
+  --set server.service.type=NodePort \
+  --set configs.secret.argocdServerAdminPassword='$2y$10$vAKJfNlItZH/h500v0DObOd5IFBAUJifgSLTiVpKzqJ2AKGhqozVy'
 
 # Create ArgoCD applications
 

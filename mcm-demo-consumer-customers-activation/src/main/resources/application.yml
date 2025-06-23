@@ -5,7 +5,7 @@ spring:
     stream:
       bindings:
         customerCreated-in-0:
-          destination: created-users-topic
+          destination: ${APP_KAFKA_TOPIC_CUSTOMER_CREATED:customers-created-topic}
           #group: customer-consumer-group
       kafka:
         binder:
