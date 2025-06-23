@@ -10,11 +10,11 @@ Enviar un mensaje al topic:
 [source, bash]
 ----
 echo "foo" | kcat \
-  -b 192.168.49.2:30627 \
+  -b 192.168.49.2:31179 \
   -X security.protocol=SASL_PLAINTEXT \
   -X sasl.mechanisms=PLAIN \
   -X sasl.username=user1 \
-  -X sasl.password=Ho6d2t4SeH \
+  -X sasl.password=teVM3iV3V8 \
   -t created-users-topic
 ----
 
@@ -27,7 +27,7 @@ kcat \
   -X security.protocol=SASL_PLAINTEXT \
   -X sasl.mechanisms=PLAIN \
   -X sasl.username=user1 \
-  -X sasl.password=Ho6d2t4SeH \
+  -X sasl.password=teVM3iV3V8 \
   -t created-users-topic \
   -C
 ----

@@ -16,5 +16,5 @@ spring:
             sasl.mechanism: PLAIN
             sasl.jaas.config: >
               org.apache.kafka.common.security.plain.PlainLoginModule required
-              username="user1"
-              password="Ho6d2t4SeH";
+              username="${APP_KAFKA_USERNAME:user1}"
+              password="${APP_KAFKA_PASSWORD:Ho6d2t4SeH}";

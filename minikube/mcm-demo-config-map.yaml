@@ -22,7 +22,8 @@ data:
 
   APP_KAFKA_BROKER: host.minikube.internal:9093
 
-  APP_KAFKA_BROKER_CONSUMER: kafka:9092
+  # APP_KAFKA_BROKER_CONSUMER: kafka:9092
+  APP_KAFKA_BROKER_CONSUMER: kafka.mcm-local-kafka:9092
   
   APP_KAFKA_USERNAME: user1
 
