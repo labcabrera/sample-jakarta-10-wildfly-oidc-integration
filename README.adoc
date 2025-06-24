@@ -15,8 +15,8 @@ desacoplada de la implementación de servidor.
 
 Proyectos:
 
-* link:mcm-demo-lib-security-jwt[]: starter de seguridad para servicios REST basados en JWT.
-* link:mcm-demo-lib-security-oidc[]: starter de seguridad para aplicaciones web basado en OIDC.
+* link:mcm-demo-lib-security-jwt[]: starter de seguridad para servicios REST basados en JWT basado en Jakarta Security.
+* link:mcm-demo-lib-security-oidc[]: starter de seguridad para aplicaciones web basado en OIDC  basado en Jakarta Security.
 * link:mcm-demo-lib-user-client[]: cliente de la API REST de usuarios utilizado para mapear los usuarios y roles obtenidos de Keycloak
   con valores obtenidos a través de un servicio.
 * link:mcm-demo-api-customers[]: ejemplo de API REST Code-First con un CRUD básico de clientes.
@@ -39,7 +39,7 @@ Creación de usuarios:
 image::./resources/images/oidc-flow-c4-context-customer-creation.png[]
 
 En este caso durante la creación del cliente se notificará el evento de creación a una topic de Kafka que actualizará el estado a través de
-la API de clientes.
+la API de clientes utilizando Client Credentials para la autenticación.
 
 == Implementación de la capa de seguridad
 
