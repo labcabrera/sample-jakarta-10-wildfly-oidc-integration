@@ -22,6 +22,7 @@ Proyectos:
 * link:mcm-demo-api-customers[]: ejemplo de API REST Code-First con un CRUD básico de clientes.
 * link:mcm-demo-api-users[]: ejemplo de API REST Contract-First con consultas de usuarios.
 * link:mcm-demo-ui-jsf[]: frontal basado en JSF que consume la API de clientes y utiliza OIDC para la autenticación.
+* link:mcm-demo-ui-angular[]: frontal basado en Angular que consume la API de clientes y utiliza OIDC para la autenticación.
 * link:mcm-demo-ui-spring-boot[]: frontal basado en Spring Boot + Thymeleaf que consume la API de clientes y utiliza OIDC para la
   autenticación.
 * link:mcm-demo-consumer-customers-activation[]: consumidor de eventos de activación de clientes a a través de Kafka basado en Spring Cloud Stream.
