@@ -1,0 +1,50 @@
+@startuml Demo Authorization Flow - Customer Creation - C4 Context
+title Demo Authorization Flow - Customer Creation - C4 Context
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+LAYOUT_LEFT_RIGHT()
+LAYOUT_WITH_LEGEND() 
+
+Person(user, "User")
+
+Boundary(k8s, "Kubernetes (Minikube)") {
+    Boundary(namespace_mcm_local, "Namespace mcm-local") {
+        System(customer_api, "Customer API", "Jakarta 10")
+        System(customer_fe, "Customer Frontend", "Jakarta 10 + JSF")
+        System(user_api, "User API", "Jakarta 10")
+        System(customer_consumer, "Consumer Customer Activation", "Spring Boot 3.x")
+    }
+    Boundary(namespace_mcm_local_kafka, "Namespace mcm-local-kafka") {
+        Boundary(kafka_boundary, "Kafka 3.x") {
+            System_Ext(kafka_created_consumer_topic, "user-created topic", "Topic", $tags="queue")
+        }
+    }
+}
+
+Boundary(localDockerNetwork, "Local Docker Network") {
+    System_Ext(keycloak, "Keycloak", "24.x")
+    System_Ext(postgres, "Postgres", "17.x")
+}
+
+Rel(user, customer_fe, "1.- Request resource", "HTTP / OIDC")
+
+Rel(customer_fe, keycloak, "2.- Login redirect", "HTTP / OIDC")
+
+Rel(keycloak, customer_fe, "3.- Callback with code", "HTTP / OIDC")
+
+Rel(customer_fe, keycloak, "4.- Request token access", "HTTP / OIDC")
+
+Rel(customer_fe, customer_api, "5.- API call with access token", "HTTPS")
+
+Rel(customer_api, postgres, "JDBC")
+Rel(customer_api, kafka_created_consumer_topic, "Event")
+
+Rel(customer_fe, user_api, "Override user mapping", "HTTP")
+Rel(customer_api, user_api, "Override user mapping", "HTTP")
+
+Rel(kafka_created_consumer_topic, customer_consumer, "Consume events", "Kafka", "#red")
+
+Rel(customer_consumer, customer_api, "Update status", "REST / Client Credentials")
+
+@enduml
