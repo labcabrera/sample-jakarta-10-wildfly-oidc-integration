@@ -6,10 +6,11 @@ En primer lugar iniciaremos Minikube a través del comando:
 
 [source,bash]
 ----
-./cmd-minikube-start.sh
+./cmd-minikube-congigure.sh
 ----
 
-Este comando creará el namespace `mcm-dev`, habilitará el addon de Ingress necesario para la demo.
+Este comando creará el namespace `mcm-dev`, habilitará los addons necesarios como Ingress e instalará Kafka y ArgoCD y creará los configMaps y secrets
+en nuestro namespace..
 
 TIP: antes de ejecutar este comando deberemos actualizar el valor del ClientSecret de Keycloak en
 el fichero _mcm-demo-secrets.yaml_. Para ello deberemos establecer el valor en Base64 que podremos
@@ -17,14 +18,7 @@ obtener ejecutando `echo -n 'clientSecret' | base64`.
 
 echo -n 'HtsCdaR7o5KoNQpI0BOOWwtds1sxorCT' | base64
 
-Una vez arrancado desplegaremos los recursos con:
-
-[source,bash]
-----
-./cmd-minikube-deploy.sh
-----
-
-Este comando realizara el `kubectl apply` de los recursos necesarios para la demo.
+Una vez se inicien los recursos esperaremos a que ArgoCD haya terminado de deplegar las aplicaciones. Abriremos el dashboard de K8s ejecutando:
 
 Una vez desplegados los recursos, podremos acceder al dashboard ejecutando:
 
@@ -33,7 +27,7 @@ Una vez desplegados los recursos, podremos acceder al dashboard ejecutando:
 minikube dashboard
 ----
 
-Esto abrirá una nueva pestaña en el navegador con el dashboard de Minikube. En el selector de namespace seleccionaremos `mcm-dev` para ver los recursos desplegados en este namespace.
+Esto abrirá una nueva pestaña en el navegador con el dashboard de Minikube. En el selector de namespace seleccionaremos `mcm-local` para ver los recursos desplegados en este namespace.
 
 image::../resources/images/minikube-namespace.png[Minikube Namespace, width=600, align="center"]
 
