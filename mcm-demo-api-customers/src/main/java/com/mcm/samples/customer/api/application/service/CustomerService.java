@@ -6,14 +6,12 @@ import com.mcm.samples.customer.api.application.repository.CustomerRepository;
 import com.mcm.samples.customer.api.domain.cmd.CreateCustomerCmd;
 import com.mcm.samples.customer.api.domain.cmd.UpdateCustomerCmd;
 import com.mcm.samples.customer.api.domain.entity.Customer;
-import com.mcm.samples.customer.api.domain.entity.CustomerStatus;
 import com.mcm.samples.customer.api.domain.entity.Page;
 import com.mcm.samples.customer.api.domain.service.CustomerCreationService;
 import com.mcm.samples.customer.api.domain.service.CustomerUpdateService;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import jakarta.transaction.Transactional;
 
 @ApplicationScoped
 public class CustomerService {
@@ -48,15 +46,6 @@ public class CustomerService {
         return customerUpdateService.update(customerId, cmd);
     }
 
-    public Customer updateStatus(String customerId, CustomerStatus status) {
-        Customer customer = customerRepository.findById(customerId)
-            .orElseThrow(() -> new IllegalArgumentException("Customer not found with id: " + customerId));
-        customer.setStatus(status);
-        customerRepository.save(customer);
-        return customer;
-    }
-
-    @Transactional
     public void delete(String customerId) {
         customerRepository.delete(customerId);
     }

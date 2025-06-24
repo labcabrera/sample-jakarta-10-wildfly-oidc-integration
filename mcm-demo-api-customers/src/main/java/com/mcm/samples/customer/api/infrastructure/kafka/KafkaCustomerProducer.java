@@ -16,6 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class KafkaCustomerProducer implements CustomerMessageProducer {
 
+    private static final String APP_SASL_TEMPLATE = "org.apache.kafka.common.security.plain.PlainLoginModule required\nusername=\"%s\"\npassword=\"%s\";";
+
     private Producer<String, String> producer;
 
     private String topicName;
@@ -28,29 +30,11 @@ public class KafkaCustomerProducer implements CustomerMessageProducer {
                 return;
             }
             log.info("Creating Kafka producer with broker: {}", kafkaBroker);
-            Properties props = new Properties();
-            props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaBroker);
-            props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer");
-            props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer");
-            props.put(ProducerConfig.ACKS_CONFIG, "all");
-
-            String username = System.getenv("APP_KAFKA_USERNAME");
-            String password = System.getenv("APP_KAFKA_PASSWORD");
-            if (username != null && password != null) {
-                props.put("security.protocol", "SASL_PLAINTEXT");
-                props.put("sasl.mechanism", "PLAIN");
-                String saslJaasConfig = String
-                .format("org.apache.kafka.common.security.plain.PlainLoginModule required\nusername=\"%s\"\npassword=\"%s\";",
-                username,
-                password);
-                log.info("Kafka SASL config: {}", saslJaasConfig);
-                props.put("sasl.jaas.config", saslJaasConfig);
-
-            }
+            Properties props = readKafkaProperties(kafkaBroker);
             producer = new KafkaProducer<>(props);
         }
         catch (Exception ex) {
-            log.error("Error creating kafka producer", ex);
+            log.error("Error creating Kafka producer", ex);
         }
     }
 
@@ -61,11 +45,29 @@ public class KafkaCustomerProducer implements CustomerMessageProducer {
             return;
         }
         try {
-            ProducerRecord<String, String> record = new ProducerRecord<>(topicName, userId, email);
+            String message = String.format("{\"userId\":\"%s\", \"email\":\"%s\"}", userId, email);
+            ProducerRecord<String, String> record = new ProducerRecord<>(topicName, userId, message);
             producer.send(record);
         }
         catch (Exception ex) {
             log.error("Error sending customer created event to Kafka", ex);
         }
+    }
+
+    private Properties readKafkaProperties(String kafkaBroker) {
+        Properties props = new Properties();
+        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaBroker);
+        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer");
+        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer");
+        props.put(ProducerConfig.ACKS_CONFIG, "all");
+        String username = System.getenv("APP_KAFKA_USERNAME");
+        String password = System.getenv("APP_KAFKA_PASSWORD");
+        if (username != null && password != null) {
+            String saslJaasConfig = String.format(APP_SASL_TEMPLATE, username, password);
+            props.put("security.protocol", "SASL_PLAINTEXT");
+            props.put("sasl.mechanism", "PLAIN");
+            props.put("sasl.jaas.config", saslJaasConfig);
+        }
+        return props;
     }
 }
