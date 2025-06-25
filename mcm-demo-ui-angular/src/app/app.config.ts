@@ -1,6 +1,5 @@
-import { HttpClientModule } from '@angular/common/http'; // <-- Agrega esta línea
+import { HttpClientModule } from '@angular/common/http';
 import { ApplicationConfig, importProvidersFrom, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection } from '@angular/core';
-
 import { provideRouter } from '@angular/router';
 import { OAuthModule } from 'angular-oauth2-oidc';
 import { routes } from './app.routes';
