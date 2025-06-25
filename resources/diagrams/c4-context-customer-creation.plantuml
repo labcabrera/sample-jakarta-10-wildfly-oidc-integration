@@ -1,15 +1,19 @@
-@startuml Demo Authorization Flow - Customer Creation - C4 Context
-title Demo Authorization Flow - Customer Creation - C4 Context
+@startuml C4 Context Demo
+title C4 Context Demo
 
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
 
 LAYOUT_LEFT_RIGHT()
-LAYOUT_WITH_LEGEND() 
+
+UpdateElementStyle(person, $bgColor="#008fb3")
+UpdateElementStyle(system, $bgColor="#f9b000")
+UpdateElementStyle(external_system, $bgColor="#005b72")
+UpdateElementStyle(boundary, $bgColor="#e6f8fa")
 
 Person(user, "User")
 
 Boundary(k8s, "Kubernetes (Minikube)") {
-    Boundary(namespace_mcm_local, "Namespace mcm-local") {
+    Boundary(namespace_mcm_local, "Namespace mcm-local", "", $tags="k8s_namespace") {
         System(customer_api, "Customer API", "Jakarta 10")
         System(customer_fe, "Customer Frontend", "Jakarta 10 + JSF")
         System(user_api, "User API", "Jakarta 10")
@@ -27,15 +31,11 @@ Boundary(localDockerNetwork, "Local Docker Network") {
     System_Ext(postgres, "Postgres", "17.x")
 }
 
-Rel(user, customer_fe, "1.- Request resource", "HTTP / OIDC")
+Rel(user, customer_fe, "Request resource", "HTTP")
 
-Rel(customer_fe, keycloak, "2.- Login redirect", "HTTP / OIDC")
+Rel(customer_fe, keycloak, "External login", "HTTP / OIDC")
 
-Rel(keycloak, customer_fe, "3.- Callback with code", "HTTP / OIDC")
-
-Rel(customer_fe, keycloak, "4.- Request token access", "HTTP / OIDC")
-
-Rel(customer_fe, customer_api, "5.- API call with access token", "HTTPS")
+Rel(customer_fe, customer_api, "API call with access token", "HTTP / JWT")
 
 Rel(customer_api, postgres, "JDBC")
 Rel(customer_api, kafka_created_consumer_topic, "Event")
@@ -46,5 +46,7 @@ Rel(customer_api, user_api, "Override user mapping", "HTTP")
 Rel(kafka_created_consumer_topic, customer_consumer, "Consume events", "Kafka", "#red")
 
 Rel(customer_consumer, customer_api, "Update status", "REST / Client Credentials")
+
+SHOW_LEGEND()
 
 @enduml
