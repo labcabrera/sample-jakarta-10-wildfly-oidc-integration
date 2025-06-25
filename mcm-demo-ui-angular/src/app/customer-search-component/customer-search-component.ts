@@ -17,11 +17,10 @@ import { CustomerService } from '../customer.service';
 export class CustomerSearchComponent {
 
   customers: any[] = [];
-  displayedColumns: string[] = ['id', 'firstName', 'lastName', 'email'];
 
   constructor(private customerService: CustomerService) { }
 
-  buscar() {
+  searchCustomers() {
     this.customerService.searchCustomers().subscribe(data => {
       this.customers = data.content;
     });

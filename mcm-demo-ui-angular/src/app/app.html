@@ -1,7 +1,10 @@
 <app-header-component [title]="title"></app-header-component>
 
+<router-outlet />
+
+<a mat-button href="/customers">Customers</a>
+
 <div class="main-content" *ngIf="auth.isLoggedIn$ | async">
-  <a mat-button routerLink="/customers">Customers</a>
   <div>
     OIDC User Profile:
     <pre><code>{{ auth.userProfile | json }}</code></pre>
@@ -11,5 +14,3 @@
     <code>{{auth.token}}</code>
   </div>
 </div>
-
-<router-outlet />

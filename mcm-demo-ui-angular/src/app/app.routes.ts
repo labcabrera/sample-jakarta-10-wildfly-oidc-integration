@@ -3,10 +3,5 @@ import { CustomerSearchComponent } from './customer-search-component/customer-se
 import { App } from './app';
 
 export const routes: Routes = [
-    {
-        path: '', component: App
-    },
-    {
-        path: 'customers', component: CustomerSearchComponent
-    }
+    { path: 'customers', component: CustomerSearchComponent }
 ];

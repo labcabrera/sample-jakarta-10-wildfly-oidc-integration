@@ -1,6 +1,6 @@
-<h2>Customer search</h2>
+<h2>Customers</h2>
 
-<button mat-raised-button color="primary" (click)="buscar()">Buscar clientes</button>
+<button mat-raised-button color="primary" (click)="searchCustomers()">Buscar clientes</button>
 
 <table mat-table [dataSource]="customers" class="mat-elevation-z8" *ngIf="customers?.length">
 
@@ -24,8 +24,13 @@
     <td mat-cell *matCellDef="let customer"> {{ customer.contactInfo.email }} </td>
   </ng-container>
 
-  <tr mat-header-row *matHeaderRowDef="['id', 'firstName', 'lastName', 'email']"></tr>
-  <tr mat-row *matRowDef="let row; columns: ['id', 'firstName', 'lastName', 'email'];"></tr>
+  <ng-container matColumnDef="status">
+    <th mat-header-cell *matHeaderCellDef> Status </th>
+    <td mat-cell *matCellDef="let customer"> {{ customer.status }} </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="['id', 'firstName', 'lastName', 'email', 'status']"></tr>
+  <tr mat-row *matRowDef="let row; columns: ['id', 'firstName', 'lastName', 'email', 'status'];"></tr>
 
 </table>
 
