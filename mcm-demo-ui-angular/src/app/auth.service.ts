@@ -5,10 +5,6 @@ import { authConfig } from './auth.config';
 @Injectable({ providedIn: 'root' })
 export class AuthService {
     constructor(private oauthService: OAuthService) {
-        this.configure();
-    }
-
-    private configure() {
         this.oauthService.configure(authConfig);
         this.oauthService.loadDiscoveryDocumentAndTryLogin();
     }
@@ -21,11 +17,15 @@ export class AuthService {
         this.oauthService.logOut();
     }
 
-    get identityClaims() {
-        return this.oauthService.getIdentityClaims();
+    get token(): string {
+        return this.oauthService.getAccessToken();
     }
 
-    get isLoggedIn() {
+    get isLoggedIn(): boolean {
         return this.oauthService.hasValidAccessToken();
+    }
+
+    get userProfile(): any {
+        return this.oauthService.getIdentityClaims();
     }
 }

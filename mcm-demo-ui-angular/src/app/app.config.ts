@@ -1,12 +1,16 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZoneChangeDetection } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { HttpClientModule } from '@angular/common/http'; // <-- Agrega esta línea
+import { ApplicationConfig, importProvidersFrom, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection } from '@angular/core';
 
+import { provideRouter } from '@angular/router';
+import { OAuthModule } from 'angular-oauth2-oidc';
 import { routes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
-    provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes)
+    provideZonelessChangeDetection(),
+    provideRouter(routes),
+    importProvidersFrom(HttpClientModule),
+    importProvidersFrom(OAuthModule.forRoot())
   ]
 };
