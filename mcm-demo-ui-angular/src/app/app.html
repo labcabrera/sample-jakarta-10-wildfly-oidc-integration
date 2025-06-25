@@ -1,27 +1,35 @@
-<div *ngIf="!(auth.isLoggedIn$ | async)">
-  <button (click)="login()">Login</button>
-</div>
+<mat-toolbar color="primary">
+  <span>{{ title }}</span>
+  <span class="spacer"></span>
+  <ng-container *ngIf="auth.isLoggedIn$ | async; else loginBlock">
+    <button mat-button [matMenuTriggerFor]="userMenu">
+      <mat-icon>account_circle</mat-icon>
+      {{ auth.userProfile?.name || 'Usuario' }}
+    </button>
+    <mat-menu #userMenu="matMenu">
+      <button mat-menu-item (click)="logout()">
+        <mat-icon>logout</mat-icon>
+        Logout
+      </button>
+    </mat-menu>
+  </ng-container>
+  <ng-template #loginBlock>
+    <button mat-button (click)="login()">
+      <mat-icon>login</mat-icon>
+      Login
+    </button>
+  </ng-template>
+</mat-toolbar>
 
-<div *ngIf="auth.isLoggedIn$ | async">
-  <button (click)="logout()">Logout</button>
-  <div>
-    <a href="/customers">Customers</a>
-  </div>
-  <div>
-    <div>User: {{ auth.userProfile?.name }}</div>
-    <div>Preferred username: {{ auth.userProfile?.preferred_username }}</div>
-  </div>
+<div class="main-content" *ngIf="auth.isLoggedIn$ | async">
+  <a mat-button routerLink="/customers">Customers</a>
   <div>
     OIDC User Profile:
-    <pre>
-    <code>{{ auth.userProfile | json }}</code>
-  </pre>
+    <pre><code>{{ auth.userProfile | json }}</code></pre>
   </div>
   <div>
-    Token:
-    <code>
-    {{auth.token}}
-  </code>
+    JWT Token:
+    <code>{{auth.token}}</code>
   </div>
 </div>
 
