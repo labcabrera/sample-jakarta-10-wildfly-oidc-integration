@@ -8,7 +8,8 @@
     <a href="/customers">Customers</a>
   </div>
   <div>
-    User: {{ auth.userProfile?.name }}
+    <div>User: {{ auth.userProfile?.name }}</div>
+    <div>Preferred username: {{ auth.userProfile?.preferred_username }}</div>
   </div>
   <div>
     OIDC User Profile:
