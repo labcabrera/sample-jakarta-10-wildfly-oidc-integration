@@ -1,8 +1,8 @@
 <app-header-component [title]="title"></app-header-component>
 
-<router-outlet />
+<router-outlet></router-outlet>
 
-<a mat-button href="/customers">Customers</a>
+<a mat-button routerLink="/customers">Customers</a>
 
 <div class="main-content" *ngIf="auth.isLoggedIn$ | async">
   <div>
