@@ -8,18 +8,18 @@ import { RouterOutlet } from '@angular/router';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { authConfig } from './auth.config';
 import { AuthService } from './auth.service';
+import { HeaderComponent } from './header-component/header-component';
+
 
 @Component({
   selector: 'app-root',
   imports: [
+    HeaderComponent,
     RouterOutlet,
     NgIf,
     AsyncPipe,
     JsonPipe,
-    MatToolbarModule,
-    MatButtonModule,
-    MatMenuModule,
-    MatIconModule],
+    MatButtonModule],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
