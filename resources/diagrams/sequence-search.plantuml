@@ -1,0 +1,78 @@
+@startuml Customer creation sequence
+title Customer creation sequence
+
+skinparam ParticipantBackgroundColor #005b72
+skinparam ParticipantFontColor #ffffff
+skinparam ArrowColor #000000
+
+actor User as user
+
+participant "Customer FE" as customer_fe
+participant "Keycloak" as keycloak
+participant "Customer API" as customer_api
+participant "User API" as user_api
+participant "DDBB" as ddbb
+participant "Kafka" as kafka
+participant "Customer Consumer" as customer_consumer
+
+user -> customer_fe: Request
+activate customer_fe
+
+' OIDC Login
+customer_fe -> keycloak: OIDC Code Request
+activate keycloak
+keycloak --> customer_fe: OIDC Code
+
+customer_fe -> keycloak: OIDC token request from code
+keycloak --> customer_fe: OIDC token
+deactivate keycloak
+
+customer_fe -> user_api: Read user profile
+activate user_api
+user_api --> customer_fe: User code + additional roles
+deactivate user_api
+
+'Customer Creation
+customer_fe -> customer_api: Customer creation request with JWT
+activate customer_api
+customer_api -> customer_api: Check JWT Signature
+customer_api -> user_api: Read user profile
+activate user_api
+user_api --> customer_api: User code + additional roles
+deactivate user_api
+
+customer_api -> ddbb: Create Customer
+activate ddbb
+ddbb --> customer_api: Customer
+deactivate ddbb
+
+customer_api -> kafka: Create Event
+activate kafka
+deactivate kafka
+customer_api --> customer_fe: Customer Created
+deactivate customer_api
+deactivate customer_fe
+
+activate kafka
+kafka --> customer_consumer: Customer created event
+activate customer_consumer
+customer_consumer -> keycloak: Request token using Client Credentials
+activate keycloak
+keycloak --> customer_consumer: JWT Token
+deactivate keycloak
+customer_consumer -> customer_api: Update customer status
+activate customer_api
+
+customer_api -> customer_api: Check JWT signature
+customer_api -> user_api: Read user profile
+activate user_api
+user_api --> customer_api: User code + additional roles
+deactivate user_api
+
+customer_api -> ddbb: Update customer status
+activate ddbb
+ddbb --> customer_api: Customer updated
+customer_api --> customer_consumer: Customer status updated
+deactivate customer_api
+
+@enduml

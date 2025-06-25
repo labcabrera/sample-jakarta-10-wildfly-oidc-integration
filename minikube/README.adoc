@@ -16,8 +16,6 @@ TIP: antes de ejecutar este comando deberemos actualizar el valor del ClientSecr
 el fichero _mcm-demo-secrets.yaml_. Para ello deberemos establecer el valor en Base64 que podremos
 obtener ejecutando `echo -n 'clientSecret' | base64`.
 
-echo -n 'HtsCdaR7o5KoNQpI0BOOWwtds1sxorCT' | base64
-
 Una vez se inicien los recursos esperaremos a que ArgoCD haya terminado de deplegar las aplicaciones. Abriremos el dashboard de K8s ejecutando:
 
 Una vez desplegados los recursos, podremos acceder al dashboard ejecutando:
