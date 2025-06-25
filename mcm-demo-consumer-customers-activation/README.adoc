@@ -12,7 +12,7 @@ Para ello deberemos crear en Keycloak el cliente llamado _mem-demo-customer-acti
 
 Este último rol es el que permite la actualización del estado del cliente a través de la API.
 
-image::./../resources/images/keycloak-mcm-demo-consumer-customer-activation.png[]
+image::../resources/images/keycloak-mcm-demo-customer-consumer.png[]
 
 Aplicación basada en Spring Boot que consume eventos de creación de clientes a través de Kafka.
 
