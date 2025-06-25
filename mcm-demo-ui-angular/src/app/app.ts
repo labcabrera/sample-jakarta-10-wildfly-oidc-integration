@@ -1,4 +1,4 @@
-import { NgIf } from '@angular/common';
+import { AsyncPipe, JsonPipe, NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { OAuthService } from 'angular-oauth2-oidc';
@@ -7,7 +7,7 @@ import { AuthService } from './auth.service';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, NgIf],
+  imports: [RouterOutlet, NgIf, AsyncPipe, JsonPipe],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })

@@ -1,17 +1,27 @@
-<div>
-  app.html works
+<div *ngIf="!(auth.isLoggedIn$ | async)">
+  <button (click)="login()">Login</button>
 </div>
 
-<div>
-  <button *ngIf="!auth.isLoggedIn" (click)="login()">Login</button>
-  <button *ngIf="auth.isLoggedIn" (click)="logout()">Logout</button>
-  <div *ngIf="auth.isLoggedIn">
-    Welcome, {{ auth.userProfile?.name }}
+<div *ngIf="auth.isLoggedIn$ | async">
+  <button (click)="logout()">Logout</button>
+  <div>
+    <a href="/customers">Customers</a>
   </div>
-</div>
-
-<div>
-  <a href="/customers">Customers</a>
+  <div>
+    User: {{ auth.userProfile?.name }}
+  </div>
+  <div>
+    OIDC User Profile:
+    <pre>
+    <code>{{ auth.userProfile | json }}</code>
+  </pre>
+  </div>
+  <div>
+    Token:
+    <code>
+    {{auth.token}}
+  </code>
+  </div>
 </div>
 
 <router-outlet />
