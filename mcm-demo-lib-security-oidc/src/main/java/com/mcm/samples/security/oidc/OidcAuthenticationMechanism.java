@@ -56,6 +56,12 @@ public class OidcAuthenticationMechanism implements HttpAuthenticationMechanism 
         log.info("  isAuthenticationRequest : {}", context.isAuthenticationRequest());
         log.info("------------------------------------------------------------");
 
+        // Allow OPTIONS with no autenticación (CORS preflight)
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            log.info("OPTIONS request detected, skipping authentication");
+            return AuthenticationStatus.SUCCESS;
+        }
+
         if (request.getSession().getAttribute("principal") != null) {
             log.info("Detected principal in session. Building authentication from session attributes");
             CallerPrincipal principal = (CallerPrincipal) request.getSession().getAttribute("principal");

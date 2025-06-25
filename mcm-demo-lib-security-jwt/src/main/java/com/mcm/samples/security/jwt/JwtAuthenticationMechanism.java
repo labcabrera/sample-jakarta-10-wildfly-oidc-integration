@@ -26,6 +26,12 @@ public class JwtAuthenticationMechanism implements HttpAuthenticationMechanism {
     public AuthenticationStatus validateRequest(HttpServletRequest request, HttpServletResponse response, HttpMessageContext context)
         throws AuthenticationException {
 
+        // Allow OPTIONS with no autenticación (CORS preflight)
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            log.info("OPTIONS request detected, skipping authentication");
+            return AuthenticationStatus.SUCCESS;
+        }
+
         String header = request.getHeader("Authorization");
         log.info("Auhorization header: {}", header);
 
