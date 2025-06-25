@@ -6,6 +6,7 @@ import com.mcm.samples.customer.api.application.service.CustomerService;
 import com.mcm.samples.customer.api.domain.cmd.CreateCustomerCmd;
 import com.mcm.samples.customer.api.domain.cmd.UpdateCustomerCmd;
 import com.mcm.samples.customer.api.domain.entity.Customer;
+import com.mcm.samples.customer.api.domain.entity.CustomerStatus;
 import com.mcm.samples.customer.api.domain.entity.Page;
 
 import jakarta.enterprise.context.RequestScoped;
@@ -55,6 +56,14 @@ public class CustomerApi implements CustomerApiDefinition {
         log.info("Customers << update customer {}", customerId);
         checkUserRole("customer-manager", "User is not authorized to modify customers.");
         Customer customer = customerService.update(customerId, cmd);
+        return Response.ok().entity(customer).build();
+    }
+
+    @Override
+    public Response updateConsumerStatus(String customerId, CustomerStatus status) {
+        log.info("Customers << update customer status {} : {}", customerId, status);
+        checkUserRole("customer-manager", "User is not authorized to update customer status.");
+        Customer customer = customerService.updateStatus(customerId, status);
         return Response.ok().entity(customer).build();
     }
 

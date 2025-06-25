@@ -12,6 +12,7 @@ import com.mcm.samples.customer.api.domain.cmd.UpdateCustomerCmd;
 import com.mcm.samples.customer.api.domain.entity.ApiError;
 import com.mcm.samples.customer.api.domain.entity.Customer;
 import com.mcm.samples.customer.api.domain.entity.CustomerPage;
+import com.mcm.samples.customer.api.domain.entity.CustomerStatus;
 
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
@@ -63,6 +64,15 @@ public interface CustomerApiDefinition {
     @APIResponse(responseCode = "200", description = "Customer updated", content = @Content(schema = @Schema(implementation = Customer.class)))
     @APIResponse(responseCode = "400", description = "Validation errors", content = @Content(schema = @Schema(implementation = ApiError.class)))
     Response updateConsumer(@PathParam("id") String id, UpdateCustomerCmd cmd);
+
+    //TODO Fix serialization issue lowercase
+    @PATCH
+    @Path("/{id}/status/{status}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Operation(summary = "Update consumer status", description = "Update consumer status", operationId = "updateConsumerStatus")
+    @APIResponse(responseCode = "200", description = "Customer updated", content = @Content(schema = @Schema(implementation = Customer.class)))
+    @APIResponse(responseCode = "400", description = "Validation errors", content = @Content(schema = @Schema(implementation = ApiError.class)))
+    Response updateConsumerStatus(@PathParam("id") String id, @PathParam("status") CustomerStatus status);
 
     @DELETE
     @Path("/{id}")

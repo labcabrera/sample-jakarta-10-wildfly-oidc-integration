@@ -14,7 +14,6 @@ import com.mcm.samples.customer.api.domain.exception.ConstraintValidationExcepti
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.security.enterprise.SecurityContext;
-import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +31,6 @@ public class CustomerCreationService {
     @Inject
     private SecurityContext securityContext;
 
-    @Transactional
     public Customer create(CreateCustomerCmd cmd) {
         log.info("Creating customer with command: {}", cmd);
         String username = securityContext.getCallerPrincipal().getName();

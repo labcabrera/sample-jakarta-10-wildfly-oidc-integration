@@ -22,5 +22,5 @@ api:
     base-url: ${API_CUSTOMERS_BASE_URL:http://mcm-demo-api-customers.local/api-customers/api}
   oauth2:
     token-uri: ${APP_TOKEN_URL:http://127.0.0.1:8090/realms/mcm-demo/protocol/openid-connect/token}
-    client-id: ${APP_CLIENT_ID:mcm-demo-client-jsf}
-    client-secret: ${APP_CLIENT_SECRET:HtsCdaR7o5KoNQpI0BOOWwtds1sxorCT}
+    client-id: ${APP_CLIENT_ID:mcm-demo-customer-consumer}
+    client-secret: ${APP_CLIENT_SECRET:2wvBjlhSDHVIR6UVfA05TZ0yOPfmFiCn}

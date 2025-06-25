@@ -9,7 +9,6 @@ import com.mcm.samples.customer.api.domain.entity.Customer;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.security.enterprise.SecurityContext;
-import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 
 @RequestScoped
@@ -22,7 +21,6 @@ public class CustomerUpdateService {
     @Inject
     private SecurityContext securityContext;
 
-    @Transactional
     public Customer update(String customerId, UpdateCustomerCmd cmd) {
         Customer customer = customerRepository.findById(customerId)
             .orElseThrow(() -> new IllegalArgumentException("Customer not found: " + customerId));

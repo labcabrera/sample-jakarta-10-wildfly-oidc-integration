@@ -6,12 +6,13 @@ La API está securizada mediante autenticación JWT y requiere que el usuario te
 
 [options="header"]
 |===
-| Método | Ruta                | Descripción              | Rol              |
-| GET    | /api/customers      | Listado de clientes      | customer-viewer  |
-| GET    | /api/customers/{id} | Consulta RSQL de clientes| customer-viewer  |
-| POST   | /api/customers      | Alta de cliente          | customer-manager |
-| PATCH  | /api/customers/{id} | Actualización de cliente | customer-manager |
-| DELETE | /api/customers/{id} | Eliminación de cliente   | customer-manager |
+| Método | Ruta                               | Descripción              | Role                 |
+| GET    | /api/customers                     | Listado de clientes      | _customer-viewer_    |
+| GET    | /api/customers/{id}                | Consulta RSQL de clientes| _customer-viewer_    |
+| POST   | /api/customers                     | Alta de cliente          | _customer-manager_   |
+| PATCH  | /api/customers/{id}                | Actualización de cliente | _customer-manager_   |
+| PATCH  | /api/customers/{id}/status{status} | Actualización de estado  | _customer-processor_ |
+| DELETE | /api/customers/{id}                | Eliminación de cliente   | _customer-manager_   |
 |===
 
 La API de la aplicación está basada en Code-First a partir de las anotaciones

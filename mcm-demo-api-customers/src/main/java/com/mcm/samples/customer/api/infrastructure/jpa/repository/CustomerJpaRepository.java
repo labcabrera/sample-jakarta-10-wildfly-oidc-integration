@@ -12,6 +12,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 
 @ApplicationScoped
@@ -56,6 +57,7 @@ public class CustomerJpaRepository implements CustomerRepository {
             .build();
     }
 
+    @Transactional
     public Customer save(Customer customer) {
         CustomerEntity customerEntity = customerMapper.toEntity(customer);
         em.persist(customerEntity);
@@ -63,12 +65,14 @@ public class CustomerJpaRepository implements CustomerRepository {
         return customerMapper.toDomain(customerEntity);
     }
 
+    @Transactional
     public Customer update(Customer customer) {
         CustomerEntity customerEntity = customerMapper.toEntity(customer);
         CustomerEntity updated = em.merge(customerEntity);
         return customerMapper.toDomain(updated);
     }
 
+    @Transactional
     public void delete(String id) {
         CustomerEntity customer = em.find(CustomerEntity.class, id);
         if (customer != null) {
