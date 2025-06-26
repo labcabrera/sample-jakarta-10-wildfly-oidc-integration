@@ -1,12 +1,16 @@
 spring:
   application:
     name: mcm-demo-consumer-customers-activation
+  main:
+    # Note: We start the web server only for actuator endpoints. If you do not want
+    # this functionality, use the 'none' mode
+    web-application-type: reactive
   cloud:
     stream:
       bindings:
         customerCreated-in-0:
           destination: ${APP_KAFKA_TOPIC_CUSTOMER_CREATED:customers-created-topic}
-          #group: customer-consumer-group
+          group: ${APP_KAFKA_CONSUMER_GROUP:customer-consumers-activation-group}
       kafka:
         binder:
           brokers: ${APP_KAFKA_BROKER:192.168.49.2:31108}
@@ -17,10 +21,20 @@ spring:
               org.apache.kafka.common.security.plain.PlainLoginModule required
               username="${APP_KAFKA_USERNAME:user1}"
               password="${APP_KAFKA_PASSWORD:879P1qgPkc}";
-api:
-  customers:
-    base-url: ${API_CUSTOMERS_BASE_URL:http://mcm-demo-api-customers.local/api-customers/api}
-  oauth2:
-    token-uri: ${APP_TOKEN_URL:http://127.0.0.1:8090/realms/mcm-demo/protocol/openid-connect/token}
-    client-id: ${APP_CLIENT_ID:mcm-demo-client-jsf}
-    client-secret: ${APP_CLIENT_SECRET:HtsCdaR7o5KoNQpI0BOOWwtds1sxorCT}
+  security:
+    oauth2:
+      client:
+        registration:
+          demo-keycloak:
+            client-id: ${APP_CLIENT_ID:mcm-demo-customer-consumer}
+            client-secret: ${APP_CLIENT_SECRET:2wvBjlhSDHVIR6UVfA05TZ0yOPfmFiCn}
+            authorization-grant-type: client_credentials
+            scope: openid
+            provider: demo-keycloak
+        provider:
+          demo-keycloak:
+            token-uri: ${APP_TOKEN_URL:http://127.0.0.1:8090/realms/mcm-demo/protocol/openid-connect/token}
+app:
+  api-client: 
+    customers:
+      base-url: ${API_CUSTOMERS_BASE_URL:http://mcm-demo-api-customers.local/api-customers/api}

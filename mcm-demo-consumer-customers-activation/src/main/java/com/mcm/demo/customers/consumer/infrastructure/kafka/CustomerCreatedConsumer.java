@@ -13,6 +13,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mcm.demo.customers.consumer.domain.ConsumerActivationService;
 
 import lombok.extern.slf4j.Slf4j;
+import reactor.core.publisher.Flux;
 
 @Component
 @Slf4j
@@ -24,27 +25,26 @@ public class CustomerCreatedConsumer {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Bean
-    public Consumer<Message<String>> customerCreated() {
-        return message -> {
-            log.info("Received message: {}", message.getPayload());
-            log.info("Message Headers: {}", message.getHeaders());
-            updateCustomer(message.getPayload());
-        };
+    public Consumer<Flux<Message<String>>> customerCreated() {
+        return flux -> flux
+            .doOnNext(this::processMessage)
+            .doOnError(Throwable::printStackTrace)
+            .subscribe();
     }
 
     @SuppressWarnings("unchecked")
-    private void updateCustomer(String message) {
-        log.info("Processing message: {}", message);
-        Map<String, String> messageBody;
+    private void processMessage(Message<String> message) {
         try {
-            messageBody = objectMapper.readValue(message, Map.class);
+            log.info("Processing message: {}", message.getPayload());
+            Map<String, String> payload = objectMapper.readValue(message.getPayload(), Map.class);
+            String customerId = payload.get("userId");
+            String email = payload.get("email");
+            consumerActivationService.processActivation(customerId, email);
         }
         catch (IOException ex) {
-            log.error(message, ex);
-            return;
+            //TODO handle error properly
+            log.error("Error processing message: {}", ex.getMessage(), ex);
         }
-        String customerId = messageBody.get("userId");
-        String email = messageBody.get("email");
-        consumerActivationService.processActivation(customerId, email);
     }
+
 }
