@@ -63,5 +63,19 @@ kubectl apply -f ../argocd/mcm-demo-ui-jsf-app.yaml -n argocd
 
 kubectl apply -f ../argocd/mcm-demo-consumer-customers-activation-app.yaml -n argocd
 
-
 kubectl get secret kafka-user-passwords -n mcm-local-kafka -o jsonpath="{.data.client-passwords}" | base64 -d
+
+# Install Kafka UI
+
+# TODO fix hardcoded user:pwd in configMap
+
+kubectl apply -f kafka-ui-config.yaml -n mcm-local-kafka
+
+helm install kafka-ui kafka-ui/kafka-ui \
+  --set existingConfigMap="kafka-ui-config" \
+  --set ingress.enabled=true \
+  --set ingress.className=nginx \
+  --set ingress.hosts[0].host=kafka-ui.local \
+  --set ingress.hosts[0].paths[0].path=/ \
+  --set ingress.hosts[0].paths[0].pathType=Prefix \
+  --namespace mcm-local-kafka
