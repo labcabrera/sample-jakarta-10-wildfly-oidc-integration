@@ -8,9 +8,7 @@ Para ello deberemos crear en Keycloak el cliente llamado _mem-demo-customer-acti
 
 * _customer-viewer_
 * _customer-manager_
-* _customer-processor_
-
-Este último rol es el que permite la actualización del estado del cliente a través de la API.
+* _customer-processor_ (requerido para la llamada de actualización del estado del cliente)
 
 TIP: hay que tener en cuenta que en este caso los roles están definidos a nivel del cliente a diferencia
 de los roles de los usuarios.
@@ -40,6 +38,12 @@ spring:
               username="${APP_KAFKA_USERNAME:user1}"
               password="${APP_KAFKA_PASSWORD:879P1qgPkc}";
 ----
+
+Este componente simula la siguiente lógica de negocio a partir del email recibido:
+
+* Si el email contiene la expresión 'exception' lanza una excepción para simular un error en el procesamiento.
+* Si el email contiene la expresión 'error' realiza una actualización de estado a 'inactive'
+* En caso contrario realiza una actualización de estado a 'active'.
 
 Podemos probar la aplicación utilizando _kcat_:
 

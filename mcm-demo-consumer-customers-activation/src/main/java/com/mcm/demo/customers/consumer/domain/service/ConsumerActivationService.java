@@ -1,4 +1,4 @@
-package com.mcm.demo.customers.consumer.domain;
+package com.mcm.demo.customers.consumer.domain.service;
 
 public interface ConsumerActivationService {
 

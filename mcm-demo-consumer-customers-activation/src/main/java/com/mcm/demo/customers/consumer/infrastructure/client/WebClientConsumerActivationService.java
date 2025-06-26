@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import com.mcm.demo.customers.consumer.domain.ConsumerActivationService;
+import com.mcm.demo.customers.consumer.domain.service.ConsumerActivationService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -38,6 +38,9 @@ public class WebClientConsumerActivationService implements ConsumerActivationSer
 
     private String resolveStatus(String email) {
         // Mock business logic
+        if (email.contains("exception")) {
+            throw new RuntimeException(String.format("Simulated exception for testing purposes for email: %s", email));
+        }
         return email.contains("error") ? "inactive" : "active";
     }
 

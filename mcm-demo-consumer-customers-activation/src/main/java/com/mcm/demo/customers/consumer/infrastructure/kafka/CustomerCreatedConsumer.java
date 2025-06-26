@@ -1,6 +1,5 @@
 package com.mcm.demo.customers.consumer.infrastructure.kafka;
 
-import java.io.IOException;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -10,7 +9,8 @@ import org.springframework.messaging.Message;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mcm.demo.customers.consumer.domain.ConsumerActivationService;
+import com.mcm.demo.customers.consumer.domain.exception.CustomerActivationException;
+import com.mcm.demo.customers.consumer.domain.service.ConsumerActivationService;
 
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Flux;
@@ -34,16 +34,25 @@ public class CustomerCreatedConsumer {
 
     @SuppressWarnings("unchecked")
     private void processMessage(Message<String> message) {
+        log.info("Processing message: {}", message.getPayload());
+        String customerId;
+        String email;
         try {
-            log.info("Processing message: {}", message.getPayload());
             Map<String, String> payload = objectMapper.readValue(message.getPayload(), Map.class);
-            String customerId = payload.get("userId");
-            String email = payload.get("email");
+            customerId = payload.get("userId");
+            email = payload.get("email");
+        }
+        catch (Exception ex) {
+            log.error("Error processing message: {}", ex.getMessage(), ex);
+            throw new CustomerActivationException("Invalid message format: " + message.getPayload());
+
+        }
+        try {
             consumerActivationService.processActivation(customerId, email);
         }
-        catch (IOException ex) {
-            //TODO handle error properly
-            log.error("Error processing message: {}", ex.getMessage(), ex);
+        catch (Exception ex) {
+            log.error("Error activating customer: {}", ex.getMessage(), ex);
+            throw new CustomerActivationException(customerId, email, ex);
         }
     }
 
