@@ -2,21 +2,58 @@ apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: mcm-demo-job-customers
+  labels:
+    app: mcm-demo-job-customers
+    component: batch-job
+    version: v1.0.0
+  annotations:
+    description: "Job to process pending customer activations"
+    maintainer: "MCM Demo Team"
 spec:
   schedule: "*/30 * * * *"
-  successfulJobsHistoryLimit: 1
-  failedJobsHistoryLimit: 1
+  timeZone: "Europe/Madrid"
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
   suspend: false
   concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 300
   jobTemplate:
+    metadata:
+      labels:
+        app: mcm-demo-job-customers
+        component: batch-job
     spec:
-      backoffLimit: 1
+      backoffLimit: 2
+      activeDeadlineSeconds: 1800
+      ttlSecondsAfterFinished: 3600
       template:
+        metadata:
+          labels:
+            app: mcm-demo-job-customers
+            component: batch-job
         spec:
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
           containers:
           - name: mcm-demo-job-customers
             image: labcabrera/mcm-demo-job-customers:latest
             imagePullPolicy: Always
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: false
+              runAsNonRoot: true
+              runAsUser: 1000
+              capabilities:
+                drop:
+                  - ALL
+            resources:
+              requests:
+                memory: "128Mi"
+              limits:
+                memory: "512Mi"
             env:
             - name: APP_DB_SCHEMA
               valueFrom:
@@ -63,6 +100,25 @@ spec:
                 secretKeyRef:
                   name: mcm-demo-secrets
                   key: APP_KAFKA_PASSWORD
-            - name: TZ
-              value: Europe/Madrid
+            livenessProbe:
+              exec:
+                command:
+                - /bin/sh
+                - -c
+                - "ps aux | grep -v grep | grep python"
+              initialDelaySeconds: 30
+              periodSeconds: 30
+              timeoutSeconds: 5
+              failureThreshold: 3
+            readinessProbe:
+              exec:
+                command:
+                - /bin/sh
+                - -c
+                - "ps aux | grep -v grep | grep python"
+              initialDelaySeconds: 5
+              periodSeconds: 10
+              timeoutSeconds: 5
+              failureThreshold: 3
           restartPolicy: Never
+          terminationGracePeriodSeconds: 30
