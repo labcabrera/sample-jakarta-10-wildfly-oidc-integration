@@ -15,7 +15,7 @@ spec:
         spec:
           containers:
           - name: mcm-demo-job-customers
-            image: labcabrera/mcm-demo-api-customers:latest
+            image: labcabrera/mcm-demo-job-customers:latest
             imagePullPolicy: Always
             env:
             - name: APP_DB_SCHEMA
