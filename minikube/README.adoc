@@ -35,7 +35,9 @@ servicios locales. Para ello añadiremos las siguiente entradas:
 ----
 192.168.49.2 mcm-demo-api-customers.local
 192.168.49.2 mcm-demo-api-users.local
-192.168.49.4 mcm-demo-ui-jsf.local
+192.168.49.2 mcm-demo-ui-jsf.local
+192.168.49.2 argocd.local
+192.168.49.2 kafka-ui.local
 ----
 
 Siendo _192.168.49.4_ la dirección IP resuelta por el comando `minikube ip`.
@@ -54,6 +56,13 @@ Y desde los pods se podrá acceder al servicio de Keycloak local.
 Una vez desplegados los servicios podremos acceder a la aplicación de cliente a través de la URL:
 
 https://mcm-demo-ui-jsf.local/demo-ui
+
+== ArgoCD
+
+Una vez desplegados los recursos, podremos acceder al dashboard de ArgoCD con las credenciales _admin:changeit_ a través de la URL:
+
+https://argocd.local:30080
+
 
 == Consultas
 

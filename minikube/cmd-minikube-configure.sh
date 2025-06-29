@@ -2,7 +2,7 @@
 
 NAMESPACE="mcm-local"
 
-minikube start
+minikube start --driver=docker --memory=12288
 
 #kubectl patch serviceaccount default -p '{"imagePullSecrets": [{"name": "regcred"}]}' -n mcm-dev
 
