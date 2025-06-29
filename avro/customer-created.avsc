@@ -1,0 +1,9 @@
+{
+  "type": "record",
+  "name": "CustomerCreated",
+  "namespace": "com.mcm",
+  "fields": [
+    { "name": "customerId", "type": "string" },
+    { "name": "email", "type": "string" }
+  ]
+}
