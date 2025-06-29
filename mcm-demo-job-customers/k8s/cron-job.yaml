@@ -1,0 +1,68 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: mcm-demo-job-customers
+spec:
+  schedule: "*/30 * * * *"
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  suspend: false
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      backoffLimit: 1
+      template:
+        spec:
+          containers:
+          - name: mcm-demo-job-customers
+            image: labcabrera/mcm-demo-api-customers:latest
+            imagePullPolicy: Always
+            env:
+            - name: APP_DB_SCHEMA
+              valueFrom:
+                configMapKeyRef:
+                  name: mcm-demo-config-map
+                  key: APP_DB_SCHEMA
+            - name: APP_DB_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: mcm-demo-config-map
+                  key: APP_DB_USERNAME
+            - name: APP_DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: mcm-demo-config-map
+                  key: APP_DB_HOST
+            - name: APP_DB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: mcm-demo-config-map
+                  key: APP_DB_PORT
+            - name: APP_KAFKA_BROKER
+              valueFrom:
+                configMapKeyRef:
+                  name: mcm-demo-config-map
+                  key: APP_KAFKA_BROKER
+            - name: APP_KAFKA_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: mcm-demo-config-map
+                  key: APP_KAFKA_USERNAME
+            - name: APP_KAFKA_TOPIC_CUSTOMER_CREATED
+              valueFrom:
+                configMapKeyRef:
+                  name: mcm-demo-config-map
+                  key: APP_KAFKA_TOPIC_CUSTOMER_CREATED
+            - name: APP_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mcm-demo-secrets
+                  key: APP_DB_PASSWORD
+            - name: APP_KAFKA_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mcm-demo-secrets
+                  key: APP_KAFKA_PASSWORD
+            - name: TZ
+              value: Europe/Madrid
+          restartPolicy: Never

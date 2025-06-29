@@ -63,6 +63,8 @@ kubectl apply -f ../argocd/mcm-demo-ui-jsf-app.yaml -n argocd
 
 kubectl apply -f ../argocd/mcm-demo-consumer-customers-activation-app.yaml -n argocd
 
+kubectl apply -f ../argocd/mcm-demo-job-customers.yaml -n argocd
+
 kubectl get secret kafka-user-passwords -n mcm-local-kafka -o jsonpath="{.data.client-passwords}" | base64 -d
 
 # Install Kafka UI
