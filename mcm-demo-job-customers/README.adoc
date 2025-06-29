@@ -1,0 +1,20 @@
+= mcm-demo-job-customers
+
+Aplicación de ejemplo lee los clientes de base de datos que estén pendientes de activación y para cada uno
+de ellos envía un mensaje al topic de Kafka encargado de su procesamiento.
+
+Para ejecutar la aplicación en primer lugar es necesario crear un entorno virtual de Python e instalar las dependencias:
+
+----
+python3 -m venv venv
+
+source venv/bin/activate
+
+pip install -r requirements.txt
+----
+
+Después simplemente ejecutaremos el comando:
+
+----
+python main.py
+----
