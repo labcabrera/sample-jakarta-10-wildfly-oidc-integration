@@ -2,7 +2,7 @@ package com.mcm.samples.customer.api.domain.exception;
 
 import java.util.Set;
 
-import com.mcm.samples.customer.api.application.port.in.CreateCustomerCommand;
+import com.mcm.samples.customer.api.application.port.in.command.CreateCustomerCommand;
 
 import jakarta.validation.ConstraintViolation;
 import lombok.AllArgsConstructor;

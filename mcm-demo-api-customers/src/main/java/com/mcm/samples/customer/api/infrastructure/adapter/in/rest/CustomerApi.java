@@ -2,9 +2,14 @@ package com.mcm.samples.customer.api.infrastructure.adapter.in.rest;
 
 import java.util.Optional;
 
-import com.mcm.samples.customer.api.application.port.in.CreateCustomerCommand;
-import com.mcm.samples.customer.api.application.port.in.UpdateCustomerCommand;
-import com.mcm.samples.customer.api.application.service.CustomerService;
+import org.modelmapper.ModelMapper;
+
+import com.mcm.samples.customer.api.application.port.in.command.CreateCustomerCommand;
+import com.mcm.samples.customer.api.application.port.in.command.CustomerUpdateCommand;
+import com.mcm.samples.customer.api.application.port.in.usecase.CustomerCreateUseCase;
+import com.mcm.samples.customer.api.application.port.in.usecase.CustomerDeleteUseCase;
+import com.mcm.samples.customer.api.application.port.in.usecase.CustomerFindUseCase;
+import com.mcm.samples.customer.api.application.port.in.usecase.CustomerUpdateUseCase;
 import com.mcm.samples.customer.api.domain.model.Customer;
 import com.mcm.samples.customer.api.domain.model.CustomerStatus;
 import com.mcm.samples.customer.api.domain.model.Page;
@@ -21,16 +26,28 @@ import lombok.extern.slf4j.Slf4j;
 public class CustomerApi implements CustomerApiDefinition {
 
     @Inject
-    private CustomerService customerService;
+    private CustomerFindUseCase customerFindUseCase;
+
+    @Inject
+    private CustomerCreateUseCase customerCreateUseCase;
+
+    @Inject
+    private CustomerUpdateUseCase customerUpdateUseCase;
+
+    @Inject
+    private CustomerDeleteUseCase customerDeleteUseCase;
 
     @Inject
     private SecurityContext securityContext;
+
+    @Inject
+    private ModelMapper modelMapper;
 
     @Override
     public Response findById(String id) {
         log.info("Customers << search by id {}", id);
         checkUserRole("customer-viewer", "User is not authorized to view customers.");
-        Optional<Customer> customer = customerService.findById(id);
+        Optional<Customer> customer = customerFindUseCase.findById(id);
         return customer.isPresent() ? Response.ok().entity(Optional.ofNullable(customer)).build()
             : Response.status(Response.Status.NOT_FOUND).build();
     }
@@ -39,23 +56,27 @@ public class CustomerApi implements CustomerApiDefinition {
     public Response find(String searchExpression, Integer page, Integer size) {
         log.info("Customers << search by search expression {} ({}, {})", searchExpression, page, size);
         checkUserRole("customer-viewer", "User is not authorized to view customers.");
-        Page<Customer> customerPage = customerService.find(searchExpression, page, size);
+        Page<Customer> customerPage = customerFindUseCase.find(searchExpression, page, size);
         return Response.ok(customerPage).build();
     }
 
     @Override
-    public Response createConsumer(CreateCustomerCommand cmd) {
-        log.info("Customers << create customer {}", cmd);
+    public Response createConsumer(CreateCustomerRequest request) {
+        log.info("Customers << create customer {}", request);
         checkUserRole("customer-manager", "User is not authorized to create customers.");
-        Customer customer = customerService.create(cmd);
+        CreateCustomerCommand command = modelMapper.map(request, CreateCustomerCommand.class);
+        Customer customer = customerCreateUseCase.create(command);
         return Response.status(Response.Status.CREATED).entity(customer).build();
     }
 
     @Override
-    public Response updateConsumer(String customerId, UpdateCustomerCommand cmd) {
+    public Response updateConsumer(String customerId, UpdateCustomerRequest request) {
         log.info("Customers << update customer {}", customerId);
         checkUserRole("customer-manager", "User is not authorized to modify customers.");
-        Customer customer = customerService.update(customerId, cmd);
+        CustomerUpdateCommand command = modelMapper.map(request, CustomerUpdateCommand.class);
+        command.setCustomerId(customerId);
+        command.setUpdatedBy(securityContext.getCallerPrincipal().getName());
+        Customer customer = customerUpdateUseCase.update(command);
         return Response.ok().entity(customer).build();
     }
 
@@ -63,7 +84,8 @@ public class CustomerApi implements CustomerApiDefinition {
     public Response updateConsumerStatus(String customerId, CustomerStatus status) {
         log.info("Customers << update customer status {} : {}", customerId, status);
         checkUserRole("customer-manager", "User is not authorized to update customer status.");
-        Customer customer = customerService.updateStatus(customerId, status);
+        String username = securityContext.getCallerPrincipal().getName();
+        Customer customer = customerUpdateUseCase.updateStatus(customerId, status, username);
         return Response.ok().entity(customer).build();
     }
 
@@ -71,7 +93,7 @@ public class CustomerApi implements CustomerApiDefinition {
     public Response delete(String customerId) {
         log.info("Customers << delete customer {}", customerId);
         checkUserRole("customer-manager", "User is not authorized to delete customers.");
-        customerService.delete(customerId);
+        customerDeleteUseCase.delete(customerId);
         return Response.noContent().build();
     }
 

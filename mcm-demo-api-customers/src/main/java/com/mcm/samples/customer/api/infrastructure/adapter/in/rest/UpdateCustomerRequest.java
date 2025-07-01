@@ -1,4 +1,4 @@
-package com.mcm.samples.customer.api.application.port.in;
+package com.mcm.samples.customer.api.infrastructure.adapter.in.rest;
 
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class CreateCustomerCommand {
+public class UpdateCustomerRequest {
 
     @NotNull
     @Schema(description = "First name of the customer", example = "John")
