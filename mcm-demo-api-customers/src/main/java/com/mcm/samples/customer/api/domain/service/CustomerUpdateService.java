@@ -2,7 +2,7 @@ package com.mcm.samples.customer.api.domain.service;
 
 import java.time.LocalDateTime;
 
-import com.mcm.samples.customer.api.application.repository.CustomerRepository;
+import com.mcm.samples.customer.api.application.port.out.CustomerRepository;
 import com.mcm.samples.customer.api.domain.cmd.UpdateCustomerCmd;
 import com.mcm.samples.customer.api.domain.entity.Customer;
 

@@ -2,7 +2,8 @@ package com.mcm.samples.customer.api.application.service;
 
 import java.util.Optional;
 
-import com.mcm.samples.customer.api.application.repository.CustomerRepository;
+import com.mcm.samples.customer.api.application.port.out.CustomerEventPublisher;
+import com.mcm.samples.customer.api.application.port.out.CustomerRepository;
 import com.mcm.samples.customer.api.domain.cmd.CreateCustomerCmd;
 import com.mcm.samples.customer.api.domain.cmd.UpdateCustomerCmd;
 import com.mcm.samples.customer.api.domain.entity.Customer;
@@ -27,7 +28,7 @@ public class CustomerService {
     private CustomerUpdateService customerUpdateService;
 
     @Inject
-    private CustomerMessageProducer customerMessageProducer;
+    private CustomerEventPublisher customerMessageProducer;
 
     public Optional<Customer> findById(String id) {
         return customerRepository.findById(id);
@@ -39,7 +40,7 @@ public class CustomerService {
 
     public Customer create(CreateCustomerCmd cmd) {
         Customer customer = customerCreationService.create(cmd);
-        customerMessageProducer.sendCreatedCustomerEvent(customer.getId(), customer.getContactInfo().getEmail());
+        customerMessageProducer.publishCustomerCreated(customer);
         return customer;
     }
 
