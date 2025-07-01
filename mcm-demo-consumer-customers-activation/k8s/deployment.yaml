@@ -27,7 +27,7 @@ spec:
         - secretRef:
             name: mcm-demo-secrets-client-consumer
         - secretRef:
-            name: mcm-demo-secrets-client-kafka
+            name: mcm-demo-secrets-kafka
         env:
         # - name: APP_KAFKA_BROKER
         #   valueFrom:
