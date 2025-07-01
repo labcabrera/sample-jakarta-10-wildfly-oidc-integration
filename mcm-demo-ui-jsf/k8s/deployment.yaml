@@ -19,62 +19,77 @@ spec:
       containers:
       - name: mcm-demo-ui-jsf
         image: labcabrera/mcm-demo-ui-jsf:latest
+        envFrom:
+        - configMapRef:
+            name: mcm-demo-config-map-client-jsf
+        - configMapRef:
+            name: mcm-demo-config-map-kafka
+        - configMapRef:
+            name: mcm-demo-config-map-db
+        - configMapRef:
+            name: mcm-demo-config-map-client-consumer
+        - secretRef:
+            name: mcm-demo-secrets-client-consumer
+        - secretRef:
+            name: mcm-demo-secrets-kafka
+        - secretRef:
+            name: mcm-demo-secrets-db
         env:
-        - name: APP_CUSTOMER_API_URL
-          valueFrom:
-            configMapKeyRef:
-              name: mcm-demo-config-map
-              key: APP_CUSTOMER_API_URL
-        - name: APP_TOKEN_URL
-          valueFrom:
-            configMapKeyRef:
-              name: mcm-demo-config-map
-              key: APP_TOKEN_URL
-        - name: APP_JWK_URL
-          valueFrom:
-            configMapKeyRef:
-              name: mcm-demo-config-map
-              key: APP_JWK_URL
-        - name: APP_CLIENT_ID
-          valueFrom:
-            configMapKeyRef:
-              name: mcm-demo-config-map
-              key: APP_CLIENT_ID
-        - name: APP_AUTH_SERVER_URL
-          valueFrom:
-            configMapKeyRef:
-              name: mcm-demo-config-map
-              key: APP_AUTH_SERVER_URL
-        - name: APP_LOGOUT_URL
-          valueFrom:
-            configMapKeyRef:
-              name: mcm-demo-config-map
-              key: APP_LOGOUT_URL
-        - name: APP_LOGIN_REDIRECT_URL
-          valueFrom:
-            configMapKeyRef:
-              name: mcm-demo-config-map
-              key: APP_LOGIN_REDIRECT_URL
-        - name: APP_CALLBACK_URL
-          valueFrom:
-            configMapKeyRef:
-              name: mcm-demo-config-map
-              key: APP_CALLBACK_URL
-        - name: APP_LOGOUT_REDIRECT_URL
-          valueFrom:
-            configMapKeyRef:
-              name: mcm-demo-config-map
-              key: APP_LOGOUT_REDIRECT_URL
-        - name: APP_OIDC_SCOPE
-          valueFrom:
-            configMapKeyRef:
-              name: mcm-demo-config-map
-              key: APP_OIDC_SCOPE
-        - name: APP_CLIENT_SECRET
-          valueFrom:
-            secretKeyRef:
-              name: mcm-demo-secrets
-              key: APP_CLIENT_SECRET
+        # - name: APP_CUSTOMER_API_URL
+        #   valueFrom:
+        #     configMapKeyRef:
+        #       name: mcm-demo-config-map
+        #       key: APP_CUSTOMER_API_URL
+        # - name: APP_TOKEN_URL
+        #   valueFrom:
+        #     configMapKeyRef:
+        #       name: mcm-demo-config-map
+        #       key: APP_TOKEN_URL
+        # - name: APP_JWK_URL
+        #   valueFrom:
+        #     configMapKeyRef:
+        #       name: mcm-demo-config-map
+        #       key: APP_JWK_URL
+        # - name: APP_CLIENT_ID
+        #   valueFrom:
+        #     configMapKeyRef:
+        #       name: mcm-demo-config-map
+        #       key: APP_CLIENT_ID
+        # - name: APP_AUTH_SERVER_URL
+        #   valueFrom:
+        #     configMapKeyRef:
+        #       name: mcm-demo-config-map
+        #       key: APP_AUTH_SERVER_URL
+        # - name: APP_LOGOUT_URL
+        #   valueFrom:
+        #     configMapKeyRef:
+        #       name: mcm-demo-config-map
+        #       key: APP_LOGOUT_URL
+        # - name: APP_LOGIN_REDIRECT_URL
+        #   valueFrom:
+        #     configMapKeyRef:
+        #       name: mcm-demo-config-map
+        #       key: APP_LOGIN_REDIRECT_URL
+        # - name: APP_CALLBACK_URL
+        #   valueFrom:
+        #     configMapKeyRef:
+        #       name: mcm-demo-config-map
+        #       key: APP_CALLBACK_URL
+        # - name: APP_LOGOUT_REDIRECT_URL
+        #   valueFrom:
+        #     configMapKeyRef:
+        #       name: mcm-demo-config-map
+        #       key: APP_LOGOUT_REDIRECT_URL
+        # - name: APP_OIDC_SCOPE
+        #   valueFrom:
+        #     configMapKeyRef:
+        #       name: mcm-demo-config-map
+        #       key: APP_OIDC_SCOPE
+        # - name: APP_CLIENT_SECRET
+        #   valueFrom:
+        #     secretKeyRef:
+        #       name: mcm-demo-secrets
+        #       key: APP_CLIENT_SECRET
         - name: TZ
           value: Europe/Madrid
         imagePullPolicy: Always
