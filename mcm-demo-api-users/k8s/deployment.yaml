@@ -20,21 +20,6 @@ spec:
       - name: mcm-demo-api-users
         image: labcabrera/mcm-demo-api-users:latest
         env:
-        - name: APP_DB_HOST
-          valueFrom:
-            configMapKeyRef:
-              name: mcm-demo-config-map
-              key: APP_DB_HOST
-        - name: APP_DB_USERNAME
-          valueFrom:
-            configMapKeyRef:
-              name: mcm-demo-config-map
-              key: APP_DB_USERNAME
-        - name: APP_DB_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: mcm-demo-secrets
-              key: APP_DB_PASSWORD
         - name: TZ
           value: Europe/Madrid
         imagePullPolicy: Always
