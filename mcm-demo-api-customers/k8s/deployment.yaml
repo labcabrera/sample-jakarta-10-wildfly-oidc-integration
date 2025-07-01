@@ -27,9 +27,7 @@ spec:
         - configMapRef:
             name: mcm-demo-config-map-db
         - configMapRef:
-            name: mcm-demo-config-map-client-consumer
-        - secretRef:
-            name: mcm-demo-secrets-client-consumer
+            name: mcm-demo-config-map
         - secretRef:
             name: mcm-demo-secrets-kafka
         - secretRef:
