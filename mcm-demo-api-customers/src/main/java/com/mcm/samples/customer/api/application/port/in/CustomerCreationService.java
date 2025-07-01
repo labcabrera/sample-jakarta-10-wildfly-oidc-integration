@@ -1,15 +1,14 @@
-package com.mcm.samples.customer.api.domain.service;
+package com.mcm.samples.customer.api.application.port.in;
 
 import java.time.LocalDateTime;
 import java.util.Set;
 
 import com.mcm.samples.customer.api.application.port.out.CustomerRepository;
-import com.mcm.samples.customer.api.domain.cmd.CreateCustomerCmd;
-import com.mcm.samples.customer.api.domain.entity.AuditInfo;
-import com.mcm.samples.customer.api.domain.entity.Customer;
-import com.mcm.samples.customer.api.domain.entity.CustomerContactInfo;
-import com.mcm.samples.customer.api.domain.entity.CustomerStatus;
 import com.mcm.samples.customer.api.domain.exception.ConstraintValidationException;
+import com.mcm.samples.customer.api.domain.model.AuditInfo;
+import com.mcm.samples.customer.api.domain.model.Customer;
+import com.mcm.samples.customer.api.domain.model.CustomerContactInfo;
+import com.mcm.samples.customer.api.domain.model.CustomerStatus;
 
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
@@ -31,12 +30,12 @@ public class CustomerCreationService {
     @Inject
     private SecurityContext securityContext;
 
-    public Customer create(CreateCustomerCmd cmd) {
+    public Customer create(CreateCustomerCommand cmd) {
         log.info("Creating customer with command: {}", cmd);
         String username = securityContext.getCallerPrincipal().getName();
         log.info("User: {}", username);
 
-        Set<ConstraintViolation<CreateCustomerCmd>> violations = validator.validate(cmd);
+        Set<ConstraintViolation<CreateCustomerCommand>> violations = validator.validate(cmd);
         if (!violations.isEmpty()) {
             throw new ConstraintValidationException("Invalid customer.", violations);
         }

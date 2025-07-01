@@ -2,8 +2,8 @@ package com.mcm.samples.customer.api.infrastructure.adapter.in.rest;
 
 import java.time.LocalDateTime;
 
-import com.mcm.samples.customer.api.domain.entity.ApiError;
-import com.mcm.samples.customer.api.domain.exception.ParseException;
+import com.mcm.samples.customer.api.domain.exception.SearchExpressionParseException;
+import com.mcm.samples.customer.api.domain.model.ApiError;
 
 import jakarta.validation.ConstraintViolationException;
 import jakarta.ws.rs.ForbiddenException;
@@ -32,7 +32,7 @@ public class GlobalExceptionHandler implements ExceptionMapper<Throwable> {
     }
 
     private Status mapStatus(Throwable exception) {
-        if (exception instanceof ParseException) {
+        if (exception instanceof SearchExpressionParseException) {
             return Response.Status.BAD_REQUEST;
         }
         else if (exception instanceof ForbiddenException) {

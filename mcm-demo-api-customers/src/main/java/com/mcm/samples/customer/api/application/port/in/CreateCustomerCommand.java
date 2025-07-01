@@ -1,4 +1,4 @@
-package com.mcm.samples.customer.api.domain.cmd;
+package com.mcm.samples.customer.api.application.port.in;
 
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class CreateCustomerCmd {
+public class CreateCustomerCommand {
 
     @NotNull
     @Schema(description = "First name of the customer", example = "John")

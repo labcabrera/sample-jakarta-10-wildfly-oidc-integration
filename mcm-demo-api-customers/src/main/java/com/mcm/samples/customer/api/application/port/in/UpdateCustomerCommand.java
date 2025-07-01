@@ -1,4 +1,4 @@
-package com.mcm.samples.customer.api.domain.cmd;
+package com.mcm.samples.customer.api.application.port.in;
 
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Email;
 import lombok.Data;
 
 @Data
-public class UpdateCustomerCmd {
+public class UpdateCustomerCommand {
 
     @Schema(description = "New customer name", example = "John")
     private String firstName;

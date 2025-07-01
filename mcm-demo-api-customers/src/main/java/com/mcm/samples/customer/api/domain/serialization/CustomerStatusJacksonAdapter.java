@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
-import com.mcm.samples.customer.api.domain.entity.CustomerStatus;
+import com.mcm.samples.customer.api.domain.model.CustomerStatus;
 
 public class CustomerStatusJacksonAdapter {
 

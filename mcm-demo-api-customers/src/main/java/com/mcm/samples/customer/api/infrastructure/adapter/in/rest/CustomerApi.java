@@ -2,12 +2,12 @@ package com.mcm.samples.customer.api.infrastructure.adapter.in.rest;
 
 import java.util.Optional;
 
+import com.mcm.samples.customer.api.application.port.in.CreateCustomerCommand;
+import com.mcm.samples.customer.api.application.port.in.UpdateCustomerCommand;
 import com.mcm.samples.customer.api.application.service.CustomerService;
-import com.mcm.samples.customer.api.domain.cmd.CreateCustomerCmd;
-import com.mcm.samples.customer.api.domain.cmd.UpdateCustomerCmd;
-import com.mcm.samples.customer.api.domain.entity.Customer;
-import com.mcm.samples.customer.api.domain.entity.CustomerStatus;
-import com.mcm.samples.customer.api.domain.entity.Page;
+import com.mcm.samples.customer.api.domain.model.Customer;
+import com.mcm.samples.customer.api.domain.model.CustomerStatus;
+import com.mcm.samples.customer.api.domain.model.Page;
 
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
@@ -44,7 +44,7 @@ public class CustomerApi implements CustomerApiDefinition {
     }
 
     @Override
-    public Response createConsumer(CreateCustomerCmd cmd) {
+    public Response createConsumer(CreateCustomerCommand cmd) {
         log.info("Customers << create customer {}", cmd);
         checkUserRole("customer-manager", "User is not authorized to create customers.");
         Customer customer = customerService.create(cmd);
@@ -52,7 +52,7 @@ public class CustomerApi implements CustomerApiDefinition {
     }
 
     @Override
-    public Response updateConsumer(String customerId, UpdateCustomerCmd cmd) {
+    public Response updateConsumer(String customerId, UpdateCustomerCommand cmd) {
         log.info("Customers << update customer {}", customerId);
         checkUserRole("customer-manager", "User is not authorized to modify customers.");
         Customer customer = customerService.update(customerId, cmd);

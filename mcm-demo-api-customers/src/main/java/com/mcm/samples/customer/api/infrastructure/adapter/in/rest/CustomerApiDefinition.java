@@ -7,12 +7,12 @@ import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
-import com.mcm.samples.customer.api.domain.cmd.CreateCustomerCmd;
-import com.mcm.samples.customer.api.domain.cmd.UpdateCustomerCmd;
-import com.mcm.samples.customer.api.domain.entity.ApiError;
-import com.mcm.samples.customer.api.domain.entity.Customer;
-import com.mcm.samples.customer.api.domain.entity.CustomerPage;
-import com.mcm.samples.customer.api.domain.entity.CustomerStatus;
+import com.mcm.samples.customer.api.application.port.in.CreateCustomerCommand;
+import com.mcm.samples.customer.api.application.port.in.UpdateCustomerCommand;
+import com.mcm.samples.customer.api.domain.model.ApiError;
+import com.mcm.samples.customer.api.domain.model.Customer;
+import com.mcm.samples.customer.api.domain.model.CustomerPage;
+import com.mcm.samples.customer.api.domain.model.CustomerStatus;
 
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
@@ -54,7 +54,7 @@ public interface CustomerApiDefinition {
     @Operation(summary = "Create consumer", description = "Create consumer", operationId = "createConsumer")
     @APIResponse(responseCode = "201", description = "Customer created", content = @Content(schema = @Schema(implementation = Customer.class)))
     @APIResponse(responseCode = "400", description = "Validation errors", content = @Content(schema = @Schema(implementation = ApiError.class)))
-    Response createConsumer(CreateCustomerCmd cmd);
+    Response createConsumer(CreateCustomerCommand cmd);
 
     @PATCH
     @Path("/{id}")
@@ -63,7 +63,7 @@ public interface CustomerApiDefinition {
     @Operation(summary = "Update consumer", description = "Update consumer", operationId = "updateConsumer")
     @APIResponse(responseCode = "200", description = "Customer updated", content = @Content(schema = @Schema(implementation = Customer.class)))
     @APIResponse(responseCode = "400", description = "Validation errors", content = @Content(schema = @Schema(implementation = ApiError.class)))
-    Response updateConsumer(@PathParam("id") String id, UpdateCustomerCmd cmd);
+    Response updateConsumer(@PathParam("id") String id, UpdateCustomerCommand cmd);
 
     //TODO Fix serialization issue lowercase
     @PATCH

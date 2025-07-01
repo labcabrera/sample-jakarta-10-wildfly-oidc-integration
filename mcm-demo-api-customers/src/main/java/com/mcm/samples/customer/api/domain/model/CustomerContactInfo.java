@@ -1,4 +1,4 @@
-package com.mcm.samples.customer.api.domain.entity;
+package com.mcm.samples.customer.api.domain.model;
 
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 

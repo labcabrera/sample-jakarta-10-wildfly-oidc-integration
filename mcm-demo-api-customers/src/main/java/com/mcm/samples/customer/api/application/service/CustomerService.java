@@ -2,15 +2,15 @@ package com.mcm.samples.customer.api.application.service;
 
 import java.util.Optional;
 
+import com.mcm.samples.customer.api.application.port.in.CreateCustomerCommand;
+import com.mcm.samples.customer.api.application.port.in.CustomerCreationService;
+import com.mcm.samples.customer.api.application.port.in.CustomerUpdateService;
+import com.mcm.samples.customer.api.application.port.in.UpdateCustomerCommand;
 import com.mcm.samples.customer.api.application.port.out.CustomerEventPublisher;
 import com.mcm.samples.customer.api.application.port.out.CustomerRepository;
-import com.mcm.samples.customer.api.domain.cmd.CreateCustomerCmd;
-import com.mcm.samples.customer.api.domain.cmd.UpdateCustomerCmd;
-import com.mcm.samples.customer.api.domain.entity.Customer;
-import com.mcm.samples.customer.api.domain.entity.CustomerStatus;
-import com.mcm.samples.customer.api.domain.entity.Page;
-import com.mcm.samples.customer.api.domain.service.CustomerCreationService;
-import com.mcm.samples.customer.api.domain.service.CustomerUpdateService;
+import com.mcm.samples.customer.api.domain.model.Customer;
+import com.mcm.samples.customer.api.domain.model.CustomerStatus;
+import com.mcm.samples.customer.api.domain.model.Page;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -38,13 +38,13 @@ public class CustomerService {
         return customerRepository.find(searchExpression, page, size);
     }
 
-    public Customer create(CreateCustomerCmd cmd) {
+    public Customer create(CreateCustomerCommand cmd) {
         Customer customer = customerCreationService.create(cmd);
         customerMessageProducer.publishCustomerCreated(customer);
         return customer;
     }
 
-    public Customer update(String customerId, UpdateCustomerCmd cmd) {
+    public Customer update(String customerId, UpdateCustomerCommand cmd) {
         return customerUpdateService.update(customerId, cmd);
     }
 

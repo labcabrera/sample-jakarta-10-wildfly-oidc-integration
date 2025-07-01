@@ -1,10 +1,9 @@
-package com.mcm.samples.customer.api.domain.service;
+package com.mcm.samples.customer.api.application.port.in;
 
 import java.time.LocalDateTime;
 
 import com.mcm.samples.customer.api.application.port.out.CustomerRepository;
-import com.mcm.samples.customer.api.domain.cmd.UpdateCustomerCmd;
-import com.mcm.samples.customer.api.domain.entity.Customer;
+import com.mcm.samples.customer.api.domain.model.Customer;
 
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
@@ -21,7 +20,7 @@ public class CustomerUpdateService {
     @Inject
     private SecurityContext securityContext;
 
-    public Customer update(String customerId, UpdateCustomerCmd cmd) {
+    public Customer update(String customerId, UpdateCustomerCommand cmd) {
         Customer customer = customerRepository.findById(customerId)
             .orElseThrow(() -> new IllegalArgumentException("Customer not found: " + customerId));
         String username = securityContext.getCallerPrincipal().getName();

@@ -2,11 +2,9 @@ package com.mcm.samples.customer.api.application.port.in;
 
 import java.util.Optional;
 
-import com.mcm.samples.customer.api.domain.cmd.CreateCustomerCmd;
-import com.mcm.samples.customer.api.domain.cmd.UpdateCustomerCmd;
-import com.mcm.samples.customer.api.domain.entity.Customer;
-import com.mcm.samples.customer.api.domain.entity.CustomerStatus;
-import com.mcm.samples.customer.api.domain.entity.Page;
+import com.mcm.samples.customer.api.domain.model.Customer;
+import com.mcm.samples.customer.api.domain.model.CustomerStatus;
+import com.mcm.samples.customer.api.domain.model.Page;
 
 //TODO implement
 public interface CustomerUseCase {
@@ -15,9 +13,9 @@ public interface CustomerUseCase {
 
     Page<Customer> find(String searchExpression, int page, int size);
 
-    Customer create(CreateCustomerCmd cmd);
+    Customer create(CreateCustomerCommand cmd);
 
-    Customer update(String customerId, UpdateCustomerCmd cmd);
+    Customer update(String customerId, UpdateCustomerCommand cmd);
 
     Customer updateStatus(String customerId, CustomerStatus status);
 
