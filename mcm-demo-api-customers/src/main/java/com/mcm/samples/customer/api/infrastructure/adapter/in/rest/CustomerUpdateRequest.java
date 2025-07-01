@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class UpdateCustomerRequest {
+public class CustomerUpdateRequest {
 
     @NotNull
     @Schema(description = "First name of the customer", example = "John")

@@ -2,14 +2,13 @@
 
 # Delete previous version of the schema if needed
 
-#curl -X DELETE http://schema-registry.local/subjects/customer-created-value?permanent=true
+curl -X DELETE http://schema-registry.local/subjects/customer-created-value?permanent=true
 
-SCHEMA_RAW=$(cat customer-created.avsc)
+SCHEMA_RAW=$(cat customer-created-event.avsc)
 SCHEMA_ESCAPED=$(echo "$SCHEMA_RAW" | jq -cR .)
 
 echo "Schema escaped: $SCHEMA_ESCAPED"
 
-# Crear el payload JSON usando jq (más seguro)
 PAYLOAD=$(jq -n --arg schema "$SCHEMA_RAW" '{schema: ($schema | tostring)}')
 
 echo "Payload: $PAYLOAD"

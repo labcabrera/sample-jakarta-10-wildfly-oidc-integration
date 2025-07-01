@@ -28,7 +28,9 @@ public class CustomerCreationService implements CustomerCreateUseCase {
     private final CustomerEventPublisher customerEventPublisher;
 
     @Inject
-    public CustomerCreationService(Validator validator, CustomerRepository customerRepository,
+    public CustomerCreationService(
+        Validator validator,
+        CustomerRepository customerRepository,
         CustomerEventPublisher customerEventPublisher) {
         this.validator = validator;
         this.customerRepository = customerRepository;
@@ -58,8 +60,9 @@ public class CustomerCreationService implements CustomerCreateUseCase {
                 .createdBy(command.getCreatedBy())
                 .build())
             .build();
-        customerEventPublisher.publishCustomerCreated(customer);
-        return customerRepository.save(customer);
+        Customer created = customerRepository.save(customer);
+        customerEventPublisher.publishCustomerCreated(created);
+        return created;
     }
 
 }

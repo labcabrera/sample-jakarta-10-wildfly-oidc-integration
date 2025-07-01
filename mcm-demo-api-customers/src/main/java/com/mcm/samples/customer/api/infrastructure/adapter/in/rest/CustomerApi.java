@@ -61,16 +61,18 @@ public class CustomerApi implements CustomerApiDefinition {
     }
 
     @Override
-    public Response createConsumer(CreateCustomerRequest request) {
+    public Response createConsumer(CustomerCreateRequest request) {
         log.info("Customers << create customer {}", request);
         checkUserRole("customer-manager", "User is not authorized to create customers.");
+        String username = securityContext.getCallerPrincipal().getName();
         CreateCustomerCommand command = modelMapper.map(request, CreateCustomerCommand.class);
+        command.setCreatedBy(username);
         Customer customer = customerCreateUseCase.create(command);
         return Response.status(Response.Status.CREATED).entity(customer).build();
     }
 
     @Override
-    public Response updateConsumer(String customerId, UpdateCustomerRequest request) {
+    public Response updateConsumer(String customerId, CustomerUpdateRequest request) {
         log.info("Customers << update customer {}", customerId);
         checkUserRole("customer-manager", "User is not authorized to modify customers.");
         CustomerUpdateCommand command = modelMapper.map(request, CustomerUpdateCommand.class);

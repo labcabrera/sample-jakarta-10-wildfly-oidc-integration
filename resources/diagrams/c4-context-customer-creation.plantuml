@@ -18,6 +18,7 @@ Boundary(k8s, "Kubernetes (Minikube)") {
         System(customer_fe, "Customer Frontend", "Jakarta 10 + JSF")
         System(user_api, "User API", "Jakarta 10")
         System(customer_consumer, "Consumer Customer Activation", "Spring Boot 3.x")
+        ' System(customer_job, "Customer Job", "CronJob Python")
     }
     Boundary(namespace_mcm_local_kafka, "Namespace kafka-local") {
         Boundary(kafka_boundary, "Kafka 3.x") {
@@ -39,7 +40,7 @@ Rel(customer_fe, keycloak, "External login", "HTTP / OIDC")
 Rel(customer_fe, customer_api, "API call with access token", "HTTP / JWT")
 
 Rel(customer_api, postgres, "JDBC")
-Rel(customer_api, kafka_created_consumer_topic, "Event")
+Rel(customer_api, kafka_created_consumer_topic, "Publish event", "AVRO")
 
 Rel(customer_fe, user_api, "Override user mapping", "HTTP")
 Rel(customer_api, user_api, "Override user mapping", "HTTP")
@@ -47,6 +48,9 @@ Rel(customer_api, user_api, "Override user mapping", "HTTP")
 Rel(kafka_created_consumer_topic, customer_consumer, "Consume events", "Kafka", "#red")
 
 Rel(customer_consumer, customer_api, "Update status", "REST / Client Credentials")
+
+' Rel(customer_job, postgres, "Read pending")
+' Rel(customer_job, kafka_created_consumer_topic, "Queue events", "AVRO")
 
 SHOW_LEGEND()
 

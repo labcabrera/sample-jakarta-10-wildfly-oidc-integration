@@ -6,3 +6,4 @@ data:
   APP_KAFKA_BROKER: kafka.kafka-local.svc.cluster.local:9092
   APP_KAFKA_USERNAME: user1
   APP_KAFKA_TOPIC_CUSTOMER_CREATED: customers-created-topic
+  APP_SCHEMA_REGISTRY_URL: http://schema-registry.kafka-local:8081
