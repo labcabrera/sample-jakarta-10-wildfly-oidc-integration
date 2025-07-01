@@ -19,7 +19,7 @@ data:
   APP_CLIENT_ID: mcm-demo-client-jsf
   APP_OIDC_SCOPE: openid profile roles
 
-  APP_KAFKA_BROKER: kafka.mcm-local-kafka.svc.cluster.local:9092
+  APP_KAFKA_BROKER: kafka.kafka-local.svc.cluster.local:9092
   APP_KAFKA_USERNAME: user1
   
   APP_KAFKA_TOPIC_CUSTOMER_CREATED: customers-created-topic

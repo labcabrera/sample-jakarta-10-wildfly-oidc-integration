@@ -3,8 +3,7 @@
 #helm uninstall schema-registry --namespace mcm-local-schema-registry
 
 helm install schema-registry bitnami/schema-registry \
-  --namespace mcm-local-schema-registry \
-  --create-namespace \
+  --namespace mcm-local-kafka \
   --set kafka.enabled=false \
   --set externalKafka.brokers=SASL_PLAINTEXT://kafka.mcm-local-kafka:9092 \
   --set externalKafka.auth.protocol=sasl \

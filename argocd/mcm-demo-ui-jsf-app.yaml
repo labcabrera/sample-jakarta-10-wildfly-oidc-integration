@@ -5,7 +5,7 @@ metadata:
 spec:
   destination:
     server: https://kubernetes.default.svc
-    namespace: mcm-local
+    namespace: apps-local
   source:
     path: mcm-demo-ui-jsf/k8s
     repoURL: https://github.com/labcabrera/sample-jakarta-10-wildfly-oidc-integration

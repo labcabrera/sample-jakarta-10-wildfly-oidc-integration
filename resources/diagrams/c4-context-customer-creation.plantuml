@@ -13,16 +13,17 @@ UpdateElementStyle(boundary, $bgColor="#e6f8fa")
 Person(user, "User")
 
 Boundary(k8s, "Kubernetes (Minikube)") {
-    Boundary(namespace_mcm_local, "Namespace mcm-local", "", $tags="k8s_namespace") {
+    Boundary(namespace_mcm_local, "Namespace apps-local", "", $tags="k8s_namespace") {
         System(customer_api, "Customer API", "Jakarta 10")
         System(customer_fe, "Customer Frontend", "Jakarta 10 + JSF")
         System(user_api, "User API", "Jakarta 10")
         System(customer_consumer, "Consumer Customer Activation", "Spring Boot 3.x")
     }
-    Boundary(namespace_mcm_local_kafka, "Namespace mcm-local-kafka") {
+    Boundary(namespace_mcm_local_kafka, "Namespace kafka-local") {
         Boundary(kafka_boundary, "Kafka 3.x") {
             System_Ext(kafka_created_consumer_topic, "user-created topic", "Topic", $tags="queue")
         }
+        System_Ext(schema_registry, "Schema Registry")
     }
 }
 

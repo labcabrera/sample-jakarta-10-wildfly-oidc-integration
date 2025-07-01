@@ -6,11 +6,11 @@ metadata:
     app: kafka-ui
 data:
   AUTH_TYPE: DISABLED
-  KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka.mcm-local-kafka:9092
+  KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka.kafka-local:9092
   KAFKA_CLUSTERS_0_NAME: local
   KAFKA_CLUSTERS_0_PROPERTIES_SASL_JAAS_CONFIG: >
     org.apache.kafka.common.security.plain.PlainLoginModule required
-    username="user1" password="879P1qgPkc";
+    username="user1" password="{password}";
   KAFKA_CLUSTERS_0_PROPERTIES_SASL_MECHANISM: PLAIN
   KAFKA_CLUSTERS_0_PROPERTIES_SECURITY_PROTOCOL: SASL_PLAINTEXT
   MANAGEMENT_HEALTH_LDAP_ENABLED: 'FALSE'
