@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mcm-demo-config-map-kafka
+data:
+  APP_KAFKA_BROKER: kafka.kafka-local.svc.cluster.local:9092
+  APP_KAFKA_USERNAME: user1
+  APP_KAFKA_TOPIC_CUSTOMER_CREATED: customers-created-topic

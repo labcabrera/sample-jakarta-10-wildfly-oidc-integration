@@ -28,7 +28,7 @@ public class CustomerApi implements CustomerApiDefinition {
 
     @Override
     public Response findById(String id) {
-        log.debug("Customers << search by id {}", id);
+        log.info("Customers << search by id {}", id);
         checkUserRole("customer-viewer", "User is not authorized to view customers.");
         Optional<Customer> customer = customerService.findById(id);
         return customer.isPresent() ? Response.ok().entity(Optional.ofNullable(customer)).build()

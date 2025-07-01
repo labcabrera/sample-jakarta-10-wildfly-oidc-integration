@@ -41,7 +41,7 @@ public class JwtIdentityStoreHandler implements IdentityStoreHandler {
     public void init() {
         try {
             String jwkUri = appConfig.jwtUri();
-            log.info("Using jwk uri: {}", jwkUri);
+            log.info("Using JWK uri: {}", jwkUri);
             jwkSet = JWKSet.load(new URL(jwkUri));
         }
         catch (IOException | ParseException ex) {
@@ -53,7 +53,6 @@ public class JwtIdentityStoreHandler implements IdentityStoreHandler {
     public CredentialValidationResult validate(Credential credential) {
         JwtCredential customCredential = (JwtCredential) credential;
         String accessToken = customCredential.getAccessToken();
-        log.info("Access token: {}", accessToken);
         SignedJWT signedJWT;
         try {
             signedJWT = SignedJWT.parse(accessToken);
@@ -62,13 +61,11 @@ public class JwtIdentityStoreHandler implements IdentityStoreHandler {
             log.error("Invalid signature for access token: {}", accessToken);
             return CredentialValidationResult.INVALID_RESULT;
         }
-
         boolean validSignature = validateIdToken(signedJWT);
         if (!validSignature) {
             log.error("Invalid signature for access token: {}", accessToken);
             return CredentialValidationResult.INVALID_RESULT;
         }
-
         try {
             String username = signedJWT.getJWTClaimsSet().getStringClaim("preferred_username");
             Set<String> roles = getRolesFromClaims(signedJWT);

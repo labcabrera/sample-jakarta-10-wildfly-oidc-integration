@@ -41,4 +41,4 @@ spring:
 app:
   api-client: 
     customers:
-      base-url: ${API_CUSTOMERS_BASE_URL:http://mcm-demo-api-customers.local/api-customers/api}
+      base-url: ${APP_CUSTOMER_API_URL:http://mcm-demo-api-customers.local/api-customers/api}

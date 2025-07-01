@@ -15,16 +15,4 @@ data:
   APP_LOGIN_REDIRECT_URL: http://mcm-demo-ui-jsf.local/demo-ui
   APP_CALLBACK_URL: http://mcm-demo-ui-jsf.local/demo-ui/callback
   APP_LOGOUT_REDIRECT_URL: http://mcm-demo-ui-jsf.local/demo-ui
-
-  APP_CLIENT_ID: mcm-demo-client-jsf
   APP_OIDC_SCOPE: openid profile roles
-
-  APP_KAFKA_BROKER: kafka.kafka-local.svc.cluster.local:9092
-  APP_KAFKA_USERNAME: user1
-  
-  APP_KAFKA_TOPIC_CUSTOMER_CREATED: customers-created-topic
-
-  APP_DB_HOST: host.minikube.internal
-  APP_DB_PORT: "5432"
-  APP_DB_SCHEMA: mcmdemo
-  APP_DB_USERNAME: user

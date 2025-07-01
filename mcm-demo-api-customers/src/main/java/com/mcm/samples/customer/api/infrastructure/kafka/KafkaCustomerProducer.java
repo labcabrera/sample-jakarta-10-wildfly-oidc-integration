@@ -45,7 +45,7 @@ public class KafkaCustomerProducer implements CustomerMessageProducer {
             return;
         }
         try {
-            String message = String.format("{\"userId\":\"%s\", \"email\":\"%s\"}", userId, email);
+            String message = String.format("{\"customerId\":\"%s\", \"email\":\"%s\"}", userId, email);
             ProducerRecord<String, String> record = new ProducerRecord<>(topicName, userId, message);
             producer.send(record);
         }

@@ -39,7 +39,7 @@ public class CustomerCreatedConsumer {
         String email;
         try {
             Map<String, String> payload = objectMapper.readValue(message.getPayload(), Map.class);
-            customerId = payload.get("userId");
+            customerId = payload.get("customerId");
             email = payload.get("email");
         }
         catch (Exception ex) {

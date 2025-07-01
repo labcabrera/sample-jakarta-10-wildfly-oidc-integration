@@ -46,17 +46,6 @@ public class OidcAuthenticationMechanism implements HttpAuthenticationMechanism 
     public AuthenticationStatus validateRequest(HttpServletRequest request, HttpServletResponse response, HttpMessageContext context)
         throws AuthenticationException {
 
-        log.info("------------------------------------------------------------");
-        log.info("Validating request using OIDC authentication");
-        log.info("  URL                     : {}", request.getRequestURI());
-        log.info("  Session ID              : {}", request.getSession() != null ? request.getSession().getId() : null);
-        log.info("  Session Principal       : {}", request.getSession() != null ? request.getSession().getAttribute("principal") : null);
-        log.info("  Context Principal       : {}", context.getCallerPrincipal());
-        log.info("  isProtected             : {}", context.isProtected());
-        log.info("  isAuthenticationRequest : {}", context.isAuthenticationRequest());
-        log.info("------------------------------------------------------------");
-
-        // Allow OPTIONS with no autenticación (CORS preflight)
         if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
             log.info("OPTIONS request detected, skipping authentication");
             return AuthenticationStatus.SUCCESS;
@@ -80,19 +69,17 @@ public class OidcAuthenticationMechanism implements HttpAuthenticationMechanism 
                 if (tokenResponse != null && tokenResponse.getId_token() != null) {
                     OidcCredential customCredentials = new OidcCredential(tokenResponse.getAccess_token());
                     CredentialValidationResult validationResult = identityStoreHandler.validate(customCredentials);
-                    log.info("Credential validation result: {}", validationResult.getStatus());
-
                     if (validationResult.getStatus() == CredentialValidationResult.Status.VALID) {
                         CallerPrincipal principal = validationResult.getCallerPrincipal();
                         Set<String> groups = validationResult.getCallerGroups();
                         log.info("Authentication successful for user: {} with groups {}", principal.getName(), groups);
-
+                        
                         request.getSession().setAttribute("access_token", tokenResponse.getAccess_token());
                         request.getSession().setAttribute("id_token", tokenResponse.getId_token());
                         request.getSession().setAttribute("username", principal.getName());
                         request.getSession().setAttribute("principal", principal);
                         request.getSession().setAttribute("groups", groups);
-
+                        
                         response.sendRedirect(appConfig.loginRedirectUrl());
                         return context.notifyContainerAboutLogin(principal, groups);
                     }
@@ -127,8 +114,6 @@ public class OidcAuthenticationMechanism implements HttpAuthenticationMechanism 
     }
 
     private OidcTokenResponse readTokenFromIdP(String code) throws IOException, InterruptedException {
-        log.info("Reading token from Keycloak for code {}", code);
-
         StringBuilder form = new StringBuilder();
         form.append("grant_type=authorization_code");
         form.append("&code=").append(code);
@@ -145,7 +130,6 @@ public class OidcAuthenticationMechanism implements HttpAuthenticationMechanism 
         HttpResponse<String> resp = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
         if (resp.statusCode() == 200) {
             String body = resp.body();
-            log.info("-- Token endpoint response start --/n{}/n-- Token endpoint response end --", body);
             return jsonb.fromJson(body, OidcTokenResponse.class);
         }
         throw new OidcTokenResponseException(String.format("Error reading token: %s. Message: %s", resp.statusCode(), resp.body()));

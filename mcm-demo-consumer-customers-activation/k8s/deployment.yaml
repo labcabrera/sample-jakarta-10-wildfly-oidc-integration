@@ -19,6 +19,13 @@ spec:
       containers:
       - name: mcm-demo-consumer-customers-activation
         image: labcabrera/mcm-demo-consumer-customers-activation:latest
+        envFrom:
+        - configMapRef:
+            name: mcm-demo-config-map-kafka
+        - configMapRef:
+            name: mcm-demo-config-map-client-consumer
+        - secretRef:
+            name: mcm-demo-secrets-client-consumer
         env:
         - name: APP_KAFKA_BROKER
           valueFrom:
@@ -40,6 +47,11 @@ spec:
             configMapKeyRef:
               name: mcm-demo-config-map
               key: APP_KAFKA_TOPIC_CUSTOMER_CREATED
+        - name: APP_CUSTOMER_API_URL
+          valueFrom:
+            configMapKeyRef:
+              name: mcm-demo-config-map
+              key: APP_CUSTOMER_API_URL
         - name: TZ
           value: Europe/Madrid
         imagePullPolicy: Always

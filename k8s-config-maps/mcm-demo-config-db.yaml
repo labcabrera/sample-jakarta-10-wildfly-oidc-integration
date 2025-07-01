@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mcm-demo-config-map-db
+data:
+  APP_DB_HOST: host.minikube.internal
+  APP_DB_PORT: "5432"
+  APP_DB_SCHEMA: mcmdemo
+  APP_DB_USERNAME: user
