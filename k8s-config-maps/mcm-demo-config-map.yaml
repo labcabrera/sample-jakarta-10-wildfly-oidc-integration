@@ -6,7 +6,7 @@ data:
   APP_AUTH_SERVER_URL: http://127.0.0.1:8090/realms/mcm-demo/protocol/openid-connect/auth
   APP_LOGOUT_URL: http://127.0.0.1:8090/realms/mcm-demo/protocol/openid-connect/logout
 
-  APP_CUSTOMER_API_URL: http://mcm-demo-api-customers/api-customers
+  APP_CUSTOMER_API_URL: http://mcm-demo-api-customers.apps-local/api-customers
   APP_USERS_API_URL: http://mcm-demo-api-users/api-users/api
 
   APP_JWK_URL: http://host.minikube.internal:8090/realms/mcm-demo/protocol/openid-connect/certs
