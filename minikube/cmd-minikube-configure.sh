@@ -59,7 +59,7 @@ find ../k8s-config-maps -name "*.yaml" -o -name "*.yml" | while read -r file; do
 done
 
 find ../k8s-secrets -name "*.yaml" -o -name "*.yml" | while read -r file; do
-  sed "s/{kafka_password_b64}/$KAFKA_CLIENT_PWD/g" "$file" | kubectl apply -f - -n "$NAMESPACE_KAFKA"
+  sed "s/{kafka_password_b64}/$KAFKA_CLIENT_PWD/g" "$file" | kubectl apply -f - -n "$NAMESPACE"
 done
 
 echo "✨ Installing ArgoCD and configuring demo applications..."

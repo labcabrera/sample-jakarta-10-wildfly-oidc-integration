@@ -85,11 +85,11 @@ spec:
         #     secretKeyRef:
         #       name: mcm-demo-secrets
         #       key: APP_KAFKA_PASSWORD
-        - name: APP_KAFKA_TOPIC_CUSTOMER_CREATED
-          valueFrom:
-            configMapKeyRef:
-              name: mcm-demo-config-map
-              key: APP_KAFKA_TOPIC_CUSTOMER_CREATED
+        # - name: APP_KAFKA_TOPIC_CUSTOMER_CREATED
+        #   valueFrom:
+        #     configMapKeyRef:
+        #       name: mcm-demo-config-map
+        #       key: APP_KAFKA_TOPIC_CUSTOMER_CREATED
         - name: TZ
           value: Europe/Madrid
         imagePullPolicy: Always
