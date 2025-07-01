@@ -72,51 +72,6 @@ spec:
             env:
             - name: TZ
               value: Europe/Madrid
-            # - name: APP_DB_SCHEMA
-            #   valueFrom:
-            #     configMapKeyRef:
-            #       name: mcm-demo-config-map
-            #       key: APP_DB_SCHEMA
-            # - name: APP_DB_USERNAME
-            #   valueFrom:
-            #     configMapKeyRef:
-            #       name: mcm-demo-config-map
-            #       key: APP_DB_USERNAME
-            # - name: APP_DB_HOST
-            #   valueFrom:
-            #     configMapKeyRef:
-            #       name: mcm-demo-config-map
-            #       key: APP_DB_HOST
-            # - name: APP_DB_PORT
-            #   valueFrom:
-            #     configMapKeyRef:
-            #       name: mcm-demo-config-map
-            #       key: APP_DB_PORT
-            # - name: APP_KAFKA_BROKER
-            #   valueFrom:
-            #     configMapKeyRef:
-            #       name: mcm-demo-config-map
-            #       key: APP_KAFKA_BROKER
-            # - name: APP_KAFKA_USERNAME
-            #   valueFrom:
-            #     configMapKeyRef:
-            #       name: mcm-demo-config-map
-            #       key: APP_KAFKA_USERNAME
-            # - name: APP_KAFKA_TOPIC_CUSTOMER_CREATED
-            #   valueFrom:
-            #     configMapKeyRef:
-            #       name: mcm-demo-config-map
-            #       key: APP_KAFKA_TOPIC_CUSTOMER_CREATED
-            # - name: APP_DB_PASSWORD
-            #   valueFrom:
-            #     secretKeyRef:
-            #       name: mcm-demo-secrets
-            #       key: APP_DB_PASSWORD
-            # - name: APP_KAFKA_PASSWORD
-            #   valueFrom:
-            #     secretKeyRef:
-            #       name: mcm-demo-secrets
-            #       key: APP_KAFKA_PASSWORD
             livenessProbe:
               exec:
                 command:
