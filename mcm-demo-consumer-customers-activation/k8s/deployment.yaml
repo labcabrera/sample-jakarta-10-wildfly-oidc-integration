@@ -29,31 +29,6 @@ spec:
         - secretRef:
             name: mcm-demo-secrets-kafka
         env:
-        # - name: APP_KAFKA_BROKER
-        #   valueFrom:
-        #     configMapKeyRef:
-        #       name: mcm-demo-config-map
-        #       key: APP_KAFKA_BROKER
-        # - name: APP_KAFKA_USERNAME
-        #   valueFrom:
-        #     configMapKeyRef:
-        #       name: mcm-demo-config-map
-        #       key: APP_KAFKA_USERNAME
-        # - name: APP_KAFKA_PASSWORD
-        #   valueFrom:
-        #     secretKeyRef:
-        #       name: mcm-demo-secrets
-        #       key: APP_KAFKA_PASSWORD
-        # - name: APP_KAFKA_TOPIC_CUSTOMER_CREATED
-        #   valueFrom:
-        #     configMapKeyRef:
-        #       name: mcm-demo-config-map
-        #       key: APP_KAFKA_TOPIC_CUSTOMER_CREATED
-        # - name: APP_CUSTOMER_API_URL
-        #   valueFrom:
-        #     configMapKeyRef:
-        #       name: mcm-demo-config-map
-        #       key: APP_CUSTOMER_API_URL
         - name: TZ
           value: Europe/Madrid
         imagePullPolicy: Always
