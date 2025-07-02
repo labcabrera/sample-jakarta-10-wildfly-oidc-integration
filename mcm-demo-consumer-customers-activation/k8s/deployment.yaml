@@ -29,6 +29,11 @@ spec:
         - secretRef:
             name: mcm-demo-secrets-kafka
         env:
+        - name: APP_CUSTOMER_API_URL
+          valueFrom:
+            configMapKeyRef:
+              name: mcm-demo-config-map
+              key: APP_CUSTOMER_API_URL
         - name: TZ
           value: Europe/Madrid
         imagePullPolicy: Always
