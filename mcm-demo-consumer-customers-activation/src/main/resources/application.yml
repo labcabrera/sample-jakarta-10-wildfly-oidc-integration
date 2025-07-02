@@ -53,3 +53,14 @@ logging:
   level:
     root: INFO
     com.mcm.demo.customers.consumer: DEBUG
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,env
+  endpoint:
+    env:
+      enabled: true
+  security:
+    enabled: false

@@ -10,7 +10,7 @@ metadata:
     description: "Job to process pending customer activations"
     maintainer: "MCM Demo Team"
 spec:
-  schedule: "*/30 * * * *"
+  schedule: "0 8 * * *"
   timeZone: "Europe/Madrid"
   successfulJobsHistoryLimit: 3
   failedJobsHistoryLimit: 3
