@@ -10,16 +10,12 @@ spring:
       bindings:
         customerCreated-in-0:
           destination: ${APP_KAFKA_TOPIC_CUSTOMER_CREATED:customers-created-topic}
-          #TODO DEMO -1
-          group: ${APP_KAFKA_CONSUMER_GROUP:customer-consumers-activation-group-1}
+          group: ${APP_KAFKA_CONSUMER_GROUP:customer-consumers-activation-group}
           content-type: application/*+avro
           consumer:
             enableDlq: true
-            dlqName: ${APP_KAFKA_DLQ_NAME:customer-created-dlt}
+            dlqName: ${APP_KAFKA_DLQ_NAME:customers-created-topic-dlt}
             max-attempts: 3
-            # configuration:
-            #   specific.avro.reader: true
-            #   value.deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
       kafka:
         binder:
           brokers: ${APP_KAFKA_BROKER:192.168.49.2:31101}
@@ -34,11 +30,6 @@ spring:
             value.deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
             schema.registry.url: ${APP_SCHEMA_REGISTRY_URL:http://schema-registry.local}
             specific.avro.reader: true
-        streams:
-          binder:
-            configuration:
-              schema.registry.url: ${APP_SCHEMA_REGISTRY_URL:http://schema-registry.local}
-              specific.avro.reader: true
             
   security:
     oauth2:
