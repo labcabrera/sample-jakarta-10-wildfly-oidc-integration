@@ -5,6 +5,23 @@ spring:
     # Note: We start the web server only for actuator endpoints. If you do not want
     # this functionality, use the 'none' mode
     web-application-type: reactive
+  security:
+    oauth2:
+      client:
+        registration:
+          demo-keycloak:
+            # NOTA hay un error en la carga de la aplicacion reactiva ya que no resuelve correctamente
+            # las variables de entorno pero si que funciona si se hardcodean los valores
+            client-id: mcm-demo-customer-consumer
+            client-secret: 2wvBjlhSDHVIR6UVfA05TZ0yOPfmFiCn
+            # client-id: ${APP_CLIENT_ID}
+            # client-secret: ${APP_CLIENT_SECRET}
+            authorization-grant-type: client_credentials
+            scope: openid
+            provider: demo-keycloak
+        provider:
+          demo-keycloak:
+            token-uri: ${APP_TOKEN_URL:http://127.0.0.1:8090/realms/mcm-demo/protocol/openid-connect/token}
   cloud:
     stream:
       bindings:
@@ -31,19 +48,6 @@ spring:
             schema.registry.url: ${APP_SCHEMA_REGISTRY_URL:http://schema-registry.local}
             specific.avro.reader: true
             
-  security:
-    oauth2:
-      client:
-        registration:
-          demo-keycloak:
-            client-id: ${APP_CLIENT_ID:mcm-demo-customer-consumer}
-            client-secret: ${APP_CLIENT_SECRET:2wvBjlhSDHVIR6UVfA05TZ0yOPfmFiCn}
-            authorization-grant-type: client_credentials
-            scope: openid
-            provider: demo-keycloak
-        provider:
-          demo-keycloak:
-            token-uri: ${APP_TOKEN_URL:http://127.0.0.1:8090/realms/mcm-demo/protocol/openid-connect/token}
 app:
   api-client: 
     customers:
@@ -52,7 +56,7 @@ app:
 logging:
   level:
     root: INFO
-    com.mcm.demo.customers.consumer: DEBUG
+    com.mcm.samples: DEBUG
 
 management:
   endpoints:

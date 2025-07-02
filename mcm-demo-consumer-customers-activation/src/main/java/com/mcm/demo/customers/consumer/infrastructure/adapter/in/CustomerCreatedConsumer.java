@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 
 import com.mcm.demo.customers.consumer.domain.exception.CustomerActivationException;
 import com.mcm.demo.customers.consumer.domain.port.in.ConsumerActivationUseCase;
-import com.mcm.samples.customer.api.event.CustomerCreated;
 
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Flux;
