@@ -73,6 +73,7 @@ def create_customer_serializer() -> AvroSerializer:
     """Create and return a customer event serializer."""
     schema_path = os.path.join(
         os.path.dirname(__file__), 
+        '../',
         'schemas', 
         'customer-created-event.avsc'
     )

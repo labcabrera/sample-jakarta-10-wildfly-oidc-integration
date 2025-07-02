@@ -4,7 +4,7 @@ import json
 import os
 import time
 import uuid
-from avro_utils import create_customer_serializer
+from src.avro_utils import create_customer_serializer
 # from dotenv import load_dotenv
 
 # load_dotenv("config.env")
@@ -60,7 +60,9 @@ for row in rows:
     headers = [
         ('eventType', b'CustomerCreated'),
         ('eventVersion', b'1.0'),
-        ('source', b'mcm-demo-job-customers')
+        ('source', b'mcm-demo-job-customers'),
+        ('schemaId', b'customers-created-topic-value'),
+        ('schemaVersion', b'1.0')
     ]
 
     print(f"Sending message: {message_data}")
@@ -72,6 +74,7 @@ for row in rows:
     
     producer.send(
         KAFKA_TOPIC,
+        # key=str(uuid.uuid4()),
         value=serialized_message,
         headers=headers
     )

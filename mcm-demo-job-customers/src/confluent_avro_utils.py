@@ -2,10 +2,8 @@ from confluent_kafka import Producer
 from confluent_kafka.serialization import SerializationContext, MessageField
 from confluent_kafka.schema_registry import SchemaRegistryClient
 from confluent_kafka.schema_registry.avro import AvroSerializer
-import json
 import os
 from typing import Dict, Any
-
 
 class ConfluentAvroSerializer:
     def __init__(self, schema_registry_url: str, schema_file_path: str):
