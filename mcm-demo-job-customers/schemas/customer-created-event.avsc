@@ -1,0 +1,29 @@
+{
+  "type": "record",
+  "name": "CustomerCreated",
+  "namespace": "com.mcm.samples.customer.api.event",
+  "doc": "Event fired when a customer is created",
+  "fields": [
+    {
+      "name": "customerId",
+      "type": "string",
+      "doc": "Unique identifier of the customer"
+    },
+    {
+      "name": "email",
+      "type": "string",
+      "doc": "Email address of the customer"
+    },
+    {
+      "name": "eventId",
+      "type": "string",
+      "doc": "Unique identifier for this event"
+    },
+    {
+      "name": "eventVersion",
+      "type": "string",
+      "default": "1.0",
+      "doc": "Version of this event schema"
+    }
+  ]
+}

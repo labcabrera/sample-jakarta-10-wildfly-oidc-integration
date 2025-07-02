@@ -2,6 +2,9 @@ import psycopg2
 from kafka import KafkaProducer
 import json
 import os
+import time
+import uuid
+from avro_utils import create_customer_serializer
 # from dotenv import load_dotenv
 
 # load_dotenv("config.env")
@@ -14,13 +17,16 @@ DB_CONFIG = {
     'port': os.getenv("APP_DB_PORT", 5432)
 }
 
-KAFKA_BROKER = os.getenv("APP_KAFKA_BROKER", "192.168.49.2:31108")
+KAFKA_BROKER = os.getenv("APP_KAFKA_BROKER", "192.168.49.2:31101")
 KAFKA_TOPIC = os.getenv("APP_KAFKA_TOPIC_CUSTOMER_CREATED", "customers-created-topic")
 
 KAFKA_SASL_USERNAME = os.getenv("APP_KAFKA_USERNAME", "user1")
-KAFKA_SASL_PASSWORD = os.getenv("APP_KAFKA_PASSWORD", "879P1qgPkc")
+KAFKA_SASL_PASSWORD = os.getenv("APP_KAFKA_PASSWORD", "gWXJezKXhm")
 KAFKA_SECURITY_PROTOCOL = os.getenv("APP_KAFKA_SECURITY_PROTOCOL", "SASL_PLAINTEXT")
 KAFKA_SASL_MECHANISM = os.getenv("APP_KAFKA_SASL_MECHANISM", "PLAIN")
+
+# Initialize Avro serializer
+avro_serializer = create_customer_serializer()
 
 conn = psycopg2.connect(**DB_CONFIG)
 cursor = conn.cursor()
@@ -30,7 +36,7 @@ rows = cursor.fetchall()
 
 producer_config = {
     'bootstrap_servers': KAFKA_BROKER,
-    'value_serializer': lambda v: json.dumps(v).encode('utf-8')
+    'value_serializer': lambda v: v if isinstance(v, bytes) else json.dumps(v).encode('utf-8')
 }
 
 if KAFKA_SASL_USERNAME and KAFKA_SASL_PASSWORD:
@@ -44,12 +50,31 @@ if KAFKA_SASL_USERNAME and KAFKA_SASL_PASSWORD:
 producer = KafkaProducer(**producer_config)
 
 for row in rows:
-    mensaje = {
+    # Create the message data
+    message_data = {
         'customerId': row[0],
-        'email': row[1]
+        'email': row[1],
+        'eventId': str(uuid.uuid4()),
+        'eventVersion': '1.0'
     }
-    print(f"Sending message: {mensaje}")
-    producer.send(KAFKA_TOPIC, mensaje)
+    headers = [
+        ('eventType', b'CustomerCreated'),
+        ('eventVersion', b'1.0'),
+        ('source', b'mcm-demo-job-customers')
+    ]
+
+    print(f"Sending message: {message_data}")
+
+    # Serialize using Avro
+    serialized_message = avro_serializer.serialize(message_data)
+
+    print(f"Serialized message: {serialized_message}")
+    
+    producer.send(
+        KAFKA_TOPIC,
+        value=serialized_message,
+        headers=headers
+    )
 
 producer.flush()
 cursor.close()

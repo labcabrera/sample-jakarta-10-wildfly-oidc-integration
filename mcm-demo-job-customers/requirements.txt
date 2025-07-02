@@ -1,3 +1,5 @@
 psycopg2-binary
 kafka-python
 python-dotenv
+avro-python3
+confluent-kafka
