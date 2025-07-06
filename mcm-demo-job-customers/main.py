@@ -43,8 +43,8 @@ schema_registry_client = SchemaRegistryClient(schema_registry_conf)
 with open('./schemas/customer-created-event.avsc', 'r') as f:
     value_schema_str = f.read()
 
-string_serializer = StringSerializer('utf_8')  # Para la key
-avro_serializer = AvroSerializer(schema_registry_client, value_schema_str)  # Para el value
+string_serializer = StringSerializer('utf_8')
+avro_serializer = AvroSerializer(schema_registry_client, value_schema_str)
 
 producer = Producer(producer_config)
 
@@ -61,15 +61,12 @@ for row in rows:
         'eventId': str(uuid.uuid4()),
         'eventVersion': '1.0'
     }
-
     headers = {
         'eventType': 'CustomerCreated',
         'eventVersion': '1.0',
         'source': 'mcm-demo-job-customers'
     }
-
     print(f"Sending message: {message_data}")
-
     try:
         serialized_key = string_serializer(
             row[0], 
