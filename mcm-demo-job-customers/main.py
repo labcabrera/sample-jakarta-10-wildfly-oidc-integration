@@ -16,7 +16,7 @@ DB_CONFIG = {
 
 KAFKA_BROKER = os.getenv("APP_KAFKA_BROKER", "192.168.49.2:31101")
 KAFKA_TOPIC = os.getenv("APP_KAFKA_TOPIC_CUSTOMER_CREATED", "customers-created-topic")
-SCHEMA_REGISTRY_URL = os.getenv("SCHEMA_REGISTRY_URL", "http://schema-registry.local")
+SCHEMA_REGISTRY_URL = os.getenv("APP_SCHEMA_REGISTRY_URL", "http://schema-registry.local")
 
 KAFKA_SASL_USERNAME = os.getenv("APP_KAFKA_USERNAME", "user1")
 KAFKA_SASL_PASSWORD = os.getenv("APP_KAFKA_PASSWORD", "gWXJezKXhm")
