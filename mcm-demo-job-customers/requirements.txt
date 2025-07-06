@@ -1,5 +1,7 @@
-psycopg2-binary
-kafka-python
-python-dotenv
-avro-python3
-confluent-kafka
+# requirements.txt
+psycopg2-binary==2.9.7
+confluent-kafka[avro]==2.3.0
+urllib3>=1.26.0
+requests>=2.28.0
+certifi>=2022.12.7
+# avro-python3>=1.11.0

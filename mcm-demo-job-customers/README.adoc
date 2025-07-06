@@ -18,3 +18,8 @@ Después simplemente ejecutaremos el comando:
 ----
 python main.py
 ----
+
+
+== Referencias
+
+https://avro.apache.org/docs/1.11.1/getting-started-python/
