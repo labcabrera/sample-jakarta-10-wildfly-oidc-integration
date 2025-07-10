@@ -105,6 +105,7 @@ helm install schema-registry bitnami/schema-registry \
   --timeout=600s
 
 echo "✅ Instalation complete"
+echo ""
 echo "To access the administration console, run:
 echo ""
 echo "  minikube dashboard"

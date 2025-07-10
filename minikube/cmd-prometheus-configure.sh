@@ -26,6 +26,8 @@ helm install prometheus prometheus-community/kube-prometheus-stack \
   --set prometheus.prometheusSpec.ruleSelectorNilUsesHelmValues=false \
   --set prometheus.prometheusSpec.retention=30d \
   --set prometheus.prometheusSpec.storageSpec.volumeClaimTemplate.spec.resources.requests.storage=10Gi \
+  --set prometheus.prometheusSpec.serviceMonitorNamespaceSelector.any=true \
+  --set prometheus.prometheusSpec.serviceMonitorSelector.matchLabels.app=mcm-demo \
   --set alertmanager.enabled=true \
   --set grafana.enabled=true \
   --set grafana.adminPassword=changeit \
@@ -48,3 +50,13 @@ echo "--------------------------------------------------------------------------
 
 kubectl apply -f ingress/grafana-ingress.yaml -n "$NAMESPACE_MONITORING"
 kubectl apply -f ingress/prometheus-ingress.yaml -n "$NAMESPACE_MONITORING"
+
+kubectl apply -f mcm-demo-prometheus-servicemonitor.yaml -n platform
+kubectl apply -f mcm-demo-prometheus-spring-boot-alerts.yaml -n platform
+
+echo "✅ Instalation complete"
+echo ""
+echo "  Check ServiceMonitor:"
+echo "    kubectl get servicemonitor -n platform"
+echo "  Check alerts:"
+echo "    kubectl get prometheusrule -n platform"

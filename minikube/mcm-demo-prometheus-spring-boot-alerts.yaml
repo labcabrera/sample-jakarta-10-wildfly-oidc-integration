@@ -1,0 +1,68 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: spring-boot-alerts
+  labels:
+    app: mcm-demo
+    release: prometheus
+spec:
+  groups:
+  - name: spring-boot-oauth2
+    rules:
+    - alert: HighAuthenticationFailureRate
+      expr: rate(auth_failure_total[5m]) > 0.1
+      for: 2m
+      labels:
+        severity: warning
+        service: oauth2
+      annotations:
+        summary: "High authentication failure rate detected"
+        description: "Authentication failure rate is {{ $value }} failures per second"
+        
+    - alert: OAuth2TokenValidationSlow
+      expr: histogram_quantile(0.95, rate(token_validation_duration_seconds_bucket[5m])) > 1
+      for: 5m
+      labels:
+        severity: warning
+        service: oauth2
+      annotations:
+        summary: "OAuth2 token validation is slow"
+        description: "95th percentile of token validation time is {{ $value }}s"
+        
+  - name: spring-boot-application
+    rules:
+    - alert: ApplicationDown
+      expr: up{job="mcm-demo-apps"} == 0
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        summary: "Application {{ $labels.instance }} is down"
+        description: "{{ $labels.instance }} has been down for more than 1 minute"
+        
+    - alert: HighMemoryUsage
+      expr: jvm_memory_used_bytes{area="heap"} / jvm_memory_max_bytes{area="heap"} > 0.9
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "High JVM heap memory usage"
+        description: "JVM heap memory usage is above 90%: {{ $value }}"
+        
+    - alert: HighResponseTime
+      expr: histogram_quantile(0.95, rate(http_server_requests_seconds_bucket[5m])) > 2
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "High HTTP response time"
+        description: "95th percentile response time is {{ $value }}s"
+        
+    - alert: HighErrorRate
+      expr: rate(http_server_requests_seconds_count{status=~"5.."}[5m]) / rate(http_server_requests_seconds_count[5m]) > 0.05
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        summary: "High HTTP error rate"
+        description: "HTTP error rate is {{ $value | humanizePercentage }}"
