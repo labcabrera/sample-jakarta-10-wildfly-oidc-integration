@@ -1,9 +1,11 @@
 #!/bin/bash
 
+set -e
+
 NAMESPACE="apps-local"
 NAMESPACE_KAFKA="kafka-local"
 NAMESPACE_DB="db-local"
-NAMESPACE_TOOLS="tools-local"
+NAMESPACE_TOOLS="platform"
 
 echo "----------------------------------------------------------------------------"
 echo "✨ Starting minikube..."
@@ -74,10 +76,10 @@ echo "--------------------------------------------------------------------------
 echo "✨ Installing Kafka-UI..."
 echo "----------------------------------------------------------------------------"
 
-sed "s/{password}/$KAFKA_CLIENT_PWD_DECODED/g" kafka-ui-config.yaml | kubectl apply -f - -n "$NAMESPACE_KAFKA"
+sed "s/{password}/$KAFKA_CLIENT_PWD_DECODED/g" ingress/kafka-ui-config.yaml | kubectl apply -f - -n "$NAMESPACE_TOOLS"
 
 helm install kafka-ui kafka-ui/kafka-ui \
-  --namespace "$NAMESPACE_KAFKA" \
+  --namespace "$NAMESPACE_TOOLS" \
   --set existingConfigMap="kafka-ui-config" \
   --set ingress.enabled=true \
   --set ingress.className=nginx \
@@ -102,12 +104,7 @@ helm install schema-registry bitnami/schema-registry \
   --set extraEnvVars[1].value="$KAFKA_CLIENT_PWD_DECODED" \
   --timeout=600s
 
-
-
-
-
-
-
-
-
-
+echo "✅ Instalation complete"
+echo "To access the administration console, run:
+echo ""
+echo "  minikube dashboard"
