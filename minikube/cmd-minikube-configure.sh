@@ -2,6 +2,11 @@
 
 set -e
 
+MINIKUBE_MEMORY=16384
+MINIKUBE_CPUS=6
+MINIKUBE_DISK=20g
+K8S_VERSION=v1.33.2
+
 NAMESPACE="apps-local"
 NAMESPACE_KAFKA="kafka-local"
 NAMESPACE_DB="db-local"
@@ -11,7 +16,12 @@ echo "--------------------------------------------------------------------------
 echo "✨ Starting minikube..."
 echo "----------------------------------------------------------------------------"
 
-minikube start --driver=docker --memory=12288
+minikube start \
+  --driver=docker \
+  --memory=$MINIKUBE_MEMORY \
+  --cpus=$MINIKUBE_CPUS \
+  --disk-size=$MINIKUBE_DISK \
+  --kubernetes-version=$K8S_VERSION
 
 minikube addons enable metrics-server
 
@@ -104,8 +114,9 @@ helm install schema-registry bitnami/schema-registry \
   --set extraEnvVars[1].value="$KAFKA_CLIENT_PWD_DECODED" \
   --timeout=600s
 
+echo ""
 echo "✅ Instalation complete"
 echo ""
-echo "To access the administration console, run:
+echo "To access the administration console, run:"
 echo ""
 echo "  minikube dashboard"

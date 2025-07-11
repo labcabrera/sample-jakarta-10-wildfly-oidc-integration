@@ -13,8 +13,10 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
+        
         <mcm.security.jwt.version>1.0.0-SNAPSHOT</mcm.security.jwt.version>
         <mcm.user.client.version>1.0.0-SNAPSHOT</mcm.user.client.version>
+        
         <jakarta.version>10.0.0</jakarta.version>
         <jakarta.security.enterprise.version>3.0.0</jakarta.security.enterprise.version>
         <microprofile.openapi.version>3.1</microprofile.openapi.version>
@@ -23,6 +25,9 @@
         <modelmapper.version>3.2.0</modelmapper.version>
         <slf4j.version>2.0.13</slf4j.version>
         <lombok.version>1.18.32</lombok.version>
+        <confluent.version>7.4.0</confluent.version>
+        <avro.version>1.11.3</avro.version>
+        <jackson.version>2.17.1</jackson.version>
     </properties>
 
     <dependencies>
@@ -59,24 +64,19 @@
             <version>${rsql.parser.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.apache.kafka</groupId>
-            <artifactId>kafka-clients</artifactId>
-            <version>3.7.0</version>
-        </dependency>
-        <dependency>
             <groupId>org.apache.avro</groupId>
             <artifactId>avro</artifactId>
-            <version>1.11.3</version>
+            <version>${avro.version}</version>
         </dependency>
         <dependency>
             <groupId>io.confluent</groupId>
             <artifactId>kafka-avro-serializer</artifactId>
-            <version>7.4.0</version>
+            <version>${confluent.version}</version>
         </dependency>
         <dependency>
             <groupId>io.confluent</groupId>
             <artifactId>kafka-schema-registry-client</artifactId>
-            <version>7.4.0</version>
+            <version>${confluent.version}</version>
         </dependency>
         <dependency>
             <groupId>org.eclipse.microprofile.openapi</groupId>
@@ -92,22 +92,17 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.17.1</version>
+            <version>${jackson.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
-            <version>2.17.1</version>
+            <version>${jackson.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
-            <version>2.17.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openapitools</groupId>
-            <artifactId>jackson-databind-nullable</artifactId>
-            <version>0.2.6</version>
+            <version>${jackson.version}</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>

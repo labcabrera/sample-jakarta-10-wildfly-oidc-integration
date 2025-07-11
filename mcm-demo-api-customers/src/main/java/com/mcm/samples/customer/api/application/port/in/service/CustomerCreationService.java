@@ -2,6 +2,7 @@ package com.mcm.samples.customer.api.application.port.in.service;
 
 import java.time.LocalDateTime;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 
 import com.mcm.samples.customer.api.application.port.in.command.CreateCustomerCommand;
 import com.mcm.samples.customer.api.application.port.in.usecase.CustomerCreateUseCase;
@@ -61,8 +62,17 @@ public class CustomerCreationService implements CustomerCreateUseCase {
                 .build())
             .build();
         Customer created = customerRepository.save(customer);
-        customerEventPublisher.publishCustomerCreated(created);
+        publishCustomerCreatedEvent(created);
         return created;
+    }
+
+    private void publishCustomerCreatedEvent(Customer customer) {
+        CompletableFuture<Void> future = customerEventPublisher.publishCustomerCreated(customer);
+        future.thenRun(() -> log.info("Event published successfully for customer: {}", customer.getId()))
+            .exceptionally(ex -> {
+                log.error("Failed to publish event for customer: {}", customer.getId(), ex);
+                return null;
+            });
     }
 
 }
